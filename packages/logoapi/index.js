@@ -13,10 +13,10 @@ const own = (map, key) =>
 
 // A symbol: AAPL, BRK.B, BRK-B, NASDAQ:MNDY, BTC. A domain always has a dot and a letter TLD.
 const SYMBOL = /^(?:[A-Z]{1,10}:)?[A-Z0-9]{1,10}(?:[.-][A-Z0-9]{1,4})?$/;
-const DOMAIN = /^(?=.{4,253}$)(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}$/;
+const DOMAIN = /^(?=.{4,253}$)(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+(?:[a-z]{2,63}|xn--[a-z0-9-]{1,59})$/;
 
 function normDomain(s) {
-  s = s.toLowerCase().replace(/^[a-z][a-z0-9+.-]*:\/\//, '').split(/[/?#]/)[0].replace(/:\d+$/, '');
+  s = s.toLowerCase().replace(/^[a-z][a-z0-9+.-]*:\/\//, '').split(/[/?#]/)[0].replace(/^[^@]*@/, '').replace(/:\d+$/, '');
   return s.replace(/\.$/, '');
 }
 

@@ -27,6 +27,8 @@ assert.strictEqual(url('aapl'), H + '/ticker/AAPL.svg');
 assert.strictEqual(url('BRK.B'), H + '/ticker/BRK.B.svg');
 assert.strictEqual(url('NASDAQ:MNDY'), H + '/ticker/NASDAQ:MNDY.svg');
 assert.strictEqual(url('https://www.Stripe.com/pricing'), H + '/icon/stripe.com.svg');
+assert.strictEqual(url('https://user:pass@Example.com/path'), H + '/icon/example.com.svg');
+assert.strictEqual(url('example.xn--p1ai'), H + '/icon/example.xn--p1ai.svg');
 assert.strictEqual(iconUrl('stripe.com'), H + '/icon/stripe.com.svg');
 assert.strictEqual(darkUrl('ETH'), H + '/dark/ticker/ETH.svg');
 assert.strictEqual(darkUrl('stripe.com'), H + '/dark/icon/stripe.com.svg');
