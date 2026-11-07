@@ -278,7 +278,7 @@ https://logoapi.sh/ticker/NASDAQ:MNDY.svg
 
 `200` with the square icon: SVG, or the PNG on `.png`. Lower case, an exchange prefix, listings outside the catalog and the coin routes answer `200` too. `?variant=full` answers `200` with the full logo.
 
-For dark backgrounds, `/dark/ticker/{TICKER}.svg` is the square icon recoloured like `/dark/icon/{domain}` (add `?variant=full` for the full logo, recoloured like `/dark/{domain}`), and `/dark/icon/ticker/{TICKER}.svg` is always the icon. For coins, `/dark/crypto/{SYMBOL}.svg` is the dark version of `/crypto/{SYMBOL}`. An unknown coin symbol gives a name tile on the crypto routes; add `?fallback=404` to get a plain 404 instead. Colour versions are SVG only: `.png` answers a `raster_only` 404. `X-Logo-Kind: icon` is sent on the bare ticker form only, not on an explicit `.svg`. For chat canvases that block images, `/ticker/{TICKER}.svg.txt` returns the same SVG as plain text.
+For dark backgrounds, `/dark/ticker/{TICKER}.svg` is the square icon recoloured like `/dark/icon/{domain}` (add `?variant=full` for the full logo, recoloured like `/dark/{domain}`), and `/dark/icon/ticker/{TICKER}.svg` is always the icon. For coins, `/dark/crypto/{SYMBOL}.svg` is the dark version of `/crypto/{SYMBOL}`. An unknown coin symbol gives a plain 404 on the crypto routes, as an unknown ticker does. Colour versions are SVG only: `.png` answers a `raster_only` 404. `X-Logo-Kind: icon` is sent on the bare ticker form only, not on an explicit `.svg`. For chat canvases that block images, `/ticker/{TICKER}.svg.txt` returns the same SVG as plain text.
 
 **Errors**
 
