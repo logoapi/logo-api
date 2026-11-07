@@ -1,5 +1,14 @@
 # crypto-logos
 
+```bash
+npm install crypto-logos
+```
+
+```jsx
+import { url } from 'crypto-logos';
+<img src={url('BTC')} alt="BTC logo" />  // https://logoapi.sh/crypto/BTC.svg
+```
+
 Crypto coin logos by symbol: 14 official coin marks offline, and a hosted logoapi.sh URL for every other coin, ticker and domain. No key.
 
 ```js
