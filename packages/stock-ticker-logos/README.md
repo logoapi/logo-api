@@ -1,5 +1,14 @@
 # stock-ticker-logos
 
+```bash
+npm install stock-ticker-logos
+```
+
+```jsx
+import { url } from 'stock-ticker-logos';
+<img src={url('AAPL')} alt="AAPL logo" />  // https://logoapi.sh/ticker/AAPL.svg
+```
+
 Stock logos and stock ticker logos: a hosted logoapi.sh SVG URL for any ticker, ETF or coin, plus 54 ticker and coin SVGs bundled offline. No key, small install. Alias of logoapi.
 
 ```js
