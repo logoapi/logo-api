@@ -11,6 +11,10 @@ import { url } from 'crypto-logos';
 
 Crypto coin logos by symbol: 14 official coin marks offline, and a hosted logoapi.sh URL for every other coin, ticker and domain. No key.
 
+Covers 6,562 stock and ETF tickers, 17 coins and 5,000+ company domains. No attribution required.
+
+Hosted service: the URLs point at logoapi.sh, served from Cloudflare's edge. Free, no key, 2M requests a month per site. Any free-tier cut gets 12 months' notice ([terms](https://logoapi.sh/terms)). The ticker index is open on GitHub: [index.json](https://github.com/logoapi/logo-api/blob/main/index.json).
+
 ```js
 // npm install crypto-logos
 import { getLogos, darkUrl } from 'crypto-logos';
