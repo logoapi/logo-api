@@ -1,26 +1,29 @@
 # logoapi (npm package)
 
-> Offline company and stock ticker logos as SVG. No key, no network, zero dependencies. Logo files are CC0, code is MIT.
+> Offline SVGs for 1,174 brands and 54 tickers, hosted logoapi.sh URL for every other ticker, coin and domain. No key, zero dependencies. Logo files are CC0, code is MIT.
 
 https://logoapi.sh/stripe.com.svg
 https://logoapi.sh/ticker/AAPL.svg
 https://logoapi.sh/crypto/BTC.svg
 
 Install: npm install logoapi
-Use: const { getLogo } = require('logoapi'); getLogo('AAPL')  // SVG string, or null
+Use: const { getLogos, url } = require('logoapi'); getLogos(['AAPL','SPY','BTC'])  // [{dataUri, url, source}], src = dataUri || url
 
 ## Facts
-- Bundles 1,174 domains and 50 stock tickers (2,016 CC0 SVG files). It is a subset.
-- getLogo(domainOrTicker) returns SVG markup as a string, never a URL. It returns null when the package has no logo.
-- Also exported: getLogoPath, hasLogo, list, getLogos. CommonJS, ESM and types.
-- getLogos(list) returns an array, one per input item in order: {ticker, dataUri, source, missing}. ticker is the input echoed back; dataUri is "data:image/svg+xml;base64,..." or null; source is "cc0" | "official" | null; missing is a boolean. Tickers (any case) and domains both work.
-- Coverage is the CC0 subset of 50 tickers (and 1,174 domains); never imply the full catalog.
+- Bundles 1,174 domains and 54 tickers (50 stocks plus BTC, ETH, ADA, XMR; 2,016 CC0 SVG files).
+- getLogo(domainOrTicker) returns bundled SVG markup as a string, or null when it is not bundled (offline only).
+- Also exported: getLogoPath, hasLogo, list, getLogos, url, iconUrl, darkUrl, HOST. CommonJS, ESM and types.
+- Hybrid since 0.2.0: bundled files are offline; every other well-formed ticker, coin symbol or domain gets a hosted logoapi.sh URL, never null.
+- url(id) / iconUrl(id): https://logoapi.sh/ticker/{SYM}.svg for tickers and coins, https://logoapi.sh/icon/{domain}.svg for domains. darkUrl(id): the same path after /dark/. Pure string builders, no network. null only for malformed input.
+- getLogos(list) returns an array, one per input item in order: {ticker, dataUri, url, source, missing}. dataUri is the bundled file as "data:image/svg+xml;base64,..." or null; url is the hosted URL; source is "cc0" | "official" | "hosted" | null; missing is true only for malformed input. Use dataUri || url as the img src.
+- On /ticker/ and /crypto/, a 404 means the API does not know the symbol: check the status (or onerror) and show a letter tile.
+- Bundled coverage is a subset (54 tickers, 1,174 domains); the hosted URL covers the rest.
 - It reads files with Node fs: call it on the server or at build time, not in browser code. Embed the returned string in HTML for sandboxes that block outside images.
-- Files keep their original colours (no currentColor), so CSS cannot recolour them.
+- Bundled files keep their original colours (no currentColor); use darkUrl(id) for dark backgrounds.
 
 ## Bundled tickers
 <!-- tickers:start -->
-50 tickers: AAPL, ABNB, ADBE, AKAM, AMD, AMPL, ARM, ASAN, AVGO, BOX, BRZE, CBRS, COUR, CRM, CRWV, DBX, DDOG, DOCN, DT, FROG, FSLY, GOOGL, HUBS, IBM, INTC, MA, MDB, META, MNDY, MSFT, MU, NET, NFLX, NVDA, OKTA, OPRA, ORCL, PD, PINS, PS, PYPL, QCOM, RDDT, RXT, SAP, SNOW, TSM, TWLO, UPWK, V
+54 tickers: AAPL, ABNB, ADA, ADBE, AKAM, AMD, AMPL, ARM, ASAN, AVGO, BOX, BRZE, BTC, CBRS, COUR, CRM, CRWV, DBX, DDOG, DOCN, DT, ETH, FROG, FSLY, GOOGL, HUBS, IBM, INTC, MA, MDB, META, MNDY, MSFT, MU, NET, NFLX, NVDA, OKTA, OPRA, ORCL, PD, PINS, PS, PYPL, QCOM, RDDT, RXT, SAP, SNOW, TSM, TWLO, UPWK, V, XMR
 <!-- tickers:end -->
 
 ## Limits
@@ -28,7 +31,7 @@ Use: const { getLogo } = require('logoapi'); getLogo('AAPL')  // SVG string, or 
 - Free stays free. 12 months' notice before any change.
 
 ## Misses
-- On null, show a letter tile. Never guess or substitute another company's logo.
+- getLogo() null: use url(id). Hosted 404: show a letter tile. Never guess or substitute another company's logo.
 
 ## Beyond this package (hosted API, 5,000+ logos, free, no key)
 - Logo by domain: https://logoapi.sh/{domain}.svg

@@ -1,7 +1,7 @@
 {
   "name": "logoapi",
-  "version": "0.1.3",
-  "description": "Offline company logos with stock ticker lookup. SVG, no network, no key.",
+  "version": "0.2.0",
+  "description": "Offline SVGs for 1,174 brands and 54 tickers, hosted logoapi.sh URL for every other ticker, coin and domain. No key.",
   "keywords": [
     "logo",
     "logos",

@@ -14,4 +14,8 @@ for (const f of fs.readdirSync(src).filter((n) => n.endsWith('.svg')).sort()) {
 }
 if (!Object.keys(crypto).length) throw new Error('no coin marks found in official/crypto');
 fs.copyFileSync(path.join(root, 'official', 'LICENSE.md'), path.join(out, 'LICENSE.md'));
-fs.writeFileSync(path.join(out, 'index.json'), JSON.stringify({ crypto }, null, 1) + '\n');
+// Every coin the API knows (bundled or not), so unbundled coins get a /crypto/ URL.
+const rootIndex = JSON.parse(fs.readFileSync(path.join(root, 'index.json'), 'utf8'));
+const coins = Object.keys(rootIndex.crypto || {}).filter((k) => /^[A-Z0-9]{1,15}$/.test(k)).sort();
+if (!coins.length) throw new Error('no coins found in the root index.json');
+fs.writeFileSync(path.join(out, 'index.json'), JSON.stringify({ crypto, coins }, null, 1) + '\n');

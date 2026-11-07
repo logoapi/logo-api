@@ -1,7 +1,7 @@
 {
   "name": "crypto-logos",
-  "version": "0.1.3",
-  "description": "Crypto coin logos by symbol (BTC, ETH, SOL) as SVG, offline. Official coin marks, with a CC0 fallback from logoapi.",
+  "version": "0.2.0",
+  "description": "Crypto coin logos by symbol: 14 official marks offline, hosted logoapi.sh URL for every other coin, ticker and domain. No key.",
   "keywords": [
     "crypto",
     "crypto-logo",
@@ -50,7 +50,7 @@
     "README.md"
   ],
   "dependencies": {
-    "logoapi": "^0.1.2"
+    "logoapi": "^0.2.0"
   },
   "engines": {
     "node": ">=16.7"

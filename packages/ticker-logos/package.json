@@ -1,7 +1,7 @@
 {
   "name": "ticker-logos",
-  "version": "0.1.3",
-  "description": "Stock ticker logos as SVG, offline, no API key. Alias of logoapi.",
+  "version": "0.2.0",
+  "description": "Stock ticker logos: offline SVGs for 54 tickers, hosted logoapi.sh URL for every other ticker, coin and domain. No key. Alias of logoapi.",
   "keywords": [
     "ticker",
     "ticker-logos",
@@ -46,7 +46,7 @@
     "README.md"
   ],
   "dependencies": {
-    "logoapi": "^0.1.2"
+    "logoapi": "^0.2.0"
   },
   "engines": {
     "node": ">=16.7"

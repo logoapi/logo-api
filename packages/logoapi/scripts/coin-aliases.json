@@ -1,0 +1,7 @@
+{
+ "_note": "Coin symbols whose CC0 file is in logos/ but which the root index maps to the API only. prepack adds them to the package ticker map.",
+ "BTC": "logos/bitcoin.svg",
+ "ETH": "logos/ethereum.svg",
+ "ADA": "logos/cardano-icon.svg",
+ "XMR": "logos/monero.svg"
+}
