@@ -30,7 +30,7 @@ Only `/icon/ticker/<SYM>` and `.svg` in upper case are static files. Everything 
 
 1. **Square slot: use `/ticker/<SYM>` or `/icon/ticker/<SYM>`** (both return the square icon). Set `object-fit: contain`. For a wide logo add `?variant=full` to `/ticker/<SYM>.svg`.
 2. **ETFs map to their issuer.** VTI shows Vanguard, SPY shows SSGA. That is the real brand, not a fund-specific mark.
-3. **Crypto uses `/crypto/<SYM>`; coins work on `/ticker/` too.** `/ticker/BTC` and `/crypto/BTC` answer the same coin mark; `/ticker/GBTC` and `/ticker/ETHE` stay the Grayscale trusts; an exchange prefix always means the stock (`/ticker/NASDAQ:COIN` is Coinbase).
+3. **Crypto uses `/crypto/<SYM>`; coins work on `/ticker/` too.** `/ticker/BTC` and `/crypto/BTC` answer the same coin mark; `/ticker/GBTC` and `/ticker/ETHE` stay the Grayscale trusts (a stock, not the coin; there is no Grayscale logo in the catalog, so they serve a fallback with `X-Logo-Fallback` set); an exchange prefix always means the stock (`/ticker/NASDAQ:COIN` is Coinbase).
 4. **Cash, unknown or unlisted symbols: draw a letter tile yourself.** An unknown ticker returns a plain 404. Never invent a logo, never swap in another company's logo. Check a symbol with `https://logoapi.sh/search?q=<SYM>` first.
 5. **A tile or favicon is not a real logo.** The `X-Logo-Fallback` response header says a fallback was served. Do not present it as the company mark.
 6. **Write alt text:** `alt="<Company> logo"`. For a logo next to the company name in text, use `alt=""`.

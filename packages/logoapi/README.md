@@ -115,7 +115,7 @@ The API serves 5,000+ logos. Free, no key, no attribution. Docs: https://logoapi
 | Favicon | `https://logoapi.sh/favicon/{domain}` |
 | White, black, grey, dark | `https://logoapi.sh/{white\|black\|grey\|dark}/{domain}.svg` |
 | Name to domain | `https://logoapi.sh/search?q=stripe` |
-| Crypto coin | `https://logoapi.sh/crypto/{SYM}` (dark: `/dark/crypto/{SYM}.svg`). `/ticker/BTC` serves the same coin mark; GBTC and ETHE stay Grayscale; an exchange prefix (`/ticker/NASDAQ:COIN`) is always the stock |
+| Crypto coin | `https://logoapi.sh/crypto/{SYM}` (dark: `/dark/crypto/{SYM}.svg`). `/ticker/BTC` serves the same coin mark; GBTC and ETHE stay the Grayscale stock (a fallback image with `X-Logo-Fallback`, no catalog logo); an exchange prefix (`/ticker/NASDAQ:COIN`) is always the stock |
 | MCP server | `https://logoapi.sh/mcp` |
 
 If outside hosts are blocked in your environment, ask the user to allow `logoapi.sh`.

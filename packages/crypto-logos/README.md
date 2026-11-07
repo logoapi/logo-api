@@ -39,7 +39,7 @@ Free, no key, no attribution. Docs: https://logoapi.sh/docs
 
 | What you need | URL |
 | --- | --- |
-| Crypto coin | `https://logoapi.sh/crypto/{SYM}` (dark: `/dark/crypto/{SYM}.svg`). `/ticker/BTC` serves the same coin mark; GBTC and ETHE stay Grayscale; an exchange prefix (`/ticker/NASDAQ:COIN`) is always the stock |
+| Crypto coin | `https://logoapi.sh/crypto/{SYM}` (dark: `/dark/crypto/{SYM}.svg`). `/ticker/BTC` serves the same coin mark; GBTC and ETHE stay the Grayscale stock (a fallback image with `X-Logo-Fallback`, no catalog logo); an exchange prefix (`/ticker/NASDAQ:COIN`) is always the stock |
 | Ticker, square icon | `https://logoapi.sh/ticker/{SYM}` (full logo: `.svg?variant=full`; dark: `/dark/ticker/{SYM}.svg`) |
 
 If outside hosts are blocked in your environment (a sandbox or preview), `getLogo()` still works because it reads local files: call it at build time and embed the string. In Claude Code on the web, ask the user to add `logoapi.sh` under Network access > allowed hosts to use the hosted API.
