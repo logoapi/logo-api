@@ -137,7 +137,11 @@ H. Tech Innovation LLC. Questions: hello@logoapi.sh.
 - [Privacy](https://logoapi.sh/privacy): analytics and processors
 - [About](https://logoapi.sh/about): who runs LogoAPI.sh (H. Tech Innovation LLC, Dallas, Texas)
 - [Contact](https://logoapi.sh/contact): Pro, Enterprise or support; contact form or hello@logoapi.sh, reply in 2 business days
-- [Source](https://github.com/logoapi/logo-api): public GitHub repo with the issue forms. The API is not open source; the full catalog is served by the CDN (logoapi.sh)
+- [Stock ticker logos and crypto logos on GitHub](https://github.com/logoapi/logo-api): public GitHub repo with the npm packages (logoapi, ticker-logos, crypto-logos), agent skills, a CC0 sample of the catalog and the issue forms.
+- [Logo API on npm: logoapi](https://www.npmjs.com/package/logoapi): npm package, no key, about 100 kB; hosted URL for any ticker, coin or domain, 54 ticker and coin SVGs offline
+- [Stock ticker logos on npm: ticker-logos](https://www.npmjs.com/package/ticker-logos): alias of logoapi for stock and ETF tickers
+- [Stock ticker logos on npm: stock-ticker-logos](https://www.npmjs.com/package/stock-ticker-logos): alias of logoapi for stock and ETF tickers
+- [Crypto logos on npm: crypto-logos](https://www.npmjs.com/package/crypto-logos): crypto coin logos by symbol, 14 official coin marks offline
 
 ## Contact
 
