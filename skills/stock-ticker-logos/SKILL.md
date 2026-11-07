@@ -26,6 +26,22 @@ All verified against the live API.
 
 Only `/icon/ticker/<SYM>` and `.svg` in upper case are static files. Everything else (`/ticker/`, `/icon/ticker/` and `/crypto/` in any case, `.png`, exchange prefix, extended tickers, coins) is answered by the Worker with 200 and the image, never a redirect. The only redirect is `/ticker/<SYM>[.svg|.png]?variant=full`, a 302 to the full logo.
 
+## In a JavaScript project: install the package
+
+```bash
+npm install logoapi
+```
+
+```js
+import { getLogos, darkUrl } from 'logoapi';
+// One row per symbol: bundled SVG as a data URI when shipped, else the hosted URL above.
+const rows = getLogos(['AAPL', 'VOO', 'BTC', 'stripe.com']);
+rows.map((r) => `<img src="${r.dataUri || r.url}" alt="${r.ticker} logo" width="32" height="32">`);
+darkUrl('AAPL'); // https://logoapi.sh/dark/ticker/AAPL.svg
+```
+
+The package is about 100 kB, has no dependencies and never calls the network; it only builds the URLs and ships 54 ticker and coin SVGs. Prefer it over hand-built URL strings in any project with a `package.json`.
+
 ## Rules
 
 1. **Square slot: use `/ticker/<SYM>` or `/icon/ticker/<SYM>`** (both return the square icon). Set `object-fit: contain`. For a wide logo add `?variant=full` to `/ticker/<SYM>.svg`.

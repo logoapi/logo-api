@@ -3,8 +3,6 @@ const fs = require('fs');
 const path = require('path');
 const root = path.join(__dirname, '..', '..', '..');
 const pkg = path.join(__dirname, '..');
-fs.rmSync(path.join(pkg, 'logos'), { recursive: true, force: true });
-fs.cpSync(path.join(root, 'logos'), path.join(pkg, 'logos'), { recursive: true });
 // Filtered copy: only domains and tickers whose values are repo paths (strings).
 // The root index.json also carries API-only tickers, coins and URL patterns; keep them out of the tarball.
 const full = JSON.parse(fs.readFileSync(path.join(root, 'index.json'), 'utf8'));
@@ -18,6 +16,16 @@ for (const [sym, rel] of Object.entries(aliases)) {
   filtered.tickers[sym] = rel;
 }
 filtered.tickers = Object.fromEntries(Object.entries(filtered.tickers).sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0)));
+// Small install (#1072): bundle only the files behind a ticker or coin symbol. Hosted URLs cover the rest.
+// A domain stays bundled only when its file is one of those (apple.com -> logos/apple.svg).
+const keep = new Set(Object.values(filtered.tickers));
+filtered.domains = Object.fromEntries(Object.entries(filtered.domains).filter(([, rel]) => keep.has(rel)));
+fs.rmSync(path.join(pkg, 'logos'), { recursive: true, force: true });
+for (const rel of keep) {
+  if (!/^logos\/[A-Za-z0-9._-]+\.svg$/.test(rel)) throw new Error('unexpected bundled path: ' + rel);
+  fs.mkdirSync(path.dirname(path.join(pkg, rel)), { recursive: true });
+  fs.copyFileSync(path.join(root, rel), path.join(pkg, rel));
+}
 fs.writeFileSync(path.join(pkg, 'index.json'), JSON.stringify(filtered, null, 1) + '\n');
 fs.copyFileSync(path.join(root, 'LICENSE'), path.join(pkg, 'LICENSE'));
 const idx = JSON.parse(fs.readFileSync(path.join(pkg, 'index.json'), 'utf8'));

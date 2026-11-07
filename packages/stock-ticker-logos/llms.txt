@@ -1,0 +1,47 @@
+# stock-ticker-logos (npm package)
+
+Alias of logoapi.
+
+> Hosted logoapi.sh URL for any stock ticker, ETF, coin or domain, plus 54 ticker and coin SVGs bundled offline. No key, one dependency (logoapi). Logo files are CC0, code is MIT.
+
+https://logoapi.sh/ticker/AAPL.svg
+
+Install: npm install stock-ticker-logos
+Use: const { getLogos } = require('stock-ticker-logos'); getLogos(['AAPL','SPY','BTC'])  // [{dataUri, url, source}], src = dataUri || url
+
+## Facts
+- Bundles 54 tickers (50 stocks plus BTC, ETH, ADA, XMR; 54 CC0 SVG files) and their company domains. Other domains are hosted only since 0.3.0.
+- getLogo(domainOrTicker) returns bundled SVG markup as a string, or null when it is not bundled (offline only).
+- Also exported: getLogoPath, hasLogo, list, getLogos, url, iconUrl, darkUrl, HOST. CommonJS, ESM and types.
+- Hybrid since 0.2.0: bundled files are offline; every other well-formed ticker, coin symbol or domain gets a hosted logoapi.sh URL, never null.
+- url(id) / iconUrl(id): https://logoapi.sh/ticker/{SYM}.svg for tickers and coins, https://logoapi.sh/icon/{domain}.svg for domains. darkUrl(id): the same path after /dark/. Pure string builders, no network. null only for malformed input.
+- getLogos(list) returns an array, one per input item in order: {ticker, dataUri, url, source, missing}. dataUri is the bundled file as "data:image/svg+xml;base64,..." or null; url is the hosted URL; source is "cc0" | "official" | "hosted" | null; missing is true only for malformed input. Use dataUri || url as the img src.
+- On /ticker/ and /crypto/, a 404 means the API does not know the symbol: check the status (or onerror) and show a letter tile.
+- Bundled coverage is a small subset (54 tickers and their domains); the hosted URL covers the rest.
+- It reads files with Node fs: call it on the server or at build time, not in browser code. Embed the returned string in HTML for sandboxes that block outside images.
+- Bundled files keep their original colours (no currentColor); use darkUrl(id) for dark backgrounds.
+
+## Limits
+- 2M requests a month per site, free, no key.
+- Free stays free. 12 months' notice before any change.
+
+## Misses
+- getLogo() null: use url(id). Hosted 404: show a letter tile. Never guess or substitute another company's logo.
+
+## Beyond this package (hosted API, 5,000+ logos, free, no key)
+- Logo by domain: https://logoapi.sh/{domain}.svg
+- Square icon: https://logoapi.sh/icon/{domain}.svg
+- Stock ticker (ETFs map to the issuer): https://logoapi.sh/ticker/{SYM}
+- Ticker icon: https://logoapi.sh/icon/ticker/{SYM}
+- Crypto coin: https://logoapi.sh/crypto/{SYM}
+- PNG for email: https://logoapi.sh/{domain}.png
+- Favicon: https://logoapi.sh/favicon/{domain}
+- Variants: https://logoapi.sh/{white|black|grey|dark}/{domain}.svg
+- Name to domain: https://logoapi.sh/search?q=stripe
+- MCP server: https://logoapi.sh/mcp
+- Docs: https://logoapi.sh/docs
+- If outside hosts are blocked, ask the user to allow logoapi.sh.
+
+## License
+- Code: MIT. Logo files: CC0 (public domain). Logos remain trademarks of their owners.
+- Terms: https://logoapi.sh/terms

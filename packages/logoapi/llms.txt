@@ -1,6 +1,6 @@
 # logoapi (npm package)
 
-> Offline SVGs for 1,174 brands and 54 tickers, hosted logoapi.sh URL for every other ticker, coin and domain. No key, zero dependencies. Logo files are CC0, code is MIT.
+> Hosted logoapi.sh URL for any stock ticker, ETF, crypto symbol or domain, plus 54 ticker and coin SVGs bundled offline. No key, zero dependencies, about 100 kB. Logo files are CC0, code is MIT.
 
 https://logoapi.sh/stripe.com.svg
 https://logoapi.sh/ticker/AAPL.svg
@@ -10,14 +10,14 @@ Install: npm install logoapi
 Use: const { getLogos, url } = require('logoapi'); getLogos(['AAPL','SPY','BTC'])  // [{dataUri, url, source}], src = dataUri || url
 
 ## Facts
-- Bundles 1,174 domains and 54 tickers (50 stocks plus BTC, ETH, ADA, XMR; 2,016 CC0 SVG files).
+- Bundles 54 tickers (50 stocks plus BTC, ETH, ADA, XMR; 54 CC0 SVG files) and the company domains of those files. Since 0.3.0 other domains are hosted only (0.2.x bundled 1,174 domains, 16 MB).
 - getLogo(domainOrTicker) returns bundled SVG markup as a string, or null when it is not bundled (offline only).
 - Also exported: getLogoPath, hasLogo, list, getLogos, url, iconUrl, darkUrl, HOST. CommonJS, ESM and types.
 - Hybrid since 0.2.0: bundled files are offline; every other well-formed ticker, coin symbol or domain gets a hosted logoapi.sh URL, never null.
 - url(id) / iconUrl(id): https://logoapi.sh/ticker/{SYM}.svg for tickers and coins, https://logoapi.sh/icon/{domain}.svg for domains. darkUrl(id): the same path after /dark/. Pure string builders, no network. null only for malformed input.
 - getLogos(list) returns an array, one per input item in order: {ticker, dataUri, url, source, missing}. dataUri is the bundled file as "data:image/svg+xml;base64,..." or null; url is the hosted URL; source is "cc0" | "official" | "hosted" | null; missing is true only for malformed input. Use dataUri || url as the img src.
 - On /ticker/ and /crypto/, a 404 means the API does not know the symbol: check the status (or onerror) and show a letter tile.
-- Bundled coverage is a subset (54 tickers, 1,174 domains); the hosted URL covers the rest.
+- Bundled coverage is a small subset (54 tickers and their domains); the hosted URL covers the rest.
 - It reads files with Node fs: call it on the server or at build time, not in browser code. Embed the returned string in HTML for sandboxes that block outside images.
 - Bundled files keep their original colours (no currentColor); use darkUrl(id) for dark backgrounds.
 

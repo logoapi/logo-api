@@ -1,6 +1,6 @@
 # ticker-logos
 
-Offline SVGs for 1,174 brands and 54 tickers, and a hosted logoapi.sh URL for every other ticker, coin and domain. No key. Alias of logoapi.
+Stock ticker logos: a hosted logoapi.sh SVG URL for any ticker, ETF or coin, plus 54 ticker and coin SVGs bundled offline. No key, small install. Alias of logoapi.
 
 ```js
 // npm install ticker-logos
