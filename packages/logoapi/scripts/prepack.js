@@ -10,6 +10,14 @@ fs.cpSync(path.join(root, 'logos'), path.join(pkg, 'logos'), { recursive: true }
 const full = JSON.parse(fs.readFileSync(path.join(root, 'index.json'), 'utf8'));
 const onlyStrings = (m) => Object.fromEntries(Object.entries(m || {}).filter(([, v]) => typeof v === 'string'));
 const filtered = { domains: onlyStrings(full.domains), tickers: onlyStrings(full.tickers) };
+// Coins with a bundled CC0 file (ethereum.svg) but no string ticker key (ETH) in the root index.
+const aliases = JSON.parse(fs.readFileSync(path.join(__dirname, 'coin-aliases.json'), 'utf8'));
+for (const [sym, rel] of Object.entries(aliases)) {
+  if (sym.startsWith('_')) continue;
+  if (typeof filtered.tickers[sym] === 'string') continue; // the root index already bundles it
+  filtered.tickers[sym] = rel;
+}
+filtered.tickers = Object.fromEntries(Object.entries(filtered.tickers).sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0)));
 fs.writeFileSync(path.join(pkg, 'index.json'), JSON.stringify(filtered, null, 1) + '\n');
 fs.copyFileSync(path.join(root, 'LICENSE'), path.join(pkg, 'LICENSE'));
 const idx = JSON.parse(fs.readFileSync(path.join(pkg, 'index.json'), 'utf8'));

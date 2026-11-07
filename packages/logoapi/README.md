@@ -1,68 +1,80 @@
 # logoapi
 
-Offline company and stock ticker logos as SVG. No key, no network, CC0 files, zero dependencies.
-
-```
-https://logoapi.sh/stripe.com.svg
-https://logoapi.sh/ticker/AAPL.svg
-https://logoapi.sh/crypto/BTC.svg
-```
+Offline SVGs for 1,174 brands and 54 tickers, and a hosted logoapi.sh URL for every other ticker, coin and domain. No key, zero dependencies.
 
 ```js
 // npm install logoapi
-const { getLogo } = require('logoapi');
-getLogo('AAPL'); // '<svg ...>' (or null if the package has no logo)
+import { getLogos, darkUrl } from 'logoapi';
+
+// A watchlist: stocks, an ETF and crypto, by symbol.
+const rows = getLogos(['AAPL', 'NVDA', 'SPY', 'BTC', 'ETH', 'GBTC']);
+const html = rows
+  .map((r) => `<img src="${r.dataUri || r.url}" alt="${r.ticker}" width="32" height="32">`)
+  .join('');
+// AAPL, NVDA, BTC, ETH: bundled SVG as a data URI, no network.
+// SPY, GBTC: not bundled, so r.url is https://logoapi.sh/ticker/SPY.svg (source: 'hosted').
+
+// Dark mode: one line.
+darkUrl('AAPL'); // 'https://logoapi.sh/dark/ticker/AAPL.svg'
 ```
 
-Bundles 1,174 domains and 50 stock tickers (2,016 CC0 SVG files). It is a subset: the hosted API at [logoapi.sh](https://logoapi.sh) covers 5,000+ logos (see "Beyond this package").
+What is bundled never touches the network. What is not bundled comes back as a hosted URL, never `null`, as long as the input is a well-formed ticker, coin symbol or domain.
 
 ## API
 
-`getLogo()` returns SVG markup as a string, never a URL, or `null` on a miss. CommonJS and ESM, with types.
+CommonJS and ESM, with types.
 
 ```js
-import { getLogo, getLogoPath, hasLogo, list } from 'logoapi';
+import { getLogos, url, iconUrl, darkUrl, getLogo, getLogoPath, hasLogo, list } from 'logoapi';
 
-getLogo('AAPL');            // ticker, any case
+// Hosted URLs: pure string builders, no network. Every well-formed input gets one.
+url('GBTC');               // 'https://logoapi.sh/ticker/GBTC.svg'   (square icon)
+url('stripe.com');         // 'https://logoapi.sh/icon/stripe.com.svg'
+iconUrl('ETH');            // same as url()
+darkUrl('stripe.com');     // 'https://logoapi.sh/dark/icon/stripe.com.svg'
+url('not a symbol!');      // null (malformed input only)
+
+// Bundled files only: offline, null when not bundled.
+getLogo('AAPL');            // '<svg ...>'; ticker, any case
 getLogo('apple.com');       // domain; https://www.apple.com/ also works
-getLogo('nope');            // null
+getLogo('GBTC');            // null (not bundled; use url('GBTC'))
 hasLogo('stripe.com');      // true
 getLogoPath('stripe.com');  // absolute path to the .svg, or null
-list();                     // { domains: [...], tickers: [...] }
+list();                     // { domains: [...], tickers: [...] } (bundled only)
 ```
 
 ### Batch lookup
 
 ```js
-import { getLogos } from 'logoapi';
-
-getLogos(['AAPL', 'stripe.com', 'ZZZZ']);
+getLogos(['AAPL', 'GBTC', 'stripe.com', '../x']);
 // [
-//   { ticker: 'AAPL',       dataUri: 'data:image/svg+xml;base64,...', source: 'cc0', missing: false },
-//   { ticker: 'stripe.com', dataUri: 'data:image/svg+xml;base64,...', source: 'cc0', missing: false },
-//   { ticker: 'ZZZZ',       dataUri: null,                            source: null,  missing: true }
+//   { ticker: 'AAPL',       dataUri: 'data:image/svg+xml;base64,...', url: 'https://logoapi.sh/ticker/AAPL.svg',      source: 'cc0',    missing: false },
+//   { ticker: 'GBTC',       dataUri: null,                            url: 'https://logoapi.sh/ticker/GBTC.svg',      source: 'hosted', missing: false },
+//   { ticker: 'stripe.com', dataUri: 'data:image/svg+xml;base64,...', url: 'https://logoapi.sh/icon/stripe.com.svg',  source: 'cc0',    missing: false },
+//   { ticker: '../x',       dataUri: null,                            url: null,                                      source: null,     missing: true }
 // ]
 ```
 
-`getLogos(list)` returns one object per input item, in order: `ticker` (your input, echoed back), `dataUri` (`string | null`), `source` (`'cc0' | 'official' | null`) and `missing` (`boolean`). Tickers in any case and domains both work, like `getLogo()`. Coverage is the CC0 subset of 50 tickers (and 1,174 domains); never imply the full catalog.
+One object per input, in order: `ticker` (your input), `dataUri` (bundled file or `null`), `url` (hosted URL), `source` (`'cc0' | 'official' | 'hosted' | null`) and `missing` (`true` only for malformed input). Use `dataUri || url` as the image `src`.
 
-## Misses
+## Hosted URLs and misses
 
-When `getLogo()` returns `null`, show a letter tile (recipes below). Never guess or substitute another company's logo.
+- Tickers and coins: `/ticker/{SYM}.svg` (square icon; coins such as BTC answer their coin mark). Domains: `/icon/{domain}.svg`. Dark: the same path after `/dark/`.
+- The package builds the URL; the server decides the image. A domain with no catalog logo gets its favicon or a name tile. On `/ticker/` and `/crypto/`, a 404 means the API does not know the symbol (not a listed ticker or coin): check the status (or use `onerror`) and show a letter tile.
+- Never guess or substitute another company's logo.
 
 ## Recipes
 
-Portfolio tracker by ticker, with a letter tile when there is no logo:
+Portfolio tracker by ticker, with a letter tile if the hosted image fails:
 
 ```js
-import { getLogo } from 'logoapi';
+import { getLogos } from 'logoapi';
 
-const tile = (sym) =>
-  `<span class="tile">${sym.slice(0, 1).toUpperCase()}</span>`;
-const row = (sym) =>
-  `<li><span class="logo">${getLogo(sym) ?? tile(sym)}</span> ${sym}</li>`;
+const row = (r) =>
+  `<li><img src="${r.dataUri || r.url}" width="24" height="24" alt=""
+    onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'tile',textContent:'${r.ticker[0]}'}))"> ${r.ticker}</li>`;
 
-console.log(['AAPL', 'NVDA', 'ZZZZ'].map(row).join('\n'));
+console.log(getLogos(['AAPL', 'NVDA', 'MNDY']).filter((r) => !r.missing).map(row).join('\n'));
 ```
 
 Company directory by domain (the package ships its list):
@@ -96,7 +108,7 @@ export function Logo({ id, size = 32 }) {
 }
 ```
 
-Dark mode: these files keep their original colours (none use `currentColor`), so CSS cannot recolour them. For white, black, grey or dark-background versions use the API variants below.
+Dark mode: the bundled files keep their original colours (none use `currentColor`), so CSS cannot recolour them. Use `darkUrl(id)`, or the white, black and grey API variants below.
 
 ## Beyond this package
 

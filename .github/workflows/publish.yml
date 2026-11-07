@@ -56,7 +56,9 @@ jobs:
           set -euo pipefail
           for pkg in logoapi ticker-logos crypto-logos; do
             cd "packages/$pkg"
-            if grep -q '"dependencies"' package.json; then npm install --no-audit --no-fund --no-save; fi
+            # Dependents test against the sibling logoapi from this commit: the new
+            # logoapi version is only staged, not yet on the registry.
+            if grep -q '"dependencies"' package.json; then npm install --no-audit --no-fund --no-save ../logoapi; fi
             if npm run | grep -q '^  prepack'; then npm run prepack; fi
             if npm run | grep -q '^  test'; then npm test; fi
             cd ../..

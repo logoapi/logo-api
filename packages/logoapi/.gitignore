@@ -2,3 +2,4 @@
 /index.json
 /LICENSE
 *.tgz
+/node_modules/

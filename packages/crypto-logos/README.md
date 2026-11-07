@@ -1,35 +1,40 @@
 # crypto-logos
 
-Crypto coin logos by symbol (BTC, ETH, SOL) as SVG, offline. Official coin marks, with the CC0 files from logoapi as fallback.
-
-```
-https://logoapi.sh/crypto/BTC.svg
-```
+Crypto coin logos by symbol: 14 official coin marks offline, and a hosted logoapi.sh URL for every other coin, ticker and domain. No key.
 
 ```js
 // npm install crypto-logos
-const { getLogo } = require('crypto-logos');
-getLogo('BTC'); // '<svg ...>' (or null if the package has no logo)
+import { getLogos, darkUrl } from 'crypto-logos';
+
+// A watchlist: crypto, stocks and an ETF, by symbol.
+const rows = getLogos(['BTC', 'ETH', 'DOGE', 'AAPL', 'SPY', 'GBTC']);
+const html = rows
+  .map((r) => `<img src="${r.dataUri || r.url}" alt="${r.ticker}" width="32" height="32">`)
+  .join('');
+// BTC, ETH: official marks, no network. AAPL: CC0 file from logoapi.
+// DOGE: https://logoapi.sh/crypto/DOGE.svg. SPY, GBTC: https://logoapi.sh/ticker/SPY.svg (source: 'hosted').
+
+darkUrl('ETH'); // dark mode: 'https://logoapi.sh/dark/crypto/ETH.svg'
 ```
 
-This package ships 14 official coin marks (see `official/crypto/`) and falls back to `logoapi` (installed automatically as a dependency when you run `npm install crypto-logos`) for CC0 company and ticker logos. It exports `getLogo`, `getLogoPath`, `hasLogo`, `list` (adds `crypto: [...]`) and `getLogos`.
+This package ships 14 official coin marks (see `official/crypto/`) and falls back to `logoapi` (installed automatically) for CC0 company and ticker logos. It exports `getLogos`, `url`, `iconUrl`, `darkUrl`, `getLogo`, `getLogoPath`, `hasLogo` and `list` (adds `crypto: [...]`).
 
-`getLogo()` returns SVG markup as a string, never a URL, or `null` on a miss. On a miss, show a letter tile and never substitute another company's logo.
+`getLogo()` returns bundled SVG markup, or `null` when the file is not bundled (offline only). `url(id)` and `getLogos()` return a hosted URL for every well-formed coin, ticker or domain: `/crypto/{SYM}.svg` for coins the API knows, else `/ticker/{SYM}.svg` or `/icon/{domain}.svg`. On `/crypto/` and `/ticker/`, a 404 means the API does not know the symbol: check the status (or use `onerror`) and show a letter tile. Never substitute another company's logo.
 
 ### Batch lookup
 
 ```js
 import { getLogos } from 'crypto-logos';
 
-getLogos(['AAPL', 'stripe.com', 'ZZZZ']);
+getLogos(['AAPL', 'GBTC', '../x']);
 // [
-//   { ticker: 'AAPL',       dataUri: 'data:image/svg+xml;base64,...', source: 'cc0', missing: false },
-//   { ticker: 'stripe.com', dataUri: 'data:image/svg+xml;base64,...', source: 'cc0', missing: false },
-//   { ticker: 'ZZZZ',       dataUri: null,                            source: null,  missing: true }
+//   { ticker: 'AAPL', dataUri: 'data:image/svg+xml;base64,...', url: 'https://logoapi.sh/ticker/AAPL.svg', source: 'cc0',    missing: false },
+//   { ticker: 'GBTC', dataUri: null,                            url: 'https://logoapi.sh/ticker/GBTC.svg', source: 'hosted', missing: false },
+//   { ticker: '../x', dataUri: null,                            url: null,                                 source: null,     missing: true }
 // ]
 ```
 
-`getLogos(list)` returns one object per input item, in order: `ticker` (your input, echoed back), `dataUri` (`string | null`), `source` (`'cc0' | 'official' | null`) and `missing` (`boolean`). Tickers in any case and domains both work, like `getLogo()`. For coins, `source` is `'official'`. Coverage is the CC0 subset of 50 tickers (and 1,174 domains) plus the 14 coin marks; never imply the full catalog.
+`getLogos(list)` returns one object per input item, in order: `ticker` (your input), `dataUri` (bundled file or `null`), `url` (hosted URL), `source` (`'cc0' | 'official' | 'hosted' | null`) and `missing` (`true` only for malformed input). Use `dataUri || url` as the image `src`.
 
 ## Hosted API
 

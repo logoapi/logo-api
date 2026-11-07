@@ -1,35 +1,39 @@
 # ticker-logos
 
-Stock ticker logos as SVG, offline, no API key. Alias of logoapi.
-
-```
-https://logoapi.sh/ticker/AAPL.svg
-```
+Offline SVGs for 1,174 brands and 54 tickers, and a hosted logoapi.sh URL for every other ticker, coin and domain. No key. Alias of logoapi.
 
 ```js
 // npm install ticker-logos
-const { getLogo } = require('ticker-logos');
-getLogo('AAPL'); // '<svg ...>' (or null if the package has no logo)
+import { getLogos, darkUrl } from 'ticker-logos';
+
+// A watchlist: stocks, an ETF and crypto, by symbol.
+const rows = getLogos(['AAPL', 'NVDA', 'SPY', 'BTC', 'ETH', 'GBTC']);
+const html = rows
+  .map((r) => `<img src="${r.dataUri || r.url}" alt="${r.ticker}" width="32" height="32">`)
+  .join('');
+// AAPL, NVDA, BTC, ETH: bundled SVG, no network. SPY, GBTC: r.url = https://logoapi.sh/ticker/SPY.svg (source: 'hosted').
+
+darkUrl('AAPL'); // dark mode: 'https://logoapi.sh/dark/ticker/AAPL.svg'
 ```
 
-This package is an alias of `logoapi`; install that one directly if you prefer. It re-exports `getLogo`, `getLogoPath`, `hasLogo`, `list` and `getLogos`.
+This package is an alias of `logoapi`; install that one directly if you prefer. It re-exports `getLogos`, `url`, `iconUrl`, `darkUrl`, `getLogo`, `getLogoPath`, `hasLogo` and `list`.
 
-`getLogo()` returns SVG markup as a string, never a URL, or `null` on a miss. On a miss, show a letter tile and never substitute another company's logo.
+`getLogo()` returns bundled SVG markup, or `null` when the file is not bundled (offline only). `url(id)` and `getLogos()` return a hosted URL for every well-formed ticker, coin or domain. A symbol the API does not know answers 404 on that URL, so keep a letter tile, and never substitute another company's logo.
 
 ### Batch lookup
 
 ```js
 import { getLogos } from 'ticker-logos';
 
-getLogos(['AAPL', 'stripe.com', 'ZZZZ']);
+getLogos(['AAPL', 'GBTC', '../x']);
 // [
-//   { ticker: 'AAPL',       dataUri: 'data:image/svg+xml;base64,...', source: 'cc0', missing: false },
-//   { ticker: 'stripe.com', dataUri: 'data:image/svg+xml;base64,...', source: 'cc0', missing: false },
-//   { ticker: 'ZZZZ',       dataUri: null,                            source: null,  missing: true }
+//   { ticker: 'AAPL', dataUri: 'data:image/svg+xml;base64,...', url: 'https://logoapi.sh/ticker/AAPL.svg', source: 'cc0',    missing: false },
+//   { ticker: 'GBTC', dataUri: null,                            url: 'https://logoapi.sh/ticker/GBTC.svg', source: 'hosted', missing: false },
+//   { ticker: '../x', dataUri: null,                            url: null,                                 source: null,     missing: true }
 // ]
 ```
 
-`getLogos(list)` returns one object per input item, in order: `ticker` (your input, echoed back), `dataUri` (`string | null`), `source` (`'cc0' | 'official' | null`) and `missing` (`boolean`). Tickers in any case and domains both work, like `getLogo()`. Coverage is the CC0 subset of 50 tickers (and 1,174 domains); never imply the full catalog.
+`getLogos(list)` returns one object per input item, in order: `ticker` (your input), `dataUri` (bundled file or `null`), `url` (hosted URL), `source` (`'cc0' | 'official' | 'hosted' | null`) and `missing` (`true` only for malformed input). Use `dataUri || url` as the image `src`.
 
 ## Hosted API
 
