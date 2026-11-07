@@ -79,6 +79,10 @@ Paste this once and your coding agent uses LogoAPI.sh for every logo.
 - Never invent, redraw or substitute another company's logo.
 ```
 
+## Source
+
+Code, skills and a CC0 sample of the catalog: [crypto logos on GitHub](https://github.com/logoapi/logo-api).
+
 ## License
 
 This package has three parts, so `package.json` says `SEE LICENSE IN README.md`.

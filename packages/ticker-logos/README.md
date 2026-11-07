@@ -80,6 +80,10 @@ Paste this once and your coding agent uses LogoAPI.sh for every logo.
 - Never invent, redraw or substitute another company's logo.
 ```
 
+## Source
+
+Code, skills and a CC0 sample of the catalog: [stock ticker logos on GitHub](https://github.com/logoapi/logo-api).
+
 ## License
 
 - Code (`index.js`, `index.mjs`, `index.d.ts`): MIT.
