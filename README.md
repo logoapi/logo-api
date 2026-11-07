@@ -7,18 +7,40 @@
   </a>
 </p>
 
-<h1 align="center">Free logo API: company logos by domain, stock ticker or crypto symbol</h1>
+<h1 align="center">Stock ticker, crypto and company logos by URL</h1>
 
 <p align="center">
   <b>One URL returns the SVG. No API key, no signup, no attribution.</b><br>
-  A free alternative to the Clearbit Logo API. 2M requests a month per site. Commercial use included.
+  2M requests a month per site, free. Commercial use included.
 </p>
 
-<p align="center">
-  <code>https://logoapi.sh/stripe.com.svg</code><br>
-  <code>https://logoapi.sh/ticker/AAPL.svg</code><br>
-  <code>https://logoapi.sh/crypto/BTC.svg</code>
-</p>
+```
+https://logoapi.sh/ticker/AAPL.svg     stock or ETF ticker (square icon)
+https://logoapi.sh/crypto/BTC.svg      crypto symbol
+https://logoapi.sh/stripe.com.svg      company domain
+```
+
+<table align="center">
+  <tr>
+    <td align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://logoapi.sh/dark/ticker/AAPL.svg"><img src="https://logoapi.sh/ticker/AAPL.svg" alt="AAPL" width="40" height="40"></picture><br><code>AAPL</code><br><sub>stock</sub></td>
+    <td align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://logoapi.sh/dark/ticker/MSFT.svg"><img src="https://logoapi.sh/ticker/MSFT.svg" alt="MSFT" width="40" height="40"></picture><br><code>MSFT</code><br><sub>stock</sub></td>
+    <td align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://logoapi.sh/dark/ticker/VOO.svg"><img src="https://logoapi.sh/ticker/VOO.svg" alt="VOO" width="40" height="40"></picture><br><code>VOO</code><br><sub>ETF</sub></td>
+    <td align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://logoapi.sh/dark/crypto/BTC.svg"><img src="https://logoapi.sh/crypto/BTC.svg" alt="BTC" width="40" height="40"></picture><br><code>BTC</code><br><sub>coin</sub></td>
+    <td align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://logoapi.sh/dark/crypto/ETH.svg"><img src="https://logoapi.sh/crypto/ETH.svg" alt="ETH" width="40" height="40"></picture><br><code>ETH</code><br><sub>coin</sub></td>
+    <td align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://logoapi.sh/dark/crypto/SOL.svg"><img src="https://logoapi.sh/crypto/SOL.svg" alt="SOL" width="40" height="40"></picture><br><code>SOL</code><br><sub>coin</sub></td>
+  </tr>
+</table>
+
+<p align="center"><sub>Live responses from logoapi.sh (dark versions on dark themes). Ticker coverage: about 1,650 tickers have a catalog logo (1,455 vector); the rest get the company favicon or a name tile, and the <code>X-Logo-Fallback</code> header says which.</sub></p>
+
+```bash
+npm install logoapi        # or ticker-logos, stock-ticker-logos, crypto-logos
+```
+
+```js
+import { getLogos } from 'logoapi';
+getLogos(['AAPL', 'VOO', 'BTC']).map((r) => r.dataUri || r.url); // SVG data URI or hosted URL
+```
 
 <p align="center">
   This repo holds part of the catalog. The <a href="https://logoapi.sh?utm_source=github&utm_medium=readme&utm_campaign=logo-api">logoapi.sh</a> CDN serves all 5,000+ logos. We add more here when the licence allows.

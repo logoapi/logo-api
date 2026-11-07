@@ -9,7 +9,19 @@ assert(getLogo('apple.com') === getLogo('https://www.Apple.com/x'));
 assert.strictEqual(getLogo('nope'), null);
 assert.strictEqual(hasLogo('nope'), false);
 assert(getLogoPath('apple.com').endsWith('.svg'));
-assert(list().domains.length > 1000);
+// 0.3.0 (#1072): only ticker and coin files are bundled; other domains are hosted.
+assert(list().domains.length >= 40 && list().domains.length < 200);
+assert(list().domains.includes('apple.com'));
+assert.strictEqual(hasLogo('stripe.com'), false);
+assert.strictEqual(getLogos(['stripe.com'])[0].source, 'hosted');
+assert.strictEqual(getLogos(['stripe.com'])[0].url, H + '/icon/stripe.com.svg');
+{
+  const fs = require('fs');
+  const files = fs.readdirSync(require('path').join(__dirname, 'logos'));
+  assert(files.length <= 120, 'bundle grew past the public scope: ' + files.length);
+  const used = new Set([...Object.values(require('./index.json').tickers), ...Object.values(require('./index.json').domains)].map((p) => p.replace(/^logos\//, '')));
+  for (const f of files) assert(used.has(f), 'unused bundled file: ' + f);
+}
 
 // ETH, BTC, ADA, XMR: the CC0 coin files are bundled and now reachable by symbol.
 for (const sym of ['ETH', 'BTC', 'ADA', 'XMR']) {

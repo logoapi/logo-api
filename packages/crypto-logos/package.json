@@ -1,6 +1,6 @@
 {
   "name": "crypto-logos",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Crypto coin logos by symbol: 14 official marks offline, hosted logoapi.sh URL for every other coin, ticker and domain. No key.",
   "keywords": [
     "crypto",
@@ -50,7 +50,7 @@
     "README.md"
   ],
   "dependencies": {
-    "logoapi": "^0.2.0"
+    "logoapi": "^0.3.0"
   },
   "engines": {
     "node": ">=16.7"

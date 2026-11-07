@@ -45,7 +45,7 @@ jobs:
           set -euo pipefail
           [[ "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "Bad tag: $TAG"; exit 1; }
           git merge-base --is-ancestor "$GITHUB_SHA" origin/main || { echo "Tag commit is not on main"; exit 1; }
-          for pkg in logoapi ticker-logos crypto-logos; do
+          for pkg in logoapi ticker-logos crypto-logos stock-ticker-logos; do
             version=$(node -p "require('./packages/$pkg/package.json').version")
             [ "$TAG" = "v$version" ] || { echo "Tag $TAG does not match $pkg version $version"; exit 1; }
           done
@@ -54,7 +54,7 @@ jobs:
       - name: Test all packages
         run: |
           set -euo pipefail
-          for pkg in logoapi ticker-logos crypto-logos; do
+          for pkg in logoapi ticker-logos crypto-logos stock-ticker-logos; do
             cd "packages/$pkg"
             # Dependents test against the sibling logoapi from this commit: the new
             # logoapi version is only staged, not yet on the registry.
@@ -72,3 +72,12 @@ jobs:
             (cd "packages/$pkg" && npm stage publish --provenance --access public)
             echo "::endgroup::"
           done
+          # stock-ticker-logos: a new name needs one manual first publish and a trusted
+          # publisher on npm before this job can stage it. Skip it until it exists.
+          if npm view stock-ticker-logos name >/dev/null 2>&1; then
+            echo "::group::stage stock-ticker-logos"
+            (cd packages/stock-ticker-logos && npm stage publish --provenance --access public)
+            echo "::endgroup::"
+          else
+            echo "::notice::stock-ticker-logos is not on npm yet: first publish is manual"
+          fi

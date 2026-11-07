@@ -1,6 +1,6 @@
 # logoapi
 
-Offline SVGs for 1,174 brands and 54 tickers, and a hosted logoapi.sh URL for every other ticker, coin and domain. No key, zero dependencies.
+A logoapi.sh URL for any stock ticker, ETF, crypto symbol or domain, plus 54 ticker and coin SVGs bundled for offline use. No key, zero dependencies, about 100 kB.
 
 ```js
 // npm install logoapi
@@ -38,8 +38,9 @@ url('not a symbol!');      // null (malformed input only)
 getLogo('AAPL');            // '<svg ...>'; ticker, any case
 getLogo('apple.com');       // domain; https://www.apple.com/ also works
 getLogo('GBTC');            // null (not bundled; use url('GBTC'))
-hasLogo('stripe.com');      // true
-getLogoPath('stripe.com');  // absolute path to the .svg, or null
+hasLogo('apple.com');       // true (company of a bundled ticker)
+hasLogo('stripe.com');      // false since 0.3.0: use url('stripe.com')
+getLogoPath('apple.com');   // absolute path to the .svg, or null
 list();                     // { domains: [...], tickers: [...] } (bundled only)
 ```
 
@@ -50,7 +51,7 @@ getLogos(['AAPL', 'GBTC', 'stripe.com', '../x']);
 // [
 //   { ticker: 'AAPL',       dataUri: 'data:image/svg+xml;base64,...', url: 'https://logoapi.sh/ticker/AAPL.svg',      source: 'cc0',    missing: false },
 //   { ticker: 'GBTC',       dataUri: null,                            url: 'https://logoapi.sh/ticker/GBTC.svg',      source: 'hosted', missing: false },
-//   { ticker: 'stripe.com', dataUri: 'data:image/svg+xml;base64,...', url: 'https://logoapi.sh/icon/stripe.com.svg',  source: 'cc0',    missing: false },
+//   { ticker: 'stripe.com', dataUri: null,                            url: 'https://logoapi.sh/icon/stripe.com.svg',  source: 'hosted', missing: false },
 //   { ticker: '../x',       dataUri: null,                            url: null,                                      source: null,     missing: true }
 // ]
 ```
@@ -77,13 +78,13 @@ const row = (r) =>
 console.log(getLogos(['AAPL', 'NVDA', 'MNDY']).filter((r) => !r.missing).map(row).join('\n'));
 ```
 
-Company directory by domain (the package ships its list):
+Company directory by domain (hosted URL for any domain, bundled file when there is one):
 
 ```js
-import { getLogo, list } from 'logoapi';
+import { getLogos } from 'logoapi';
 
-const cards = list().domains.slice(0, 12)
-  .map((d) => `<a href="https://${d}">${getLogo(d)}<span>${d}</span></a>`);
+const cards = getLogos(['stripe.com', 'apple.com', 'notion.so'])
+  .map((r) => `<a href="https://${r.ticker}"><img src="${r.dataUri || r.url}" width="32" height="32" alt=""><span>${r.ticker}</span></a>`);
 ```
 
 Sandboxed artifact or preview that blocks outside images: call `getLogo()` at build time (it reads files with Node `fs`, so not in browser code) and embed the string.
@@ -93,7 +94,7 @@ import { writeFileSync } from 'node:fs';
 import { getLogo } from 'logoapi';
 
 writeFileSync('index.html',
-  `<div class="logo">${getLogo('stripe.com') ?? ''}</div>`);
+  `<div class="logo">${getLogo('AAPL') ?? ''}</div>`);
 ```
 
 React component (server component or build step, keep `logoapi` external if you bundle for Node; the SVG comes from your own package, not user input):

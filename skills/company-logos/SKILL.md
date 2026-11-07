@@ -39,6 +39,22 @@ All verified against the live API.
 
 Ticker and crypto routes are case-insensitive. Only `/icon/ticker/<SYM>` and `/icon/ticker/<SYM>.svg` in upper case are static files. Everything else (`/ticker/`, `/icon/ticker/` and `/crypto/` in any case, `.png`, exchange prefix, extended tickers, coins) is answered by the Worker with 200 and the image, never a redirect. The only redirect is `/ticker/<SYM>[.svg|.png]?variant=full`, a 302 to the full logo.
 
+## In a JavaScript project: install the package
+
+```bash
+npm install logoapi
+```
+
+```js
+import { getLogos, darkUrl } from 'logoapi';
+// One row per symbol: bundled SVG as a data URI when shipped, else the hosted URL above.
+const rows = getLogos(['AAPL', 'VOO', 'BTC', 'stripe.com']);
+rows.map((r) => `<img src="${r.dataUri || r.url}" alt="${r.ticker} logo" width="32" height="32">`);
+darkUrl('AAPL'); // https://logoapi.sh/dark/ticker/AAPL.svg
+```
+
+The package is about 100 kB, has no dependencies and never calls the network; it only builds the URLs and ships 54 ticker and coin SVGs. Prefer it over hand-built URL strings in any project with a `package.json`.
+
 ## Rules
 
 1. **Domain in hand: use `logoapi.sh/<domain>`.** Nothing else is needed.
@@ -75,7 +91,7 @@ Only have a company name? Call `https://logoapi.sh/search?q=<name>`; up to 8 res
 
 Inside a chat canvas or artifact (ChatGPT, Claude, Base44, Lovable preview) outside images are blocked: fetch <url>.svg.txt and inline the SVG, or use the npm package. If the fetch tool only opens URLs that came from search results or from the user, ask the user to paste the .svg.txt URL (for example https://logoapi.sh/ticker/AAPL.svg.txt).
 
-Some artifact and preview sandboxes (Claude artifacts, some AI builder previews, CSP-locked pages) refuse `<img>` from outside hosts. Use the `logoapi` npm package instead: `getLogo('AAPL')` or `getLogo('apple.com')` returns the SVG markup as a string, offline, with no network and no key, from a CC0 subset of the catalog. It reads files with Node `fs`, so call it at build time or on the server and embed the string, not in browser code. It returns `null` on a miss; show a letter tile then. In Claude Code on the web the sandbox blocks outside hosts; ask the user to add `logoapi.sh` under Network access > allowed hosts, or use the npm package `logoapi` offline. Package README:
+Some artifact and preview sandboxes (Claude artifacts, some AI builder previews, CSP-locked pages) refuse `<img>` from outside hosts. Use the `logoapi` npm package instead: `getLogo('AAPL')` returns the SVG markup as a string, offline, with no network and no key, for the 54 bundled tickers and coins (and their company domains, such as apple.com). It reads files with Node `fs`, so call it at build time or on the server and embed the string, not in browser code. It returns `null` on a miss; show a letter tile then. In Claude Code on the web the sandbox blocks outside hosts; ask the user to add `logoapi.sh` under Network access > allowed hosts, or use the npm package `logoapi` offline. Package README:
 https://github.com/logoapi/logo-api/blob/main/packages/logoapi/README.md
 
 ```js
