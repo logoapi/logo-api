@@ -1,6 +1,6 @@
 # Tickers
 
-One SVG per stock ticker, a CC0 subset of the catalog. Same files as `logos/`, under predictable names.
+One SVG per stock ticker, a CC0 sample of the catalog (50 tickers). Same files as `logos/`, under predictable names. This is not the full list: every ticker in `index.json` (6,562) is served from `https://logoapi.sh/ticker/<SYMBOL>.svg`.
 
 Raw URL pattern:
 

@@ -11,7 +11,8 @@
 
 <p align="center">
   <b>One URL returns the SVG. No API key, no signup, no attribution.</b><br>
-  2M requests a month per site, free. Commercial use included.
+  2M requests a month per site, free. Commercial use included.<br>
+  Covers 6,562 stock and ETF tickers, 17 coins and 5,000+ company domains.
 </p>
 
 ```
@@ -31,7 +32,7 @@ https://logoapi.sh/stripe.com.svg      company domain
   </tr>
 </table>
 
-<p align="center"><sub>Live responses from logoapi.sh (dark versions on dark themes). Ticker coverage: about 1,650 tickers have a catalog logo (1,455 vector); the rest get the company favicon or a name tile, and the <code>X-Logo-Fallback</code> header says which.</sub></p>
+<p align="center"><sub>Live responses from logoapi.sh (dark versions on dark themes). Ticker icons: about 1,500 vector marks, the rest favicon or name tile; the <code>X-Logo-Fallback</code> header says which.</sub></p>
 
 ```bash
 npm install logoapi        # or ticker-logos, stock-ticker-logos, crypto-logos
@@ -62,6 +63,11 @@ getLogos(['AAPL', 'VOO', 'BTC']).map((r) => r.dataUri || r.url); // SVG data URI
   <a href="https://logoapi.sh/blog/clearbit-logo-api-migration?utm_source=github&utm_medium=readme&utm_campaign=logo-api">Migrating from Clearbit</a>
 </p>
 
+<p align="center"><sub>
+  An ETF shows its issuer's logo (VOO is Vanguard, SPY is State Street): a fund has no logo of its own, so that is the right answer, not a miss.<br>
+  Served from Cloudflare's edge. <a href="https://stats.uptimerobot.com/i1AcYCwDhS">Live status</a>. Any free-tier cut gets 12 months' notice, and changes are posted first on the <a href="https://logoapi.sh/terms?utm_source=github&utm_medium=readme&utm_campaign=logo-api">terms page</a>.
+</sub></p>
+
 <br>
 
 <p align="center">
@@ -87,7 +93,7 @@ getLogos(['AAPL', 'VOO', 'BTC']).map((r) => r.dataUri || r.url); // SVG data URI
 - Files in this repo are CC0 (public domain). Logos remain trademarks of their owners: use them to identify the company, and don't suggest the company endorses you. Full catalog and terms: https://logoapi.sh.
 - The full catalog (5,000+ logos, tickers, crypto, PNG) is on the API: `https://logoapi.sh/<domain>`, `https://logoapi.sh/ticker/<SYM>` and `https://logoapi.sh/icon/ticker/<SYM>`.
 - Tickers: `index.json` has a `tickers` map, and the API serves `https://logoapi.sh/ticker/<SYM>`. ETFs map to the issuer (SPY goes to ssga.com).
-- Stock tickers also sit at `tickers/<SYMBOL>.svg` (same files, predictable names), for example `.../main/tickers/AAPL.svg`.
+- Stock tickers also sit at `tickers/<SYMBOL>.svg` (same files, predictable names), for example `.../main/tickers/AAPL.svg`. The folder is a sample of 50 tickers. Every ticker in `index.json` (6,562) is served from `https://logoapi.sh/ticker/{SYM}.svg`.
 - Official square marks (trademarks, not CC0) for the top US tickers and main coins sit at `official/tickers/<SYMBOL>.svg` and `official/crypto/<SYMBOL>.svg`, map in `official/index.json`, terms in `official/LICENSE.md`. See [official/README.md](official/README.md).
 - Right now `index.json` lists 1,174 domains and 50 tickers, and every repo path in it exists.
 - If outside hosts are blocked, connect the MCP server `https://logoapi.sh/mcp`, or ask the user to allow `logoapi.sh`.
