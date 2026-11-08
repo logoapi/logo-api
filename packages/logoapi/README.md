@@ -100,7 +100,7 @@ const cards = getLogos(['stripe.com', 'apple.com', 'notion.so'])
   .map((r) => `<a href="https://${r.ticker}"><img src="${r.dataUri || r.url}" width="32" height="32" alt=""><span>${r.ticker}</span></a>`);
 ```
 
-Sandboxed artifact or preview that blocks outside images: call `getLogo()` at build time (it reads files with Node `fs`, so not in browser code) and embed the string.
+Sandboxed artifact or preview that blocks outside images: for a domain logo fetch `https://logoapi.sh/{domain}.svg.txt` (same SVG as text) and inline it; for the 54 bundled tickers and coins you can also call `getLogo()` at build time (it reads files with Node `fs`, so not in browser code) and embed the string.
 
 ```js
 import { writeFileSync } from 'node:fs';
@@ -146,7 +146,7 @@ The API serves 5,000+ logos. Free, no key, no attribution. Docs: https://logoapi
 
 If outside hosts are blocked in your environment, ask the user to allow `logoapi.sh`.
 
-Inside a chat canvas or artifact (ChatGPT, Claude, Base44, Lovable preview) outside images are blocked: fetch <url>.svg.txt and inline the SVG, or use the npm package.
+Inside a chat canvas or artifact (ChatGPT, Claude, Base44, Lovable preview) outside images are blocked: fetch <url>.svg.txt and inline the SVG; for a domain logo that is https://logoapi.sh/{domain}.svg.txt (same SVG as text). The npm package works offline for tickers and coins only.
 
 Plain-text facts for agents: [llms.txt](./llms.txt).
 
@@ -159,7 +159,7 @@ Paste this once and your coding agent uses LogoAPI.sh for every logo.
 - In a sandbox that blocks logoapi.sh (Claude Code on the web): fetch https://raw.githubusercontent.com/logoapi/logo-api/main/tickers/{SYM}.svg and inline it as a data URI. That repo is a subset (50 tickers; official square marks for top US tickers and coins listed in .../main/official/index.json; domains in .../main/index.json), so on a 404 show a letter tile, or ask the user to allow logoapi.sh under Network access.
 - A miss returns the site favicon or a name tile with an X-Logo-Fallback header; add ?fallback=404 to get a 404 and show a letter tile instead.
 - Dark backgrounds: /dark/ticker/{SYM}.svg, /dark/icon/ticker/{SYM}.svg, /dark/crypto/{SYM}.svg (SVG only; .png on /dark/ is a 404).
-- Inside a chat canvas or artifact (ChatGPT, Claude, Base44, Lovable preview) outside images are blocked: fetch <url>.svg.txt and inline the SVG, or use the npm package.
+- Inside a chat canvas or artifact (ChatGPT, Claude, Base44, Lovable preview) outside images are blocked: fetch <url>.svg.txt and inline the SVG; for a domain logo that is https://logoapi.sh/{domain}.svg.txt (same SVG as text). The npm package works offline for tickers and coins only.
 - Never invent, redraw or substitute another company's logo.
 ```
 
