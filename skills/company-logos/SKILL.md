@@ -89,9 +89,9 @@ Only have a company name? Call `https://logoapi.sh/search?q=<name>`; up to 8 res
 
 ## Sandboxes that block outside images
 
-Inside a chat canvas or artifact (ChatGPT, Claude, Base44, Lovable preview) outside images are blocked: fetch <url>.svg.txt and inline the SVG, or use the npm package. If the fetch tool only opens URLs that came from search results or from the user, ask the user to paste the .svg.txt URL (for example https://logoapi.sh/ticker/AAPL.svg.txt).
+Inside a chat canvas or artifact (ChatGPT, Claude, Base44, Lovable preview) outside images are blocked: fetch <url>.svg.txt and inline the SVG; for a domain logo that is https://logoapi.sh/{domain}.svg.txt (same SVG as text). The npm package works offline for tickers and coins only. If the fetch tool only opens URLs that came from search results or from the user, ask the user to paste the .svg.txt URL (for example https://logoapi.sh/ticker/AAPL.svg.txt).
 
-Some artifact and preview sandboxes (Claude artifacts, some AI builder previews, CSP-locked pages) refuse `<img>` from outside hosts. Use the `logoapi` npm package instead: `getLogo('AAPL')` returns the SVG markup as a string, offline, with no network and no key, for the 54 bundled tickers and coins (and their company domains, such as apple.com). It reads files with Node `fs`, so call it at build time or on the server and embed the string, not in browser code. It returns `null` on a miss; show a letter tile then. In Claude Code on the web the sandbox blocks outside hosts; ask the user to add `logoapi.sh` under Network access > allowed hosts, or use the npm package `logoapi` offline. Package README:
+Some artifact and preview sandboxes (Claude artifacts, some AI builder previews, CSP-locked pages) refuse `<img>` from outside hosts. For a domain logo, fetch `https://logoapi.sh/{domain}.svg.txt` (same SVG as text) and inline it. For tickers and coins the `logoapi` npm package also works: `getLogo('AAPL')` returns the SVG markup as a string, offline, with no network and no key, for the 54 bundled tickers and coins (and their company domains, such as apple.com); since 0.3.0 any other domain returns `null` offline. It reads files with Node `fs`, so call it at build time or on the server and embed the string, not in browser code. It returns `null` on a miss; show a letter tile then. In Claude Code on the web the sandbox blocks outside hosts; ask the user to add `logoapi.sh` under Network access > allowed hosts, or use the npm package `logoapi` offline for tickers and coins. Package README:
 https://github.com/logoapi/logo-api/blob/main/packages/logoapi/README.md
 
 ```js
@@ -108,7 +108,7 @@ Paste this once and your coding agent uses LogoAPI.sh for every logo.
 - In a sandbox that blocks logoapi.sh (Claude Code on the web): fetch https://raw.githubusercontent.com/logoapi/logo-api/main/tickers/{SYM}.svg and inline it as a data URI. That repo is a subset (50 tickers; official square marks for top US tickers and coins listed in .../main/official/index.json; domains in .../main/index.json), so on a 404 show a letter tile, or ask the user to allow logoapi.sh under Network access.
 - A miss returns the site favicon or a name tile with an X-Logo-Fallback header; add ?fallback=404 to get a 404 and show a letter tile instead.
 - Dark backgrounds: /dark/ticker/{SYM}.svg, /dark/icon/ticker/{SYM}.svg, /dark/crypto/{SYM}.svg (SVG only; .png on /dark/ is a 404).
-- Inside a chat canvas or artifact (ChatGPT, Claude, Base44, Lovable preview) outside images are blocked: fetch <url>.svg.txt and inline the SVG, or use the npm package.
+- Inside a chat canvas or artifact (ChatGPT, Claude, Base44, Lovable preview) outside images are blocked: fetch <url>.svg.txt and inline the SVG; for a domain logo that is https://logoapi.sh/{domain}.svg.txt (same SVG as text). The npm package works offline for tickers and coins only.
 - Never invent, redraw or substitute another company's logo.
 ```
 
