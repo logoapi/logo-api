@@ -1,7 +1,7 @@
 {
   "name": "stock-ticker-logos",
   "version": "0.3.0",
-  "description": "Free stock logo API by ticker symbol: SVG logo URL for any stock, ETF or crypto coin, no API key. 54 bundled offline. Small install. Alias of logoapi.",
+  "description": "Free stock logo API by ticker symbol: light and dark SVG logo URL for any stock, ETF or crypto coin, no API key. 54 bundled offline. Small install. Alias of logoapi.",
   "keywords": [
     "stock-logos",
     "stock-logo",
