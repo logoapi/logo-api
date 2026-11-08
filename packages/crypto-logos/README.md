@@ -21,7 +21,7 @@ Published pages or sandboxes that block remote images: fetch https://logoapi.sh/
 Promise: the free tier stays free. We give 12 months' notice before the free tier is reduced or removed.
 
 - Limits: 2M requests a month per site. Free, no key, no attribution.
-- Ticker and crypto URLs: no per-IP rate limit at the edge today, no key. Fair use applies.
+- Ticker and crypto logo URLs: no rate limit, no key.
 - Catalog: about 1,500 vector marks across tickers and domains. Everything else gets the site's favicon or a name tile, and the `X-Logo-Fallback` response header says so. Add `?fallback=404` to get a 404 instead.
 - Source: [github.com/logoapi/logo-api](https://github.com/logoapi/logo-api). Docs: [logoapi.sh/docs](https://logoapi.sh/docs).
 
