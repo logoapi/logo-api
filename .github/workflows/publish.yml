@@ -50,6 +50,19 @@ jobs:
             [ "$TAG" = "v$version" ] || { echo "Tag $TAG does not match $pkg version $version"; exit 1; }
           done
 
+      - name: No install scripts
+        run: |
+          set -euo pipefail
+          for pkg in logoapi ticker-logos crypto-logos stock-ticker-logos; do
+            for script in install preinstall postinstall; do
+              found=$(PKG="$pkg" SCRIPT="$script" node -e "const p=require('./packages/'+process.env.PKG+'/package.json'); process.stdout.write(p.scripts && p.scripts[process.env.SCRIPT] ? 'yes' : '')")
+              if [ -n "$found" ]; then
+                echo "::error::Package $pkg has a $script script. Install scripts are not allowed."
+                exit 1
+              fi
+            done
+          done
+
       # Order matters: logoapi first, the other two depend on it.
       - name: Test all packages
         run: |
