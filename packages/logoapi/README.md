@@ -14,6 +14,8 @@ URL example, no code needed:
 
 Renders as: ![Apple logo](https://logoapi.sh/ticker/AAPL.svg)
 
+Dark background? Use darkUrl('AAPL') or https://logoapi.sh/dark/ticker/AAPL.svg.
+
 - Limits: 2M requests a month per site. Free, no key, no attribution.
 - Catalog: about 1,500 vector marks across tickers and domains. Everything else gets the site's favicon or a name tile, and the `X-Logo-Fallback` response header says so. Add `?fallback=404` to get a 404 instead.
 - Source: [github.com/logoapi/logo-api](https://github.com/logoapi/logo-api). Docs: [logoapi.sh/docs](https://logoapi.sh/docs).
