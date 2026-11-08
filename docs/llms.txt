@@ -52,7 +52,7 @@ Responses send Access-Control-Allow-Origin: * and logo updates go live everywher
 
 ## Limits
 
-Limits: 2M requests a month per site. Free, no key. Pro is $29 a month for up to 10M requests a month, no attribution, email support (contact hello@logoapi.sh, waitlist). Tag search returns the first 48 results (a tag plus q gives up to 8). Need more (aggregators, bulk, heavy apps)? Pro is $29 a month for up to 10M requests a month; email hello@logoapi.sh.
+Limits: 2M requests a month per site. Free, no key. Pro is $49 a month. It adds an uptime promise with credits if we miss it, an email reply within 1 business day, and missing or wrong logos fixed within 48 business hours (contact hello@logoapi.sh). Tag search returns the first 48 results (a tag plus q gives up to 8). Need more (aggregators, bulk, heavy apps)? Enterprise has custom limits; email hello@logoapi.sh.
 
 Partners: https://partners.logoapi.sh serves the same routes with an X-Partner-Key header (server-side only) and no edge rate limit; search and MCP limits count per key. Nightly catalog list: /snapshot/latest.json.gz on that host (gzip JSON; rows: domain, name, kind svg|png|png-svg-icon, wordmark, no_icon, aliases). Ask hello@logoapi.sh for a key.
 

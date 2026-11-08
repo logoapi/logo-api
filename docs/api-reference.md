@@ -288,7 +288,7 @@ An unknown ticker returns a plain `404`. A known ticker with no logo in the cata
 
 ## Limits
 
-2M requests a month per site. Free. No key. No attribution required. Embed our logos and use the search API in your site or app. Don't copy the whole catalog. No surprise bills: we never charge unless you choose a paid plan. Need more volume? Pro is $29 a month for up to 10M requests a month; contact us. Comparing free tiers? See the [best free logo API](https://logoapi.sh/best-free-logo-api).
+2M requests a month per site. Free. No key. No attribution required. Embed our logos and use the search API in your site or app. Don't copy the whole catalog. No surprise bills: we never charge unless you choose a paid plan. Need more volume? Enterprise has custom limits; contact us. Comparing free tiers? See the [best free logo API](https://logoapi.sh/best-free-logo-api).
 
 Tag search returns the first 48 results. A tag plus `q` gives up to 8.
 
