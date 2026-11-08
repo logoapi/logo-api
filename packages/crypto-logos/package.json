@@ -1,24 +1,24 @@
 {
   "name": "crypto-logos",
   "version": "0.3.0",
-  "description": "Crypto coin logos by symbol: 14 official marks offline, hosted logoapi.sh URL for every other coin, ticker and domain. No key.",
+  "description": "Crypto logo API by symbol: SVG coin logos, 14 official marks offline, free hosted logoapi.sh URL for every other coin, stock ticker and domain. No API key.",
   "keywords": [
     "crypto",
     "crypto-logo",
     "crypto-logos",
+    "crypto-icons",
+    "coin-logos",
+    "cryptocurrency",
     "bitcoin",
     "ethereum",
     "coin",
     "token",
     "logo",
     "logos",
-    "company-logo",
+    "logo-api",
     "svg",
     "no-api-key",
-    "clearbit-alternative",
-    "logo-api",
-    "offline",
-    "ai-agent"
+    "offline"
   ],
   "homepage": "https://logoapi.sh",
   "repository": {

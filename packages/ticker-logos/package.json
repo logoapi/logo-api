@@ -1,21 +1,25 @@
 {
   "name": "ticker-logos",
   "version": "0.3.0",
-  "description": "Stock ticker logos by symbol: hosted logoapi.sh SVG URL for any ticker, ETF or coin, 54 bundled offline. Small install, no key. Alias of logoapi.",
+  "description": "Stock ticker logo API: SVG logo URL for any stock, ETF or crypto symbol, free, no API key. 54 bundled offline. Small install. Alias of logoapi.",
   "keywords": [
     "ticker",
     "ticker-logos",
+    "ticker-logo",
     "stock",
     "stock-logo",
+    "stock-logos",
+    "stock-ticker",
+    "etf",
+    "etf-logo",
     "logo",
     "logos",
+    "logo-api",
     "company-logo",
     "svg",
     "no-api-key",
-    "clearbit-alternative",
-    "logo-api",
     "offline",
-    "ai-agent"
+    "clearbit-alternative"
   ],
   "homepage": "https://logoapi.sh",
   "repository": {
