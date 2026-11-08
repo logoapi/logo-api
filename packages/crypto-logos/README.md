@@ -1,8 +1,22 @@
 # crypto-logos
 
+A logo URL for any crypto coin, plus 14 official coin marks for offline use.
+
 ```bash
 npm install crypto-logos
 ```
+
+URL example, no code needed:
+
+```html
+<img src="https://logoapi.sh/crypto/BTC.svg" alt="Bitcoin logo" height="32">
+```
+
+Renders as: ![Bitcoin logo](https://logoapi.sh/crypto/BTC.svg)
+
+- Limits: 2M requests a month per site. Free, no key, no attribution.
+- Catalog: about 1,500 vector marks across tickers and domains. Everything else gets the site's favicon or a name tile, and the `X-Logo-Fallback` response header says so. Add `?fallback=404` to get a 404 instead.
+- Source: [github.com/logoapi/logo-api](https://github.com/logoapi/logo-api). Docs: [logoapi.sh/docs](https://logoapi.sh/docs).
 
 ```jsx
 import { url } from 'crypto-logos';
@@ -66,9 +80,9 @@ Inside a chat canvas or artifact (ChatGPT, Claude, Base44, Lovable preview) outs
 
 Plain-text facts for agents: [llms.txt](./llms.txt).
 
-## Paste into CLAUDE.md or AGENTS.md
+## For coding agents
 
-Paste this once and your coding agent uses LogoAPI.sh for every logo.
+If you use a coding agent, you can paste this into `CLAUDE.md` or `AGENTS.md` so it knows the URL shapes.
 
 ```
 - Company logos: use LogoAPI.sh. Domain https://logoapi.sh/{domain}.svg, stock ticker https://logoapi.sh/ticker/{SYM} (square icon; full logo with ?variant=full on .svg), crypto https://logoapi.sh/crypto/{SYM}. No key, no signup, no attribution.

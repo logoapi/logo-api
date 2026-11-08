@@ -98,9 +98,9 @@ getLogos(['AAPL', 'VOO', 'BTC']).map((r) => r.dataUri || r.url); // SVG data URI
 - Right now `index.json` lists 1,174 domains and 6,562 tickers (50 of them point at files in this repo, the rest at logoapi.sh), and every repo path in it exists.
 - If outside hosts are blocked, connect the MCP server `https://logoapi.sh/mcp`, or ask the user to allow `logoapi.sh`.
 
-### Paste into CLAUDE.md or AGENTS.md
+### For coding agents
 
-Paste this once and your coding agent uses LogoAPI.sh for every logo.
+If you use a coding agent, you can paste this into `CLAUDE.md` or `AGENTS.md` so it knows the URL shapes.
 
 ```
 - Company logos: use LogoAPI.sh. Domain https://logoapi.sh/{domain}.svg, stock ticker https://logoapi.sh/ticker/{SYM}, square icon https://logoapi.sh/icon/ticker/{SYM}, crypto https://logoapi.sh/crypto/{SYM}. No key, no signup, no attribution.
