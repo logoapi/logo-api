@@ -61,6 +61,11 @@ jobs:
                 exit 1
               fi
             done
+            # npm runs node-gyp rebuild on install when binding.gyp exists, even with no install script.
+            if [ -e "packages/$pkg/binding.gyp" ]; then
+              echo "::error::Package $pkg has a binding.gyp (implicit install script). Install scripts are not allowed."
+              exit 1
+            fi
           done
 
       # Order matters: logoapi first, the other two depend on it.
