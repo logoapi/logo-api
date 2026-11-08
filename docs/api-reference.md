@@ -1,5 +1,5 @@
 Canonical: https://logoapi.sh/docs
-Synced from the site build on 2026-11-07; do not edit here.
+Synced from the site build on 2026-11-08; do not edit here.
 
 # LogoAPI.sh API reference: logo, icon, favicon and search endpoints
 
@@ -14,7 +14,7 @@ Everything LogoAPI.sh does today, with real examples. Every route is a plain GET
 
 **No key, no signup, no attribution. Commercial use included.** Copy this tag, swap the domain, done.
 
-Every fallback says so in the `X-Logo-Fallback` response header, or add `?fallback=404` to get a 404 instead.
+Every fallback says so in the `X-Logo-Fallback` response header, or add `?fallback=404` to get a 404 instead. Values: `wordmark` (ticker icon routes only: no catalog square icon, so the company wordmark stands in), `favicon` (the site's own favicon), `tile` (a name tile, no image found).
 
 ```
 <img src="https://logoapi.sh/stripe.com.svg" alt="Stripe" height="24">
@@ -267,7 +267,7 @@ Logo updates go live everywhere within a day. Logos, icons, favicons and colour 
 
 **GET** `/ticker/{TICKER}.svg`
 
-Get the square icon of a listed company by its stock ticker. The URL answers `200` with the icon, the same image as `/icon/{domain}.svg`, on every form (no redirect, so fetchers that do not follow redirects work). Add `?variant=full` for the full logo instead (the image of `/{domain}.svg`, also without a redirect). Use `.svg` or `.png`; the query string is kept. Tickers are not case sensitive. To pick an exchange, use `/ticker/{EXCHANGE}:{TICKER}.svg`, for example `NASDAQ:MNDY` (`%3A` also works). If a ticker is listed on several exchanges, the US listing is preferred. An unknown ticker returns a plain 404. Coverage: 6,562 tickers; 1,647 have a catalog logo (1,455 vector), served with `?variant=full`. The default square icon is a catalog icon for 402 of them; the rest get the company favicon or a name tile (`X-Logo-Fallback` says which). The ticker list in our public GitHub repo gives each ticker a `kind` for the square icon: `vector`, `raster` or `fallback`.
+Get the square icon of a listed company by its stock ticker. The URL answers `200` with the icon, the same image as `/icon/{domain}.svg`, on every form (no redirect, so fetchers that do not follow redirects work). Add `?variant=full` for the full logo instead (the image of `/{domain}.svg`, also without a redirect). Use `.svg` or `.png`; the query string is kept. Tickers are not case sensitive. To pick an exchange, use `/ticker/{EXCHANGE}:{TICKER}.svg`, for example `NASDAQ:MNDY` (`%3A` also works). If a ticker is listed on several exchanges, the US listing is preferred. An unknown ticker returns a plain 404. Coverage: 6,562 tickers; the square icon is a vector mark for about 1,500 (catalog icon, else the company wordmark), the rest get the favicon or a name tile (`X-Logo-Fallback` says which); `?variant=full` gives the full catalog logo where we have one. The ticker list in our public GitHub repo gives each ticker a `kind` for the square icon: `vector`, `raster` or `fallback`.
 
 ```
 <img src="https://logoapi.sh/ticker/MNDY.svg" alt="monday.com" height="24">
@@ -282,7 +282,7 @@ For dark backgrounds, `/dark/ticker/{TICKER}.svg` is the square icon recoloured 
 
 **Errors**
 
-An unknown ticker returns a plain `404`. A known ticker with no logo in the catalog yet serves the company's own favicon on the `.svg` URL, or a name tile when there is none; `X-Logo-Fallback` says which. Add `?fallback=none` to get a 404 instead.
+An unknown ticker returns a plain `404`. A known ticker with no logo in the catalog yet serves the company's own favicon on the `.svg` URL, or a name tile when there is none; `X-Logo-Fallback` says which (`wordmark`, `favicon` or `tile`). Add `?fallback=none` to get a 404 instead.
 
 [Full guide: company logo by stock ticker](https://logoapi.sh/docs/logo-by-stock-ticker)
 
