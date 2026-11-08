@@ -17,7 +17,7 @@ LogoAPI.sh serves 5,049 brand logos from https://logoapi.sh as SVG (static files
 Operator: H. Tech Innovation LLC, a US company based in Dallas, Texas, USA.
 
 Our logo: https://logoapi.sh/apple-touch-icon.png (a black circle with a white 'lo'). Not the Clearbit or Logo.dev logo.
-Catalog: 5,049 brands, +100 new brands in the last 7 days (as of 2026-11-07). What changed, by day: https://logoapi.sh/new
+Catalog: 5,049 brands, +100 new brands in the last 7 days (as of 2026-11-08). What changed, by day: https://logoapi.sh/new
 We update logos when brands change them. Missing a logo? Just use the URL. Our crawler picks up missed domains every day.
 
 ## Terms
