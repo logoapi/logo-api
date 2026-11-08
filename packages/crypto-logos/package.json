@@ -1,7 +1,7 @@
 {
   "name": "crypto-logos",
   "version": "0.3.0",
-  "description": "Crypto logo API by symbol: SVG coin logos, 14 official marks offline, free hosted logoapi.sh URL for every other coin, stock ticker and domain. No API key.",
+  "description": "Crypto logo API by symbol: light and dark SVG coin logos, 14 official marks offline, free hosted logoapi.sh URL for every other coin, stock ticker and domain. No API key.",
   "keywords": [
     "crypto",
     "crypto-logo",
