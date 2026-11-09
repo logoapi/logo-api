@@ -32,7 +32,7 @@ https://logoapi.sh/stripe.com.svg      company domain
   </tr>
 </table>
 
-<p align="center"><sub>Live responses from logoapi.sh (dark versions on dark themes). About <!-- n:tickers_vector -->1,600<!-- /n --> tickers have a vector logo (icon or wordmark), favicon or name tile for the rest; the <code>X-Logo-Fallback</code> header says which.</sub></p>
+<p align="center"><sub>Live responses from logoapi.sh (dark versions on dark themes). About <!-- n:tickers_vector -->1,500<!-- /n --> tickers have a vector logo (icon or wordmark), favicon or name tile for the rest; the <code>X-Logo-Fallback</code> header says which.</sub></p>
 
 ```bash
 npm install logoapi        # or ticker-logos, stock-ticker-logos, crypto-logos

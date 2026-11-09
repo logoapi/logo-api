@@ -22,7 +22,7 @@ Promise: the free tier stays free. We give 12 months' notice before the free tie
 
 - Limits: <!-- n:free_line -->2M requests a month per site. Free.<!-- /n --> No key, no attribution.
 - Ticker and crypto logo URLs: <!-- n:ticker_limit_line -->Today there is no per-IP limit at our edge for ticker and crypto URLs; fair use applies.<!-- /n --> No key.
-- Catalog: <!-- n:brands -->5,089<!-- /n --> brands. About <!-- n:tickers_vector -->1,600<!-- /n --> of <!-- n:tickers -->6,562<!-- /n --> tickers have a vector logo (icon or wordmark). Everything else gets the site's favicon or a name tile, and the `X-Logo-Fallback` response header says so. Add `?fallback=404` to get a 404 instead.
+- Catalog: <!-- n:brands -->5,089<!-- /n --> brands. About <!-- n:tickers_vector -->1,500<!-- /n --> of <!-- n:tickers -->6,562<!-- /n --> tickers have a vector logo (icon or wordmark). Everything else gets the site's favicon or a name tile, and the `X-Logo-Fallback` response header says so. Add `?fallback=404` to get a 404 instead.
 - Source: [github.com/logoapi/logo-api](https://github.com/logoapi/logo-api). Docs: [logoapi.sh/docs](https://logoapi.sh/docs).
 
 ```jsx
