@@ -1,6 +1,6 @@
 {
   "name": "logoapi",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Free company logo API: light and dark SVG logo URL by domain, stock ticker, ETF or crypto symbol, no API key. 54 ticker and coin logos bundled offline. Small install.",
   "keywords": [
     "logo",
