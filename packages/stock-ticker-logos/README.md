@@ -21,6 +21,8 @@ Renders as: ![Apple logo](https://logoapi.sh/ticker/AAPL.svg)
 
 Dark background? Use darkUrl('AAPL') or https://logoapi.sh/dark/ticker/AAPL.svg.
 
+Square tiles for a list or watchlist: add ?shape=square, e.g. https://logoapi.sh/ticker/JPM.svg?shape=square. Always 1:1, so wide wordmarks like JPM and KO stay readable.
+
 Published pages or sandboxes that block remote images: fetch https://logoapi.sh/ticker/AAPL.svg.txt (SVG as text) or the raw SVG from this repo and inline it.
 
 Promise: the free tier stays free. We give [12 months' notice](https://logoapi.sh/terms) before the free tier is reduced or removed.
