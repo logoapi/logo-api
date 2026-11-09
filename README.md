@@ -11,8 +11,8 @@
 
 <p align="center">
   <b>One URL returns the SVG. No API key, no signup, no attribution.</b><br>
-  2M requests a month per site, free. Commercial use included.<br>
-  Covers 6,562 stock and ETF tickers, 17 coins and 5,000+ company domains.
+  <!-- n:free_line -->2M requests a month per site. Free.<!-- /n --> Commercial use included.<br>
+  Covers <!-- n:tickers -->6,562<!-- /n --> stock and ETF tickers, <!-- n:coins -->17<!-- /n --> coins and <!-- n:brands -->5,089<!-- /n --> brands.
 </p>
 
 ```
@@ -32,7 +32,7 @@ https://logoapi.sh/stripe.com.svg      company domain
   </tr>
 </table>
 
-<p align="center"><sub>Live responses from logoapi.sh (dark versions on dark themes). Ticker icons: about 1,500 vector marks, the rest favicon or name tile; the <code>X-Logo-Fallback</code> header says which.</sub></p>
+<p align="center"><sub>Live responses from logoapi.sh (dark versions on dark themes). About <!-- n:tickers_vector -->1,500<!-- /n --> tickers have a vector logo (icon or wordmark), favicon or name tile for the rest; the <code>X-Logo-Fallback</code> header says which.</sub></p>
 
 ```bash
 npm install logoapi        # or ticker-logos, stock-ticker-logos, crypto-logos
@@ -44,11 +44,11 @@ getLogos(['AAPL', 'VOO', 'BTC']).map((r) => r.dataUri || r.url); // SVG data URI
 ```
 
 <p align="center">
-  This repo holds part of the catalog. The <a href="https://logoapi.sh?utm_source=github&utm_medium=readme&utm_campaign=logo-api">logoapi.sh</a> CDN serves all 5,000+ logos. We add more here when the licence allows.
+  This repo holds part of the catalog. The <a href="https://logoapi.sh?utm_source=github&utm_medium=readme&utm_campaign=logo-api">logoapi.sh</a> CDN serves logos for all <!-- n:brands -->5,089<!-- /n --> brands. We add more here when the licence allows.
 </p>
 
 <p align="center">
-  <a href="https://logoapi.sh?utm_source=github&utm_medium=readme&utm_campaign=logo-api"><img src="https://img.shields.io/badge/logos%20via%20API-5%2C000%2B-15161a?style=flat-square" alt="5,000+ logos via API"></a>
+  <a href="https://logoapi.sh?utm_source=github&utm_medium=readme&utm_campaign=logo-api"><img src="https://img.shields.io/badge/brands%20via%20API-5%2C089-15161a?style=flat-square" alt="5,089 brands via API"></a>
   <a href="logos/"><img src="https://img.shields.io/badge/CC0%20files%20in%20this%20repo-2%2C016-15161a?style=flat-square" alt="2,016 CC0 files in this repo"></a>
   <a href="https://logoapi.sh/docs?utm_source=github&utm_medium=readme&utm_campaign=logo-api"><img src="https://img.shields.io/badge/API%20key-not%20needed-15161a?style=flat-square" alt="No API key"></a>
   <a href="https://logoapi.sh/docs?utm_source=github&utm_medium=readme&utm_campaign=logo-api"><img src="https://img.shields.io/badge/attribution-not%20required-15161a?style=flat-square" alt="Attribution not required"></a>
@@ -85,15 +85,15 @@ getLogos(['AAPL', 'VOO', 'BTC']).map((r) => r.dataUri || r.url); // SVG data URI
 
 ## Using this from an AI agent or sandbox
 
-- This repo holds a sample (50 ticker files, 2,016 domain logos). The API at logoapi.sh serves every ticker in index.json (6,500+) and 5,000+ domains; do not judge coverage by the repo.
+- This repo holds a sample (50 ticker files, 2,016 domain logos). The API at logoapi.sh serves every ticker in index.json (<!-- n:tickers -->6,562<!-- /n -->) and <!-- n:brands -->5,089<!-- /n --> brands; do not judge coverage by the repo.
 - Start here: `https://raw.githubusercontent.com/logoapi/logo-api/main/index.json`. Look up the domain or the stock ticker there, then fetch the path it gives you.
 - Files are NOT named by domain. `logos/apple.com.svg` and `logos/<domain>/logo.svg` do not exist. Names are slugs, such as `logos/apple.svg`, so always go through `index.json`.
 - Shape: `{"domains": {"apple.com": "logos/apple.svg"}, "tickers": {"AAPL": "logos/apple.svg"}}`. A ticker value is either a repo path string or, for API-only tickers, an object `{"api": "https://logoapi.sh/ticker/VTI.svg", "icon": ..., "official": "official/tickers/VTI.svg"}`. There is also a `crypto` map and an `api` map of URL patterns. Check that a value is a string before treating it as a path.
 - Raw URL pattern: `https://raw.githubusercontent.com/logoapi/logo-api/main/<path>`, for example `.../main/logos/apple.svg`.
 - Files in this repo are CC0 (public domain). Logos remain trademarks of their owners: use them to identify the company, and don't suggest the company endorses you. Full catalog and terms: https://logoapi.sh.
-- The full catalog (5,000+ logos, tickers, crypto, PNG) is on the API: `https://logoapi.sh/<domain>`, `https://logoapi.sh/ticker/<SYM>` and `https://logoapi.sh/icon/ticker/<SYM>`.
+- The full catalog (<!-- n:brands -->5,089<!-- /n --> brands, tickers, crypto, PNG) is on the API: `https://logoapi.sh/<domain>`, `https://logoapi.sh/ticker/<SYM>` and `https://logoapi.sh/icon/ticker/<SYM>`.
 - Tickers: `index.json` has a `tickers` map, and the API serves `https://logoapi.sh/ticker/<SYM>`. ETFs map to the issuer (SPY goes to ssga.com).
-- Stock tickers also sit at `tickers/<SYMBOL>.svg` (same files, predictable names), for example `.../main/tickers/AAPL.svg`. The folder is a sample of 50 tickers. Every ticker in `index.json` (6,562) is served from `https://logoapi.sh/ticker/{SYM}.svg`.
+- Stock tickers also sit at `tickers/<SYMBOL>.svg` (same files, predictable names), for example `.../main/tickers/AAPL.svg`. The folder is a sample of 50 tickers. Every ticker in `index.json` (<!-- n:tickers -->6,562<!-- /n -->) is served from `https://logoapi.sh/ticker/{SYM}.svg`.
 - Official square marks (trademarks, not CC0) for the top US tickers and main coins sit at `official/tickers/<SYMBOL>.svg` and `official/crypto/<SYMBOL>.svg`, map in `official/index.json`, terms in `official/LICENSE.md`. See [official/README.md](official/README.md).
 - Right now `index.json` lists 1,174 domains and 6,562 tickers (50 of them point at files in this repo, the rest at logoapi.sh), and every repo path in it exists.
 - If outside hosts are blocked, connect the MCP server `https://logoapi.sh/mcp`, or ask the user to allow `logoapi.sh`.
@@ -222,8 +222,9 @@ Use the same paths with `stock-ticker-logos` for the ticker skill.
 
 ## Pricing
 
-**Free:** 2M requests a month per site. No key, no attribution required.
-**Pro (waitlist):** $29 a month for 10M requests a month and email support. Join at [logoapi.sh/pricing](https://logoapi.sh/pricing?utm_source=github&utm_medium=readme&utm_campaign=logo-api).
+**Free:** <!-- n:free_line -->2M requests a month per site. Free.<!-- /n --> No key, no attribution required.
+**Tickers and crypto:** <!-- n:ticker_limit_line -->Today there is no per-IP limit at our edge for ticker and crypto URLs; fair use applies.<!-- /n -->
+**Pro:** <!-- n:pro_line -->$49 a month, our founding price. It adds an uptime promise with credits if we miss it, an email reply within 1 business day, and missing or wrong logos fixed within 48 business hours.<!-- /n -->
 Details: [logoapi.sh/pricing](https://logoapi.sh/pricing?utm_source=github&utm_medium=readme&utm_campaign=logo-api)
 
 **Do I have to credit LogoAPI.sh?** No. No attribution is required, for personal or commercial projects.
@@ -232,7 +233,7 @@ Details: [logoapi.sh/pricing](https://logoapi.sh/pricing?utm_source=github&utm_m
 
 This repo holds the open logo files behind LogoAPI.sh: 2,016 SVGs in the public domain under [CC0](LICENSE). Provenance and the pinned source commit are in the LICENSE file.
 
-The hosted API serves the full catalog of 5,000+ brands, with wordmarks, icons, colour versions and
+The hosted API serves the full catalog of <!-- n:brands -->5,089<!-- /n --> brands, with wordmarks, icons, colour versions and
 search. The API service itself is not in this repo.
 
 ## Contributing

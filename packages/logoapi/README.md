@@ -20,9 +20,9 @@ Published pages or sandboxes that block remote images: fetch https://logoapi.sh/
 
 Promise: the free tier stays free. We give 12 months' notice before the free tier is reduced or removed.
 
-- Limits: 2M requests a month per site. Free, no key, no attribution.
-- Ticker and crypto logo URLs: no rate limit, no key.
-- Catalog: about 1,500 vector marks across tickers and domains. Everything else gets the site's favicon or a name tile, and the `X-Logo-Fallback` response header says so. Add `?fallback=404` to get a 404 instead.
+- Limits: <!-- n:free_line -->2M requests a month per site. Free.<!-- /n --> No key, no attribution.
+- Ticker and crypto logo URLs: <!-- n:ticker_limit_line -->Today there is no per-IP limit at our edge for ticker and crypto URLs; fair use applies.<!-- /n --> No key.
+- Catalog: <!-- n:brands -->5,089<!-- /n --> brands. About <!-- n:tickers_vector -->1,500<!-- /n --> of <!-- n:tickers -->6,562<!-- /n --> tickers have a vector logo (icon or wordmark). Everything else gets the site's favicon or a name tile, and the `X-Logo-Fallback` response header says so. Add `?fallback=404` to get a 404 instead.
 - Source: [github.com/logoapi/logo-api](https://github.com/logoapi/logo-api). Docs: [logoapi.sh/docs](https://logoapi.sh/docs).
 
 ```jsx
@@ -32,9 +32,9 @@ import { url } from 'logoapi';
 
 A logoapi.sh URL for any stock ticker, ETF, crypto symbol or domain, plus 54 ticker and coin SVGs bundled for offline use. No key, zero dependencies, about 100 kB.
 
-Covers 6,562 stock and ETF tickers, 17 coins and 5,000+ company domains. No attribution required.
+Covers <!-- n:tickers -->6,562<!-- /n --> stock and ETF tickers, <!-- n:coins -->17<!-- /n --> coins and <!-- n:brands -->5,089<!-- /n --> brands. No attribution required.
 
-Hosted service: the URLs point at logoapi.sh, served from Cloudflare's edge. Free, no key, 2M requests a month per site. Any free-tier cut gets 12 months' notice ([terms](https://logoapi.sh/terms)). The ticker index is open on GitHub: [index.json](https://github.com/logoapi/logo-api/blob/main/index.json).
+Hosted service: the URLs point at logoapi.sh, served from Cloudflare's edge. No key. <!-- n:free_line -->2M requests a month per site. Free.<!-- /n --> Any free-tier cut gets 12 months' notice ([terms](https://logoapi.sh/terms)). The ticker index is open on GitHub: [index.json](https://github.com/logoapi/logo-api/blob/main/index.json).
 
 ```js
 // npm install logoapi
@@ -147,9 +147,9 @@ Dark mode: the bundled files keep their original colours (none use `currentColor
 
 ## Beyond this package
 
-The API serves 5,000+ logos. Free, no key, no attribution. Docs: https://logoapi.sh/docs
+The API serves logos for <!-- n:brands -->5,089<!-- /n --> brands. Free, no key, no attribution. Docs: https://logoapi.sh/docs
 
-2M requests a month per site, free, no key. Free stays free. 12 months' notice before any change.
+<!-- n:free_line -->2M requests a month per site. Free.<!-- /n --> No key. Free stays free. 12 months' notice before any change.
 
 | What you need | URL |
 | --- | --- |
