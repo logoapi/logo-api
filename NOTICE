@@ -1,0 +1,19 @@
+LogoAPI.sh logo-api
+Copyright (c) 2026 H. Tech Innovation LLC
+
+This repository holds files under different terms:
+
+- Code, docs, skills, packages and data files (such as index.json):
+  MIT License, see LICENSE.
+
+- logos/ and tickers/ (tickers/ holds copies of files in logos/):
+  CC0 1.0 Universal, public domain dedication.
+  https://creativecommons.org/publicdomain/zero/1.0/legalcode
+
+- official/: not MIT and not CC0. See official/LICENSE.md.
+
+Trademarks: every logo in this repository, in logos/, tickers/ and
+official/, is a trademark of its owner. The files are here so software can
+identify the company they belong to. Using them does not imply endorsement,
+sponsorship or affiliation. Trademark owners can ask for a change or removal
+at https://logoapi.sh/claim.

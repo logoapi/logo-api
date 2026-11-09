@@ -53,7 +53,7 @@ getLogos(['AAPL', 'VOO', 'BTC']).map((r) => r.dataUri || r.url); // SVG data URI
   <a href="https://logoapi.sh/docs?utm_source=github&utm_medium=readme&utm_campaign=logo-api"><img src="https://img.shields.io/badge/API%20key-not%20needed-15161a?style=flat-square" alt="No API key"></a>
   <a href="https://logoapi.sh/docs?utm_source=github&utm_medium=readme&utm_campaign=logo-api"><img src="https://img.shields.io/badge/attribution-not%20required-15161a?style=flat-square" alt="Attribution not required"></a>
   <a href="https://logoapi.sh/pricing?utm_source=github&utm_medium=readme&utm_campaign=logo-api"><img src="https://img.shields.io/badge/free-2M%20requests%20a%20month-15161a?style=flat-square" alt="2M requests a month per site, free"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/logo%20files-CC0-15161a?style=flat-square" alt="CC0"></a>
+  <a href="NOTICE"><img src="https://img.shields.io/badge/logo%20files-CC0-15161a?style=flat-square" alt="CC0"></a>
 </p>
 
 <p align="center">
@@ -231,7 +231,7 @@ Details: [logoapi.sh/pricing](https://logoapi.sh/pricing?utm_source=github&utm_m
 
 ## What's in this repo
 
-This repo holds the open logo files behind LogoAPI.sh: 2,016 SVGs in the public domain under [CC0](LICENSE). Provenance and the pinned source commit are in the LICENSE file.
+This repo holds the open logo files behind LogoAPI.sh: 2,016 SVGs in the public domain under CC0. See [NOTICE](NOTICE).
 
 The hosted API serves the full catalog of <!-- n:brands -->5,089<!-- /n --> brands, with wordmarks, icons, colour versions and
 search. The API service itself is not in this repo.
@@ -243,7 +243,6 @@ search. The API service itself is not in this repo.
 
 ## License
 
-Logo files in this repo: [CC0 1.0](LICENSE).
-Logos remain trademarks of their owners. Use them to refer to the company, not to imply endorsement.
+Code: [MIT](LICENSE). Logo files in `logos/` and `tickers/`: CC0 1.0. `official/`: see [its licence](official/LICENSE.md). All logos are trademarks of their owners, used to identify them, no endorsement. Details in [NOTICE](NOTICE).
 
 <p align="center"><sub>LogoAPI.sh is operated by H. Tech Innovation LLC, Dallas, TX.</sub></p>

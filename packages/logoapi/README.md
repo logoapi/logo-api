@@ -179,4 +179,4 @@ Code, skills and a CC0 sample of the catalog: [logo API on GitHub](https://githu
 ## License
 
 - Code (`index.js`, `index.mjs`, `index.d.ts`): MIT, see `LICENSE-MIT`.
-- Files in this package are CC0 (public domain). Logos remain trademarks of their owners: use them to identify the company, and don't suggest the company endorses you. Full catalog and terms: https://logoapi.sh.
+- Files in this package are CC0 (public domain), see `NOTICE`. Logos remain trademarks of their owners: use them to identify the company, and don't suggest the company endorses you. Full catalog and terms: https://logoapi.sh.
