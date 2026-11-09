@@ -1,6 +1,6 @@
 {
   "name": "crypto-logos",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Crypto logo API by symbol: light and dark SVG coin logos, 14 official marks offline, free hosted logoapi.sh URL for every other coin, stock ticker and domain. No API key.",
   "keywords": [
     "crypto",
@@ -50,7 +50,7 @@
     "README.md"
   ],
   "dependencies": {
-    "logoapi": "^0.3.1"
+    "logoapi": "^0.3.2"
   },
   "engines": {
     "node": ">=16.7"

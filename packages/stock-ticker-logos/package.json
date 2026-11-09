@@ -1,6 +1,6 @@
 {
   "name": "stock-ticker-logos",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Free stock logo API by ticker symbol: light and dark SVG logo URL for any stock, ETF or crypto coin, no API key. 54 bundled offline. Small install. Alias of logoapi.",
   "keywords": [
     "stock-logos",
@@ -50,7 +50,7 @@
     "LICENSE-MIT"
   ],
   "dependencies": {
-    "logoapi": "^0.3.1"
+    "logoapi": "^0.3.2"
   },
   "engines": {
     "node": ">=16.7"
