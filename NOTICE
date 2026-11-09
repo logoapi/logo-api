@@ -4,7 +4,7 @@ Copyright (c) 2026 H. Tech Innovation LLC
 This repository holds files under different terms:
 
 - Code, docs, skills, packages and data files (such as index.json):
-  MIT License, see LICENSE.
+  MIT License, see LICENSE (LICENSE-MIT in npm packages).
 
 - logos/ and tickers/ (tickers/ holds copies of files in logos/):
   CC0 1.0 Universal, public domain dedication.
