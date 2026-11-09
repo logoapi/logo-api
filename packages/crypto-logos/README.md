@@ -21,13 +21,13 @@ Renders as: ![Bitcoin logo](https://logoapi.sh/crypto/BTC.svg)
 
 Dark background? Use darkUrl('BTC') or https://logoapi.sh/dark/crypto/BTC.svg.
 
-Published pages or sandboxes that block remote images: fetch https://logoapi.sh/ticker/AAPL.svg.txt (SVG as text) or the raw SVG from this repo and inline it.
+Published pages or sandboxes that block remote images: fetch https://logoapi.sh/crypto/BTC.svg.txt (SVG as text) or the raw SVG from this repo and inline it.
 
-Promise: the free tier stays free. We give 12 months' notice before the free tier is reduced or removed.
+Promise: the free tier stays free. We give [12 months' notice](https://logoapi.sh/terms) before the free tier is reduced or removed.
 
 - Limits: <!-- n:free_line -->2M requests a month per site. Free.<!-- /n --> No key, no attribution.
 - Ticker and crypto logo URLs: <!-- n:ticker_limit_line -->Today there is no per-IP limit at our edge for ticker and crypto URLs; fair use applies.<!-- /n --> No key.
-- Catalog: <!-- n:brands -->5,089<!-- /n --> brands. About <!-- n:tickers_vector -->1,500<!-- /n --> of <!-- n:tickers -->6,562<!-- /n --> tickers have a vector logo (icon or wordmark). Everything else gets the site's favicon or a name tile, and the `X-Logo-Fallback` response header says so. Add `?fallback=404` to get a 404 instead.
+- Catalog: <!-- n:brands -->5,089<!-- /n --> brands and <!-- n:coins -->17<!-- /n --> coins. About <!-- n:tickers_vector -->1,500<!-- /n --> of <!-- n:tickers -->6,562<!-- /n --> tickers have a vector logo (icon or wordmark). Everything else gets the site's favicon or a name tile, and the `X-Logo-Fallback` response header says so. Add `?fallback=404` to get a 404 instead.
 - Source: [github.com/logoapi/logo-api](https://github.com/logoapi/logo-api). Docs: [logoapi.sh/docs](https://logoapi.sh/docs). Ticker index: [index.json](https://github.com/logoapi/logo-api/blob/main/index.json).
 
 ```js
