@@ -302,7 +302,7 @@ No setup needed. An agent that writes HTML can use the URL pattern directly: `ht
 
 To check that a logo exists without reading the SVG, call `https://logoapi.sh/search?q=stripe.com` (JSON with the logo URL). Chat previews block external images. To show logos inside Claude artifacts or ChatGPT canvas, fetch `/{domain}.svg.txt` (or `/icon/{domain}.svg.txt`) and inline the SVG or use a data URI. It is the same file as the .svg, served as plain text. There is no `index.json` or catalog download; use `/search` to look up a domain. No attribution required.
 
-Machine-readable summary: [/llms.txt](https://logoapi.sh/llms.txt). [Full text for AI agents](https://logoapi.sh/llms-full.txt): this whole page, the terms and the Clearbit migration guide as one plain Markdown file.
+Machine-readable summary: [/llms.txt](https://logoapi.sh/llms.txt). [Full text for AI agents](https://logoapi.sh/llms-full.txt): this whole page, the terms and the Clearbit migration guide as one plain Markdown file. OpenAPI spec: [/openapi.json](https://logoapi.sh/openapi.json). Plugin manifest: [/.well-known/ai-plugin.json](https://logoapi.sh/.well-known/ai-plugin.json).
 
 ```
 Prompt: "Add a row of customer logos for stripe.com, notion.so and linear.app.\nUse https://logoapi.sh/{domain}.svg for each."
@@ -357,4 +357,3 @@ Not live yet. We list them here so you know what is next.
 - WebP, and PNG favicons
 - Optional monogram fallback
 - Free API keys
-- OpenAPI spec at `/openapi.json`

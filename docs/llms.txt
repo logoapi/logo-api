@@ -49,12 +49,12 @@ We update logos when brands change them. Missing a logo? Just use the URL. Our c
 - GET https://logoapi.sh/dark/crypto/{SYMBOL}.svg : the same coin marks recoloured for dark backgrounds; SVG only, unknown symbol gives a plain 404.
 - GET https://logoapi.sh/search?q={text} : match an exact brand name, an exact domain or a close typo, up to 8 results as JSON {domain, name, logo, icon, wordmark, score, origin, source, and for listed companies ticker and exchange of the main listing (US first), e.g. MNDY on NASDAQ}; wordmark is true when the bare route serves a wordmark (a separate wordmark file or a logo wider than 3:2), false when it serves an icon. Typos are tolerated (1 edit for 4 to 6 characters, 2 for 7 or more); those hits rank below exact matches and carry "fuzzy": true. q is 2 to 80 characters.
 - GET https://logoapi.sh/search?tag={tag} : optional filter by exactly one tag (a comma list returns 400); q becomes optional, returns the first 48 results, no total, each result has tags. A tag plus q gives up to 8 results. A q needs at least 2 letters or digits. Allowed: tech, devtools, finance, retail, media, organizations, health, industry.
-- Colour versions: GET https://logoapi.sh/{white|black|grey|dark}/{domain}.svg and https://logoapi.sh/{version}/icon/{domain}.svg return the logo or icon recoloured by the API (generated, not official, unless the brand publishes that version); unknown domains return 404.
+- Colour versions: GET https://logoapi.sh/{white|black|grey|dark}/{domain}.svg and https://logoapi.sh/{version}/icon/{domain}.svg return the logo or icon recoloured by the API (generated, not official, unless the brand publishes that version); a miss returns a name tile (X-Logo-Fallback: tile), and ?fallback=404 gives a 404.
 - /suggest and /suggest/token exist only for the logoapi.sh search box. They are not a public API: do not call them.
 
 Example: <img src="https://logoapi.sh/stripe.com.svg" alt="Stripe">
 
-Responses send Access-Control-Allow-Origin: * and logo updates go live everywhere within a day. /search sends max-age=300. There is no OpenAPI file; the routes above are the full API. There is no index.json or catalog download; use /search to look up a domain.
+Responses send Access-Control-Allow-Origin: * and logo updates go live everywhere within a day. /search sends max-age=300. OpenAPI spec: https://logoapi.sh/openapi.json (plugin manifest: https://logoapi.sh/.well-known/ai-plugin.json); the routes above are the full API. There is no index.json or catalog download; use /search to look up a domain.
 
 ## Limits
 
