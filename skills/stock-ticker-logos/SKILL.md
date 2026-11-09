@@ -24,6 +24,8 @@ All verified against the live API.
 | Crypto coin | `https://logoapi.sh/crypto/BTC` (also `.svg`, `.png`; ETH, SOL and more) |
 | Check a symbol | `https://logoapi.sh/search?q=VTI` (JSON) |
 
+Or with npm: `npm i stock-ticker-logos` (ETFs: `npm i etf-logos`, coins: `npm i crypto-logos`). Optional; the URL works without it.
+
 Only `/icon/ticker/<SYM>` and `.svg` in upper case are static files. Everything else (`/ticker/`, `/icon/ticker/` and `/crypto/` in any case, `.png`, exchange prefix, extended tickers, coins) is answered by the Worker with 200 and the image, never a redirect. The only redirect is `/ticker/<SYM>[.svg|.png]?variant=full`, a 302 to the full logo.
 
 ## In a JavaScript project: install the package
@@ -41,6 +43,8 @@ darkUrl('AAPL'); // https://logoapi.sh/dark/ticker/AAPL.svg
 ```
 
 The package is about 100 kB, has no dependencies and never calls the network; it only builds the URLs and ships 54 ticker and coin SVGs. Prefer it over hand-built URL strings in any project with a `package.json`.
+
+`stock-ticker-logos` and `etf-logos` are aliases: each installs `logoapi` and re-exports it, so the same imports work from either name.
 
 ## Rules
 

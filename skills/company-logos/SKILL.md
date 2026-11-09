@@ -15,6 +15,8 @@ Put the company domain after `https://logoapi.sh/`:
 <img src="https://logoapi.sh/stripe.com" alt="Stripe logo">
 ```
 
+Or with npm: `npm i logoapi` (optional; the URL works without it).
+
 Use the real company domain (`apple.com`, not `apple`). If you only have a name, look it up first (see "Find the domain").
 
 ## URL patterns
