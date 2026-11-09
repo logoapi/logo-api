@@ -1,0 +1,61 @@
+{
+  "name": "etf-logos",
+  "version": "0.3.1",
+  "description": "ETF, stock and crypto logos, light and dark SVG, no key",
+  "keywords": [
+    "etf-logos",
+    "etf-logo",
+    "etf",
+    "fund-logo",
+    "stock-logos",
+    "stock-logo",
+    "ticker-logos",
+    "ticker",
+    "stock",
+    "crypto",
+    "logo",
+    "logos",
+    "logo-api",
+    "svg",
+    "no-api-key"
+  ],
+  "homepage": "https://logoapi.sh",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/logoapi/logo-api.git",
+    "directory": "packages/etf-logos"
+  },
+  "bugs": {
+    "url": "https://github.com/logoapi/logo-api/issues"
+  },
+  "license": "(MIT AND CC0-1.0)",
+  "main": "./index.js",
+  "module": "./index.mjs",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.mjs",
+      "require": "./index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "index.js",
+    "index.mjs",
+    "index.d.ts",
+    "llms.txt",
+    "README.md",
+    "LICENSE-MIT"
+  ],
+  "dependencies": {
+    "logoapi": "^0.3.1"
+  },
+  "engines": {
+    "node": ">=16.7"
+  },
+  "sideEffects": false,
+  "scripts": {
+    "test": "node test.js"
+  }
+}
