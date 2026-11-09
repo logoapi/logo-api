@@ -9,6 +9,8 @@ LogoAPI.sh serves logos for 5,089 brands from https://logoapi.sh as SVG (static 
 
 Dark background? Use https://logoapi.sh/dark/ticker/AAPL.svg for a ticker, https://logoapi.sh/dark/{domain}.svg for a domain, https://logoapi.sh/dark/crypto/BTC.svg for a coin.
 
+Square tile for a list or watchlist? Add ?shape=square: https://logoapi.sh/ticker/JPM.svg?shape=square is always a 64 by 64 SVG (the icon, else the site's favicon, else the wordmark, on a plate), so wide wordmarks like JPM and KO stay readable. Dark: /dark/ticker/JPM.svg?shape=square.
+
 ## Notes for agents
 
 Facts about the API, no instructions.
