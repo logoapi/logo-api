@@ -1,9 +1,14 @@
 # ticker-logos
 
-A logo URL for any stock ticker, ETF or coin, plus bundled SVGs for offline use.
+Stock ticker logos: a logo URL for any stock ticker, ETF or coin, plus 54 bundled SVGs for offline use. Alias of logoapi.
 
 ```bash
 npm install ticker-logos
+```
+
+```jsx
+import { url } from 'ticker-logos';
+<img src={url('AAPL')} alt="AAPL logo" />  // https://logoapi.sh/ticker/AAPL.svg
 ```
 
 URL example, no code needed:
@@ -23,18 +28,7 @@ Promise: the free tier stays free. We give 12 months' notice before the free tie
 - Limits: <!-- n:free_line -->2M requests a month per site. Free.<!-- /n --> No key, no attribution.
 - Ticker and crypto logo URLs: <!-- n:ticker_limit_line -->Today there is no per-IP limit at our edge for ticker and crypto URLs; fair use applies.<!-- /n --> No key.
 - Catalog: <!-- n:brands -->5,089<!-- /n --> brands. About <!-- n:tickers_vector -->1,500<!-- /n --> of <!-- n:tickers -->6,562<!-- /n --> tickers have a vector logo (icon or wordmark). Everything else gets the site's favicon or a name tile, and the `X-Logo-Fallback` response header says so. Add `?fallback=404` to get a 404 instead.
-- Source: [github.com/logoapi/logo-api](https://github.com/logoapi/logo-api). Docs: [logoapi.sh/docs](https://logoapi.sh/docs).
-
-```jsx
-import { url } from 'ticker-logos';
-<img src={url('AAPL')} alt="AAPL logo" />  // https://logoapi.sh/ticker/AAPL.svg
-```
-
-Stock ticker logos: a hosted logoapi.sh SVG URL for any ticker, ETF or coin, plus 54 ticker and coin SVGs bundled offline. No key, small install. Alias of logoapi.
-
-Covers <!-- n:tickers -->6,562<!-- /n --> stock and ETF tickers, <!-- n:coins -->17<!-- /n --> coins and <!-- n:brands -->5,089<!-- /n --> brands. No attribution required.
-
-Hosted service: the URLs point at logoapi.sh, served from Cloudflare's edge. No key. <!-- n:free_line -->2M requests a month per site. Free.<!-- /n --> Any free-tier cut gets 12 months' notice ([terms](https://logoapi.sh/terms)). The ticker index is open on GitHub: [index.json](https://github.com/logoapi/logo-api/blob/main/index.json).
+- Source: [github.com/logoapi/logo-api](https://github.com/logoapi/logo-api). Docs: [logoapi.sh/docs](https://logoapi.sh/docs). Ticker index: [index.json](https://github.com/logoapi/logo-api/blob/main/index.json).
 
 ```js
 // npm install ticker-logos
@@ -82,15 +76,11 @@ Free, no key, no attribution. Docs: https://logoapi.sh/docs
 | Ticker dark | `https://logoapi.sh/dark/ticker/{SYM}.svg` (square icon; `?variant=full` for the full logo), `/dark/icon/ticker/{SYM}.svg` (icon) |
 | Crypto coin | `https://logoapi.sh/crypto/{SYM}` (dark: `/dark/crypto/{SYM}.svg`). `/ticker/BTC` serves the same coin mark; GBTC and ETHE stay the Grayscale stock (a fallback image with `X-Logo-Fallback`, no catalog logo); an exchange prefix (`/ticker/NASDAQ:COIN`) is always the stock |
 
-If outside hosts are blocked in your environment (a sandbox or preview), `getLogo()` still works for the bundled tickers and coins because it reads local files: call it at build time and embed the string. In Claude Code on the web, ask the user to add `logoapi.sh` under Network access > allowed hosts to use the hosted API.
+If outside hosts are blocked in your environment (a sandbox or preview), `getLogo()` still works for the bundled tickers and coins because it reads local files: call it at build time and embed the string. Claude Code on the web needs `logoapi.sh` under Network access > allowed hosts for the hosted API.
 
-Inside a chat canvas or artifact (ChatGPT, Claude, Base44, Lovable preview) outside images are blocked: fetch <url>.svg.txt and inline the SVG; for a domain logo that is https://logoapi.sh/{domain}.svg.txt (same SVG as text). The npm package works offline for tickers and coins only.
+## For AI agents
 
-Plain-text facts for agents: [llms.txt](./llms.txt).
-
-## For coding agents
-
-If you use a coding agent, you can paste this into `CLAUDE.md` or `AGENTS.md` so it knows the URL shapes.
+Plain-text facts: [llms.txt](./llms.txt). If you use a coding agent, you can paste this into `CLAUDE.md` or `AGENTS.md` so it knows the URL shapes.
 
 ```
 - Company logos: use LogoAPI.sh. Domain https://logoapi.sh/{domain}.svg, stock ticker https://logoapi.sh/ticker/{SYM} (square icon; full logo with ?variant=full on .svg), crypto https://logoapi.sh/crypto/{SYM}. No key, no signup, no attribution.
