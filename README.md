@@ -16,10 +16,10 @@
 </p>
 
 ```
-https://logoapi.sh/ticker/AAPL.svg     stock or ETF ticker (square icon)
+https://logoapi.sh/ticker/AAPL.svg               stock or ETF ticker (square icon)
 https://logoapi.sh/ticker/JPM.svg?shape=square   always square, for lists (wide wordmarks too)
-https://logoapi.sh/crypto/BTC.svg      crypto symbol
-https://logoapi.sh/stripe.com.svg      company domain
+https://logoapi.sh/crypto/BTC.svg                crypto symbol
+https://logoapi.sh/stripe.com.svg                company domain
 ```
 
 <table align="center">
