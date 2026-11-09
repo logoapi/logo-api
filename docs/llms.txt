@@ -19,6 +19,7 @@ Facts about the API, no instructions.
 - Fallbacks: a miss returns the site's favicon or a name tile, and says so in the X-Logo-Fallback response header. ?fallback=404 returns a 404 instead.
 - Chat canvases and artifacts that block outside images: add .svg.txt to an SVG URL to get the same SVG as text/plain, and inline it.
 - Sandboxes with an allowlist (Claude Code on the web and similar): logoapi.sh must be on the allowed hosts list for the hosted URLs to load. The npm packages work offline for tickers and coins only.
+- npm (optional, the URL works without it): npm i logoapi builds the hosted URL for any domain, ticker or coin (offline SVGs for tickers and coins only); npm i stock-ticker-logos for tickers, npm i etf-logos for ETFs, npm i crypto-logos for coins.
 - Migrating from Clearbit: replace logo.clearbit.com with logoapi.sh in the URL.
 - Limits: 2M requests a month per site. Free.
 
