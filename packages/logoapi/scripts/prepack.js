@@ -27,7 +27,8 @@ for (const rel of keep) {
   fs.copyFileSync(path.join(root, rel), path.join(pkg, rel));
 }
 fs.writeFileSync(path.join(pkg, 'index.json'), JSON.stringify(filtered, null, 1) + '\n');
-fs.copyFileSync(path.join(root, 'LICENSE'), path.join(pkg, 'LICENSE'));
+fs.copyFileSync(path.join(root, 'NOTICE'), path.join(pkg, 'NOTICE')); // CC0 + trademark terms; the code licence is LICENSE-MIT
+fs.rmSync(path.join(pkg, 'LICENSE'), { force: true }); // npm always packs a LICENSE file; drop a stale copy from older prepacks
 const idx = JSON.parse(fs.readFileSync(path.join(pkg, 'index.json'), 'utf8'));
 for (const m of [idx.domains, idx.tickers]) {
   for (const p of Object.values(m)) {

@@ -1,5 +1,6 @@
 /logos/
 /index.json
 /LICENSE
+/NOTICE
 *.tgz
 /node_modules/
