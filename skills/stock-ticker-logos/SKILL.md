@@ -44,6 +44,8 @@ darkUrl('AAPL'); // https://logoapi.sh/dark/ticker/AAPL.svg
 
 The package is about 100 kB, has no dependencies and never calls the network; it only builds the URLs and ships 54 ticker and coin SVGs. Prefer it over hand-built URL strings in any project with a `package.json`.
 
+`stock-ticker-logos` and `etf-logos` are aliases: each installs `logoapi` and re-exports it, so the same imports work from either name.
+
 ## Rules
 
 1. **Square slot: use `/ticker/<SYM>` or `/icon/ticker/<SYM>`** (both return the square icon). Set `object-fit: contain`. For a wide logo add `?variant=full` to `/ticker/<SYM>.svg`.
