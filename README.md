@@ -20,6 +20,7 @@ https://logoapi.sh/ticker/AAPL.svg               stock or ETF ticker (square ico
 https://logoapi.sh/ticker/JPM.svg?shape=square   always square, for lists (wide wordmarks too)
 https://logoapi.sh/crypto/BTC.svg                crypto symbol
 https://logoapi.sh/stripe.com.svg                company domain
+https://logoapi.sh/icon/jvns.ca                  favicon for any site (free favicon API)
 ```
 
 <table align="center">
@@ -137,7 +138,8 @@ An unknown domain gets the site's live favicon, then a letter tile. Add `?fallba
 | --- | --- |
 | Wordmark logo | `https://logoapi.sh/{domain}.svg` |
 | Square icon | `https://logoapi.sh/icon/{domain}.svg` |
-| Favicon | `https://logoapi.sh/favicon/{domain}` |
+| Favicon for any site (site's own icon, then a name tile) | `https://logoapi.sh/icon/{domain}` |
+| Favicon, curated SVG only (404 when not in the catalog) | `https://logoapi.sh/favicon/{domain}` |
 | White, black, grey, dark mode | `https://logoapi.sh/{white\|black\|grey\|dark}/{domain}.svg` |
 | Name to domain | `https://logoapi.sh/search?q=stripe` |
 | Clearbit-style bare domain | `https://logoapi.sh/{domain}` |

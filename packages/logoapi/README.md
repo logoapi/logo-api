@@ -155,7 +155,8 @@ The API serves logos for <!-- n:brands -->5,089<!-- /n --> brands. Free, no key,
 | Ticker full logo | `https://logoapi.sh/ticker/{SYM}.svg?variant=full` |
 | Ticker dark | `https://logoapi.sh/dark/ticker/{SYM}.svg` (square icon; `?variant=full` for the full logo), `/dark/icon/ticker/{SYM}.svg` (icon) |
 | PNG for email | `https://logoapi.sh/{domain}.png` |
-| Favicon | `https://logoapi.sh/favicon/{domain}` |
+| Favicon for any site (site's own icon, then a name tile) | `https://logoapi.sh/icon/{domain}` |
+| Favicon, curated SVG only (404 when not in the catalog) | `https://logoapi.sh/favicon/{domain}` |
 | White, black, grey, dark | `https://logoapi.sh/{white\|black\|grey\|dark}/{domain}.svg` |
 | Name to domain | `https://logoapi.sh/search?q=stripe` |
 | Crypto coin | `https://logoapi.sh/crypto/{SYM}` (dark: `/dark/crypto/{SYM}.svg`). `/ticker/BTC` serves the same coin mark; GBTC and ETHE stay the Grayscale stock (a fallback image with `X-Logo-Fallback`, no catalog logo); an exchange prefix (`/ticker/NASDAQ:COIN`) is always the stock |
