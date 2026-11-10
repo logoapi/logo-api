@@ -39,6 +39,8 @@ https://logoapi.sh/stripe.com.svg                company domain
 npm install logoapi        # or ticker-logos, stock-ticker-logos, crypto-logos
 ```
 
+MCP client (Claude Desktop, Cursor, others): run `npx -y logoapi-mcp`, or connect `https://logoapi.sh/mcp` directly.
+
 ```js
 import { getLogos } from 'logoapi';
 getLogos(['AAPL', 'VOO', 'BTC']).map((r) => r.dataUri || r.url); // SVG data URI or hosted URL
