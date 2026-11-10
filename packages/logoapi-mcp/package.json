@@ -1,0 +1,40 @@
+{
+  "name": "logoapi-mcp",
+  "version": "0.3.3",
+  "mcpName": "sh.logoapi/logos",
+  "description": "Stdio bridge to the LogoAPI MCP server: company logos and favicons by domain for MCP clients. No key, zero dependencies",
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "model-context-protocol",
+    "logo",
+    "logos",
+    "favicon",
+    "logo-api",
+    "no-api-key"
+  ],
+  "homepage": "https://logoapi.sh/docs/mcp",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/logoapi/logo-api.git",
+    "directory": "packages/logoapi-mcp"
+  },
+  "bugs": {
+    "url": "https://github.com/logoapi/logo-api/issues"
+  },
+  "license": "MIT",
+  "bin": {
+    "logoapi-mcp": "bin.js"
+  },
+  "files": [
+    "bin.js",
+    "README.md",
+    "LICENSE-MIT"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "test": "node test.js"
+  }
+}
