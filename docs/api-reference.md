@@ -1,5 +1,5 @@
 Canonical: https://logoapi.sh/docs
-Synced from the site build on 2026-11-09; do not edit here.
+Synced from the site build on 2026-11-10; do not edit here.
 
 # LogoAPI.sh API reference: logo, icon, favicon and search endpoints
 
@@ -121,7 +121,7 @@ The square mark, for avatars and lists. The bare `/icon/{domain}` route sends `X
 
 **GET** `/favicon/{domain}`
 
-A favicon for a site, taken from the catalog icon. `/favicon/{domain}.svg` works too. The answer is SVG. An unknown domain returns a 404 with a JSON body. PNG is coming. See the [Favicon API page](https://logoapi.sh/favicon) for a live demo and a comparison with Google.
+A favicon for a site, taken from the catalog icon. `/favicon/{domain}.svg` works too. The answer is SVG. An unknown domain returns a 404 with a JSON body. PNG is coming. Need a favicon for any site, including ones not in the catalog? Use `/icon/{domain}`: our icon, else the site’s own favicon, else a name tile, with `X-Logo-Fallback` saying which. See the [Favicon API page](https://logoapi.sh/favicon) for a live demo and a comparison with Google.
 
 ```
 <link rel="icon" type="image/svg+xml" href="https://logoapi.sh/favicon/github.com">
