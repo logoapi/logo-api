@@ -1,0 +1,71 @@
+{
+  "name": "react-stock-logo",
+  "version": "0.1.0",
+  "description": "React stock logo component: <StockLogo ticker=\"AAPL\" /> and <CompanyLogo domain=\"stripe.com\" />. Light and dark, square option, free, no API key. Built on stock-ticker-logos.",
+  "keywords": [
+    "react",
+    "react-component",
+    "react stock logo",
+    "stock logo",
+    "stock-logos",
+    "stock-logo",
+    "stock-ticker-logos",
+    "ticker",
+    "ticker-logos",
+    "company-logo",
+    "logo",
+    "logos",
+    "logo-api",
+    "watchlist",
+    "etf",
+    "crypto",
+    "svg",
+    "no-api-key"
+  ],
+  "homepage": "https://logoapi.sh",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/logoapi/logo-api.git",
+    "directory": "packages/react-stock-logo"
+  },
+  "bugs": {
+    "url": "https://github.com/logoapi/logo-api/issues"
+  },
+  "license": "(MIT AND CC0-1.0)",
+  "main": "./index.js",
+  "module": "./index.mjs",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.mjs",
+      "require": "./index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "index.js",
+    "index.mjs",
+    "index.d.ts",
+    "README.md",
+    "watchlist.png",
+    "LICENSE-MIT"
+  ],
+  "dependencies": {
+    "stock-ticker-logos": "^0.3.3"
+  },
+  "peerDependencies": {
+    "react": ">=16.8"
+  },
+  "devDependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "engines": {
+    "node": ">=16.7"
+  },
+  "sideEffects": false,
+  "scripts": {
+    "test": "node test.js"
+  }
+}

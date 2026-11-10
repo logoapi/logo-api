@@ -45,6 +45,7 @@ jobs:
           set -euo pipefail
           [[ "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "Bad tag: $TAG"; exit 1; }
           git merge-base --is-ancestor "$GITHUB_SHA" origin/main || { echo "Tag commit is not on main"; exit 1; }
+          # react-stock-logo has its own version line (0.1.x), so it is not in this tag check.
           for pkg in logoapi ticker-logos crypto-logos stock-ticker-logos etf-logos; do
             version=$(node -p "require('./packages/$pkg/package.json').version")
             [ "$TAG" = "v$version" ] || { echo "Tag $TAG does not match $pkg version $version"; exit 1; }
@@ -53,7 +54,7 @@ jobs:
       - name: No install scripts
         run: |
           set -euo pipefail
-          for pkg in logoapi ticker-logos crypto-logos stock-ticker-logos etf-logos; do
+          for pkg in logoapi ticker-logos crypto-logos stock-ticker-logos etf-logos react-stock-logo; do
             for script in install preinstall postinstall; do
               found=$(PKG="$pkg" SCRIPT="$script" node -e "const p=require('./packages/'+process.env.PKG+'/package.json'); process.stdout.write(p.scripts && p.scripts[process.env.SCRIPT] ? 'yes' : '')")
               if [ -n "$found" ]; then
@@ -72,7 +73,7 @@ jobs:
       - name: Test all packages
         run: |
           set -euo pipefail
-          for pkg in logoapi ticker-logos crypto-logos stock-ticker-logos etf-logos; do
+          for pkg in logoapi ticker-logos crypto-logos stock-ticker-logos etf-logos react-stock-logo; do
             cd "packages/$pkg"
             # Dependents test against the sibling logoapi from this commit: the new
             # logoapi version is only staged, not yet on the registry.
@@ -106,4 +107,12 @@ jobs:
             echo "::endgroup::"
           else
             echo "::notice::etf-logos is not on npm yet: first publish is manual"
+          fi
+          # react-stock-logo: same rule. Skip until the manual first publish and trusted publisher exist.
+          if npm view react-stock-logo name >/dev/null 2>&1; then
+            echo "::group::stage react-stock-logo"
+            (cd packages/react-stock-logo && npm stage publish --provenance --access public)
+            echo "::endgroup::"
+          else
+            echo "::notice::react-stock-logo is not on npm yet: first publish is manual"
           fi
