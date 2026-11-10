@@ -228,7 +228,7 @@ Use the same paths with `stock-ticker-logos` for the ticker skill.
 ## Pricing
 
 **Free:** <!-- n:free_line -->2M requests a month per site. Free.<!-- /n --> No key, no attribution required.
-**Tickers and crypto:** <!-- n:ticker_limit_line -->Today there is no per-IP limit at our edge for ticker and crypto URLs; fair use applies.<!-- /n -->
+**Tickers and crypto:** <!-- n:ticker_limit_line -->Today, /ticker/, /icon/ticker/ and /crypto/ URLs, /dark/ forms included, have no per-IP rate limit at our edge. Fair use and abuse blocking apply.<!-- /n -->
 **Pro:** <!-- n:pro_line -->$49 a month, our founding price. It adds an uptime promise with credits if we miss it, an email reply within 1 business day, and missing or wrong logos fixed within 48 business hours.<!-- /n -->
 Details: [logoapi.sh/pricing](https://logoapi.sh/pricing?utm_source=github&utm_medium=readme&utm_campaign=logo-api)
 
