@@ -109,10 +109,13 @@ jobs:
             echo "::notice::etf-logos is not on npm yet: first publish is manual"
           fi
           # react-stock-logo: same rule. Skip until the manual first publish and trusted publisher exist.
-          if npm view react-stock-logo name >/dev/null 2>&1; then
+          rsl_version=$(node -p "require('./packages/react-stock-logo/package.json').version")
+          if ! npm view react-stock-logo name >/dev/null 2>&1; then
+            echo "::notice::react-stock-logo is not on npm yet: first publish is manual"
+          elif [ -n "$(npm view "react-stock-logo@$rsl_version" version 2>/dev/null)" ]; then
+            echo "::notice::react-stock-logo $rsl_version is already on npm: nothing to stage"
+          else
             echo "::group::stage react-stock-logo"
             (cd packages/react-stock-logo && npm stage publish --provenance --access public)
             echo "::endgroup::"
-          else
-            echo "::notice::react-stock-logo is not on npm yet: first publish is manual"
           fi

@@ -48,7 +48,6 @@
     "index.mjs",
     "index.d.ts",
     "README.md",
-    "watchlist.png",
     "LICENSE-MIT"
   ],
   "dependencies": {

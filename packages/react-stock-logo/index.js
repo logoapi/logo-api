@@ -21,8 +21,10 @@ function srcFor(input, theme, square) {
 }
 
 function faviconUrl(domain) {
-  const d = String(domain || '').trim().toLowerCase().replace(/^https?:\/\//, '').replace(/^www\./, '').replace(/\/.*$/, '');
-  return d ? HOST + '/favicon/' + d : null;
+  // Mirrors normDomain in logoapi (not exported there): scheme, path, query, hash, user, port, trailing dot.
+  let d = String(domain || '').trim().toLowerCase().replace(/^[a-z][a-z0-9+.-]*:\/\//, '').split(/[/?#]/)[0].replace(/^[^@]*@/, '').replace(/:\d+$/, '').replace(/\.$/, '');
+  if (d.startsWith('www.')) d = d.slice(4);
+  return d && /^[a-z0-9.-]+\.[a-z0-9-]{2,}$/.test(d) ? HOST + '/favicon/' + d : null;
 }
 
 // Shared <img>. Stage 0: the logo. Stage 1: the favicon route (when a domain is known).
@@ -32,12 +34,14 @@ function Logo(props) {
   const [stage, setStage] = React.useState(0);
   React.useEffect(function () { setStage(0); }, [src]);
   const fav = faviconUrl(fallbackDomain);
+  // No usable logo URL but a domain is known: start at the favicon.
+  const eff = !src && fav && stage === 0 ? 1 : stage;
   let current = src;
-  if (stage === 1 && fav) current = fav;
-  else if (stage >= 1 || !src) current = tile(label, size);
+  if (eff === 1 && fav) current = fav;
+  else if (eff >= 1 || !src) current = tile(label, size);
   const handleError = function (e) {
     if (typeof onError === 'function') onError(e);
-    setStage(function (s) { return s === 0 && fav ? 1 : 2; });
+    setStage(function () { return eff === 0 && fav ? 1 : 2; });
   };
   return React.createElement('img', Object.assign({
     loading: 'lazy',

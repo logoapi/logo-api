@@ -35,6 +35,13 @@ assert.strictEqual(get(html(h(StockLogo, { ticker: 'AAPL', alt: 'Apple' })), 'al
 // Bad input renders a letter tile, never throws.
 assert(get(html(h(StockLogo, { ticker: '!!' })), 'src').startsWith('data:image/svg+xml'));
 assert.strictEqual(faviconUrl('https://www.Stripe.com/x'), 'https://logoapi.sh/favicon/stripe.com');
+// Bad ticker plus a domain starts at the favicon, not the letter tile.
+assert.strictEqual(get(html(h(StockLogo, { ticker: '!!', domain: 'stripe.com' })), 'src'), 'https://logoapi.sh/favicon/stripe.com');
+// Domain is normalized: scheme, path, query, hash, port, www.
+assert.strictEqual(faviconUrl('https://www.Stripe.com:8080/a/b?x=1#h'), 'https://logoapi.sh/favicon/stripe.com');
+assert.strictEqual(faviconUrl('stripe.com?x=1'), 'https://logoapi.sh/favicon/stripe.com');
+assert.strictEqual(faviconUrl('stripe.com#top'), 'https://logoapi.sh/favicon/stripe.com');
+assert.strictEqual(faviconUrl('not a domain'), null);
 // Both entry points agree; React is a peer, our helper package is the only dependency.
 assert.deepStrictEqual(Object.keys(pkg.dependencies), ['stock-ticker-logos']);
 assert(pkg.peerDependencies.react);
