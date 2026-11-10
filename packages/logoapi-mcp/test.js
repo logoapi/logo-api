@@ -35,6 +35,12 @@ const server = http.createServer((req, res) => {
       case 'html200':
         res.writeHead(200, { 'Content-Type': 'text/html' });
         return res.end('<html>challenge</html>');
+      case 'rpcerr':
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ jsonrpc: '2.0', id: msg.id, error: { code: -32602, message: 'bad params' } }));
+      case 'rpcerr429':
+        res.writeHead(429, { 'Content-Type': 'text/event-stream' });
+        return res.end('data: ' + JSON.stringify({ jsonrpc: '2.0', id: msg.id, error: { code: -32000, message: 'limit' } }) + '\n\n');
       case 'r429':
         res.writeHead(429, { 'Content-Type': 'application/json' });
         return res.end('{"error":"slow down"}');
@@ -134,6 +140,29 @@ const rpc = (id, method, params) => JSON.stringify({ jsonrpc: '2.0', id, method,
   r = await run(url, [rpc(10, 'slow')]);
   assert.strictEqual(r.code, 0);
   assert.strictEqual(r.msgs[0].result.slow, true);
+
+  // server JSON-RPC error on non-ok status is forwarded as is (JSON and SSE)
+  r = await run(url, [rpc(11, 'rpcerr'), rpc(12, 'rpcerr429')]);
+  const f = Object.fromEntries(r.msgs.map((m) => [m.id, m]));
+  assert.strictEqual(f[11].error.code, -32602);
+  assert.strictEqual(f[11].error.message, 'bad params');
+  assert.strictEqual(f[12].error.code, -32000);
+  assert.strictEqual(f[12].error.message, 'limit');
+
+  // batch array is split into separate POSTs, one reply line each
+  seen.length = 0;
+  r = await run(url, [JSON.stringify([JSON.parse(rpc(13, 'ping')), JSON.parse(rpc(14, 'sse'))])]);
+  assert.strictEqual(r.msgs.length, 2);
+  assert.strictEqual(seen.length, 2);
+  assert(seen.every((s) => !Array.isArray(s.msg)));
+  const g = Object.fromEntries(r.msgs.map((m) => [m.id, m]));
+  assert.strictEqual(g[13].result.pong, true);
+  assert.strictEqual(g[14].result.sse, true);
+
+  // many replies, then stdin close: no output lost, clean exit
+  r = await run(url, Array.from({ length: 50 }, (_, i) => rpc(100 + i, 'ping')));
+  assert.strictEqual(r.code, 0);
+  assert.strictEqual(r.msgs.length, 50);
 
   server.close();
   console.log('ok');

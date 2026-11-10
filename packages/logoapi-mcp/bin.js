@@ -44,7 +44,7 @@ function sendError(id, code, message) {
 }
 
 function hasId(m) {
-  return m && typeof m === 'object' && !Array.isArray(m) && m.id !== undefined && m.id !== null && m.method !== undefined;
+  return m && typeof m === 'object' && m.id !== undefined && m.id !== null && m.method !== undefined;
 }
 
 // Parse a response body into a list of JSON-RPC messages.
@@ -90,6 +90,11 @@ async function post(msg) {
 
   if (res.status === 202 || (res.ok && !text.trim())) return [];
   if (!res.ok) {
+    // A JSON-RPC error body from the server is forwarded as is, with its own id.
+    try {
+      const msgs = parseBody(text, res.headers.get('content-type'));
+      if (msgs.length && msgs.every((m) => m && typeof m === 'object' && m.jsonrpc === '2.0' && (m.result !== undefined || m.error !== undefined))) return msgs;
+    } catch (e) { /* not JSON: use the generic error below */ }
     if (res.status === 429) throw new Error('LogoAPI MCP is rate limited (HTTP 429). Try again later.');
     throw new Error('LogoAPI MCP server returned HTTP ' + res.status + '.');
   }
@@ -101,12 +106,12 @@ async function post(msg) {
 }
 
 async function handle(msg) {
-  const ids = (Array.isArray(msg) ? msg : [msg]).filter(hasId).map((m) => m.id);
+  const ids = [msg].filter(hasId).map((m) => m.id);
   try {
     const replies = await post(msg);
     for (const r of replies) {
       send(r);
-      if (!Array.isArray(msg) && msg.method === 'initialize' && r && r.result && r.result.protocolVersion) {
+      if (msg.method === 'initialize' && r && r.result && r.result.protocolVersion) {
         protocolVersion = r.result.protocolVersion;
       }
     }
@@ -125,7 +130,16 @@ const inflight = new Set();
 let initPromise = null;
 
 function dispatch(msg) {
-  const isInit = !Array.isArray(msg) && msg && msg.method === 'initialize';
+  // The server rejects batches: split an array and send each element on its own.
+  if (Array.isArray(msg)) {
+    if (!msg.length) sendError(null, -32600, 'Invalid request: empty batch.');
+    for (const m of msg) {
+      if (m && typeof m === 'object' && !Array.isArray(m)) dispatch(m);
+      else sendError(null, -32600, 'Invalid request: expected a JSON-RPC object.');
+    }
+    return;
+  }
+  const isInit = msg.method === 'initialize';
   let p;
   if (isInit) {
     p = handle(msg);
@@ -156,5 +170,6 @@ rl.on('line', (line) => {
 });
 rl.on('close', async () => {
   while (inflight.size) await Promise.allSettled([...inflight]);
-  process.exit(0);
+  // No process.exit: on a pipe stdout is async and exit could cut pending writes.
+  process.exitCode = 0;
 });
