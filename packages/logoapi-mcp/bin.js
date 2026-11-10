@@ -87,6 +87,11 @@ async function post(msg) {
   const sid = res.headers.get('mcp-session-id');
   if (sid) sessionId = sid;
   const text = await res.text();
+  if (res.status === 404 && sessionId) {
+    // Session is gone on the server: start clean on the next request.
+    sessionId = null;
+    protocolVersion = null;
+  }
 
   if (res.status === 202 || (res.ok && !text.trim())) return [];
   if (!res.ok) {
@@ -109,6 +114,15 @@ async function handle(msg) {
   const ids = [msg].filter(hasId).map((m) => m.id);
   try {
     const replies = await post(msg);
+    if (hasId(msg)) {
+      // A server error with no id belongs to the one request we sent.
+      for (const r of replies) {
+        if (r && r.error !== undefined && (r.id === null || r.id === undefined)) r.id = msg.id;
+      }
+      if (!replies.some((r) => r && r.id === msg.id)) {
+        throw new Error('LogoAPI MCP server sent no reply to this request.');
+      }
+    }
     for (const r of replies) {
       send(r);
       if (msg.method === 'initialize' && r && r.result && r.result.protocolVersion) {

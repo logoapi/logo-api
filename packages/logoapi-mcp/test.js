@@ -41,6 +41,21 @@ const server = http.createServer((req, res) => {
       case 'rpcerr429':
         res.writeHead(429, { 'Content-Type': 'text/event-stream' });
         return res.end('data: ' + JSON.stringify({ jsonrpc: '2.0', id: msg.id, error: { code: -32000, message: 'limit' } }) + '\n\n');
+      case 'empty':
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        return res.end();
+      case 'emptysse':
+        res.writeHead(200, { 'Content-Type': 'text/event-stream' });
+        return res.end();
+      case 'wrongid':
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ jsonrpc: '2.0', id: 999, result: {} }));
+      case 'nullid':
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ jsonrpc: '2.0', id: null, error: { code: -32600, message: 'nope' } }));
+      case 'gone':
+        res.writeHead(404, { 'Content-Type': 'text/plain' });
+        return res.end('session not found');
       case 'r429':
         res.writeHead(429, { 'Content-Type': 'application/json' });
         return res.end('{"error":"slow down"}');
@@ -69,8 +84,13 @@ function run(url, lines, opts = {}) {
       const msgs = opts.args ? [] : out.split('\n').filter(Boolean).map((l) => JSON.parse(l)); // stdout must be JSON-only
       resolve({ code, msgs, err, out });
     });
-    for (const l of lines) child.stdin.write(l + '\n');
-    child.stdin.end();
+    (async () => {
+      for (const l of lines) {
+        child.stdin.write(l + '\n');
+        if (opts.gap) await new Promise((r2) => setTimeout(r2, opts.gap));
+      }
+      child.stdin.end();
+    })();
   });
 }
 
@@ -163,6 +183,32 @@ const rpc = (id, method, params) => JSON.stringify({ jsonrpc: '2.0', id, method,
   r = await run(url, Array.from({ length: 50 }, (_, i) => rpc(100 + i, 'ping')));
   assert.strictEqual(r.code, 0);
   assert.strictEqual(r.msgs.length, 50);
+
+  // every request id gets an answer: empty body, empty SSE, mismatched id
+  r = await run(url, [rpc(20, 'empty'), rpc(21, 'emptysse'), rpc(22, 'wrongid')]);
+  assert.strictEqual(r.msgs.length, 3);
+  for (const m of r.msgs) {
+    assert.strictEqual(m.error.code, -32603);
+    assert([20, 21, 22].includes(m.id));
+  }
+  // a notification with an empty reply still writes nothing
+  r = await run(url, [JSON.stringify({ jsonrpc: '2.0', method: 'empty' })]);
+  assert.strictEqual(r.msgs.length, 0);
+
+  // server error with null id gets the request id
+  r = await run(url, [rpc(23, 'nullid')]);
+  assert.strictEqual(r.msgs[0].id, 23);
+  assert.strictEqual(r.msgs[0].error.message, 'nope');
+
+  // 404 with a session: next request carries no session or protocol headers
+  seen.length = 0;
+  r = await run(url, [rpc(1, 'initialize'), rpc(30, 'gone'), rpc(31, 'ping')], { gap: 200 });
+  assert.strictEqual(r.msgs.length, 3);
+  const last = seen[seen.length - 1];
+  assert.strictEqual(last.msg.method, 'ping');
+  assert.strictEqual(last.headers['mcp-session-id'], undefined);
+  assert.strictEqual(last.headers['mcp-protocol-version'], undefined);
+  assert.strictEqual(seen[1].headers['mcp-session-id'], 'sess-1');
 
   server.close();
   console.log('ok');
