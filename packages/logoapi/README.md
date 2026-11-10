@@ -29,7 +29,7 @@ Promise: the free tier stays free. We give [12 months' notice](https://logoapi.s
 
 - Limits: <!-- n:free_line -->2M requests a month per site. Free.<!-- /n --> No key, no attribution.
 - Ticker and crypto logo URLs: <!-- n:ticker_limit_line -->Today there is no per-IP limit at our edge for ticker and crypto URLs; fair use applies.<!-- /n --> No key.
-- Catalog: <!-- n:brands -->5,113<!-- /n --> brands and <!-- n:coins -->37<!-- /n --> coins. About <!-- n:tickers_vector -->1,500<!-- /n --> of <!-- n:tickers -->6,605<!-- /n --> tickers have a vector logo (icon or wordmark). Everything else gets the site's favicon or a name tile, and the `X-Logo-Fallback` response header says so. Add `?fallback=404` to get a 404 instead.
+- Catalog: <!-- n:brands -->5,115<!-- /n --> brands and <!-- n:coins -->37<!-- /n --> coins. About <!-- n:tickers_vector -->1,500<!-- /n --> of <!-- n:tickers -->6,605<!-- /n --> tickers have a vector logo (icon or wordmark). Everything else gets the site's favicon or a name tile, and the `X-Logo-Fallback` response header says so. Add `?fallback=404` to get a 404 instead.
 - Source: [github.com/logoapi/logo-api](https://github.com/logoapi/logo-api). Docs: [logoapi.sh/docs](https://logoapi.sh/docs). Ticker index: [index.json](https://github.com/logoapi/logo-api/blob/main/index.json).
 
 ```js
@@ -143,7 +143,7 @@ Dark mode: the bundled files keep their original colours (none use `currentColor
 
 ## Beyond this package
 
-The API serves logos for <!-- n:brands -->5,113<!-- /n --> brands. Free, no key, no attribution. Docs: https://logoapi.sh/docs
+The API serves logos for <!-- n:brands -->5,115<!-- /n --> brands. Free, no key, no attribution. Docs: https://logoapi.sh/docs
 
 <!-- n:free_line -->2M requests a month per site. Free.<!-- /n --> No key. Free stays free. 12 months' notice before any change.
 
