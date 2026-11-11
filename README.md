@@ -40,6 +40,8 @@ https://logoapi.sh/icon/jvns.ca                  favicon for any site (free favi
 npm install logoapi        # or ticker-logos, stock-ticker-logos, crypto-logos
 ```
 
+Crypto coin SVGs, light and dark, as files: [logoapi/crypto-logos](https://github.com/logoapi/crypto-logos). Favicon for any site, with a one-file example: [logoapi/favicon-api](https://github.com/logoapi/favicon-api).
+
 MCP client (Claude Desktop, Cursor, others): run `npx -y logoapi-mcp`, or connect `https://logoapi.sh/mcp` directly.
 
 ```js
