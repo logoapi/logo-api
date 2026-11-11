@@ -54,6 +54,7 @@ getLogos(['AAPL', 'VOO', 'BTC']).map((r) => r.dataUri || r.url); // SVG data URI
 </p>
 
 <p align="center">
+  <a href="https://logoapi.sh/docs/mcp?utm_source=github&utm_medium=readme&utm_campaign=logo-api"><img src="https://img.shields.io/badge/MCP%20server-logoapi.sh%2Fmcp-15161a?style=flat-square" alt="MCP server: logoapi.sh/mcp"></a>
   <a href="https://logoapi.sh?utm_source=github&utm_medium=readme&utm_campaign=logo-api"><img src="https://img.shields.io/badge/brands%20via%20API-5%2C115-15161a?style=flat-square" alt="5,115 brands via API"></a>
   <a href="logos/"><img src="https://img.shields.io/badge/CC0%20files%20in%20this%20repo-2%2C016-15161a?style=flat-square" alt="2,016 CC0 files in this repo"></a>
   <a href="https://logoapi.sh/docs?utm_source=github&utm_medium=readme&utm_campaign=logo-api"><img src="https://img.shields.io/badge/API%20key-not%20needed-15161a?style=flat-square" alt="No API key"></a>
