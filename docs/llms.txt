@@ -137,9 +137,9 @@ H. Tech Innovation LLC. Questions: hello@logoapi.sh.
 - [Free Brandfetch alternative](https://logoapi.sh/alternatives/brandfetch): no client ID, no signup, SVG; side-by-side table with Brandfetch, URL mapping and when Brandfetch is the better choice
 - [Free Simple Icons alternative](https://logoapi.sh/alternatives/simple-icons): full-colour logos by domain instead of one-colour icons by slug; side-by-side table with Simple Icons, switch snippet and when Simple Icons is the better choice
 - [Google favicon API guide](https://logoapi.sh/blog/google-favicon-api): how the s2/favicons URL works, its limits, and how it compares with DuckDuckGo and LogoAPI.sh, with tested facts
-- [Favicon API](https://logoapi.sh/favicon): favicon for any site at /icon/{domain}, live demo of the strict /favicon/{domain}, swap-one-line snippet from Google's favicon API, and a fact-checked comparison with Google and DuckDuckGo
+- [Favicon API](https://logoapi.sh/favicon): favicon for any site at /icon/{domain}: our SVG, else the site's own favicon, else a name tile; live wall of real results, no key, open CORS, one line to copy into your AI tool
 - [Logos for dark background API](https://logoapi.sh/logos-for-dark-background-api): put /dark/ before a domain for the brand's official dark file or a contrast-checked version; how it works, X-Logo-Variant values and a table against Logo.dev, Brandfetch and Simple Icons
-- [Stock logo API](https://logoapi.sh/stock-logo-api): stock, ETF and crypto logos by ticker symbol; watchlist example, dark versions, numbers, clean 404 for an unknown symbol
+- [Stock logo API](https://logoapi.sh/stock-logo-api): free logos for stocks, ETFs and crypto by ticker symbol, no key, 2M requests a month per site; watchlist example, dark versions, clean 404 for an unknown symbol
 - [Brand assets API](https://logoapi.sh/brand-assets-api): logo, icon, one-colour and official brand-kit versions as direct file URLs from /search; logo files only, no colours or fonts; table against Brandfetch, Logo.dev and Simple Icons
 - [Brand page](https://logoapi.sh/brand/stripe.com): /brand/{domain} shows one brand's logo, icon and official versions (white, black or dark only when the brand publishes them), colours, URLs and embed code
 - [Brands A to Z](https://logoapi.sh/brands): popular brands with their own page, A to Z

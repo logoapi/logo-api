@@ -1,7 +1,7 @@
 Canonical: https://logoapi.sh/docs
-Synced from the site build on 2026-11-10; do not edit here.
+Synced from the site build on 2026-11-11; do not edit here.
 
-# LogoAPI.sh API reference: logo, icon, favicon and search endpoints
+# LogoAPI.sh API docs: logo, favicon, stock ticker and crypto, no key
 
 Canonical page: https://logoapi.sh/docs
 Updated: 2026-11-03
