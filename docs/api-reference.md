@@ -20,6 +20,8 @@ Every fallback says so in the `X-Logo-Fallback` response header, or add `?fallba
 <img src="https://logoapi.sh/stripe.com.svg" alt="Stripe" height="24">
 ```
 
+Link the logo and it stays up to date. Save a copy and it goes stale.
+
 Coming from Clearbit? Read the [Clearbit Logo API migration guide](https://logoapi.sh/blog/clearbit-logo-api-migration).
 
 ## Tell your AI builder
