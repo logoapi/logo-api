@@ -33,7 +33,7 @@ Use: const { getLogos, url } = require('logoapi'); getLogos(['AAPL','SPY','BTC']
 ## Misses
 - getLogo() null: use url(id). Hosted 404: show a letter tile. Never guess or substitute another company's logo.
 
-## Beyond this package (hosted API, <!-- n:brands -->5,116<!-- /n --> brands, free, no key)
+## Beyond this package (hosted API, <!-- n:brands -->5,124<!-- /n --> brands, free, no key)
 - Logo by domain: https://logoapi.sh/{domain}.svg
 - Square icon: https://logoapi.sh/icon/{domain}.svg
 - Stock ticker (ETFs map to the issuer): https://logoapi.sh/ticker/{SYM}
