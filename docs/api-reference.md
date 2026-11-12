@@ -276,6 +276,12 @@ Get the square icon of a listed company by its stock ticker. The URL answers `20
 https://logoapi.sh/ticker/NASDAQ:MNDY.svg
 ```
 
+**Lists and watchlists: add `?shape=square`.** On `.svg` the answer is always a 64 by 64 SVG, so a ticker with a wide wordmark, like JPM, still gets a readable tile in a row (its icon or favicon on a plate, else the wordmark). Dark version: `/dark/ticker/JPM.svg?shape=square`. Details in the [ticker guide](https://logoapi.sh/docs/logo-by-stock-ticker#square).
+
+```
+<img src="https://logoapi.sh/ticker/JPM.svg?shape=square" alt="JPMorgan Chase" width="32" height="32">
+```
+
 **Response**
 
 `200` with the square icon: SVG, or the PNG on `.png`. Lower case, an exchange prefix, listings outside the catalog and the coin routes answer `200` too. `?variant=full` answers `200` with the full logo.
