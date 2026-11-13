@@ -15,7 +15,7 @@ const LOADER = fs.readFileSync(path.join(__dirname, "logo.js"), "utf8");
 const BASE = "https://cdn.jsdelivr.net/npm/logoapi-script@0.1.0/";
 
 // ---- tiny fake DOM, just what logo.js touches ----
-function fakeDom(files) {
+function fakeDom(files, display) {
   const timers = [];
   const injected = [];
   class El {
@@ -37,7 +37,7 @@ function fakeDom(files) {
     querySelectorAll: () => body.children.filter((e) => e.getAttribute("data-ticker") !== null),
     addEventListener() {},
   };
-  const win = { document: doc, setTimeout: (f) => { timers.push(f); return timers.length; }, encodeURIComponent, parseInt, Math, String, RegExp };
+  const win = { getComputedStyle: (e) => ({ display: (display && display(e)) || "inline" }), document: doc, setTimeout: (f) => { timers.push(f); return timers.length; }, encodeURIComponent, parseInt, Math, String, RegExp };
   win.window = win; win.self = win;
   const ctx = vm.createContext(win);
   function run() { // play script loads and timers until quiet
@@ -163,6 +163,29 @@ test("theme change on a tile redraws the tile", () => {
   el.setAttribute("data-theme", "dark");
   dom.ctx.LogoAPI.scan(); dom.run();
   assert.match(el.children[0].style.cssText, /#2a2f3a/);
+});
+
+test("host: plain inline span becomes a centred inline-flex box", () => {
+  const dom = fakeDom({ "t/AAPL.js": toScript("t/AAPL", SVG) });
+  const el = dom.span({ "data-ticker": "AAPL" });
+  dom.load(); dom.run();
+  assert.equal(el.style.display, "inline-flex");
+  assert.equal(el.style.alignItems, "center");
+  assert.equal(el.style.justifyContent, "center");
+  assert.equal(el.style.verticalAlign, "middle");
+  assert.match(el.children[0].style.cssText, /width:48px;height:auto;aspect-ratio:1\/1/);
+});
+
+test("host: page CSS display (grid) and inline display are left alone, also later", () => {
+  const dom = fakeDom({ "t/AAPL.js": toScript("t/AAPL", SVG) }, (e) => e.attrs.class === "g" ? "grid" : null);
+  const a = dom.span({ "data-ticker": "AAPL", class: "g" });
+  const b = dom.span({ "data-ticker": "AAPL" }); b.style.display = "block";
+  dom.load(); dom.run();
+  const c = dom.span({ "data-ticker": "AAPL", "data-theme": "dark", class: "g" });
+  dom.ctx.LogoAPI.scan(); dom.run();
+  assert.equal(a.style.display, undefined);
+  assert.equal(b.style.display, "block");
+  assert.equal(c.style.display, undefined);
 });
 
 test("package files: loader only, no install scripts", () => {
