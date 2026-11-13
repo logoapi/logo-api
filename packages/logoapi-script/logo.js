@@ -35,11 +35,34 @@
     t.textContent = txt;
     t.setAttribute("role", "img");
     t.setAttribute("aria-label", (label || "") + " logo");
-    t.style.cssText = "display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box;" +
-      "width:" + size + "px;height:" + size + "px;border-radius:" + Math.round(size * 0.22) + "px;" +
+    t.style.cssText = "display:flex;align-items:center;justify-content:center;box-sizing:border-box;" + SQ(size) +
+      "border-radius:" + Math.round(size * 0.22) + "px;" +
       "font:600 " + Math.round(size * (txt.length > 1 ? 0.36 : 0.46)) + "px/1 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;" +
       (dark ? "background:#2a2f3a;color:#e6e8ee;" : "background:#e9ecf2;color:#3a4150;");
     put(el, t);
+  }
+
+  // A square of the asked size that stays square and centred when page CSS caps
+  // it (max-width/max-height): height follows width, and align-self keeps a
+  // flex or grid parent from stretching it.
+  function SQ(size) {
+    return "align-self:center;width:" + size + "px;height:auto;aspect-ratio:1/1;";
+  }
+
+  // The host span gets a display only when it is still plain inline, so a page
+  // that styles its own tile (display:grid, place-items:center) keeps its layout.
+  // A hidden host (display:none) is checked again on the next scan.
+  function fitHost(el) {
+    var s = el.style;
+    if (!s || s.display) return 1;
+    var cs = w.getComputedStyle ? w.getComputedStyle(el) : null;
+    if (cs && cs.display === "none") return 0;
+    if (cs && cs.display !== "inline") return 1;
+    s.display = "inline-flex";
+    s.alignItems = "center";
+    s.justifyContent = "center";
+    s.verticalAlign = "middle";
+    return 1;
   }
 
   function put(el, node) {
@@ -52,7 +75,7 @@
   function inline(el, svg, label, size, dark) {
     try {
       var host = d.createElement("span");
-      host.style.cssText = "display:inline-block;width:" + size + "px;height:" + size + "px;";
+      host.style.cssText = "display:block;" + SQ(size);
       host.setAttribute("role", "img");
       host.setAttribute("aria-label", label + " logo");
       var root = host.attachShadow ? host.attachShadow({ mode: "open" }) : host;
@@ -66,7 +89,7 @@
     var img = d.createElement("img");
     img.alt = label + " logo";
     img.width = size; img.height = size;
-    img.style.cssText = "display:block;width:" + size + "px;height:" + size + "px;";
+    img.style.cssText = "display:block;object-fit:contain;" + SQ(size);
     img.onerror = function () { if (img.parentNode === el) inline(el, svg, label, size, dark); };
     img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
     put(el, img);
@@ -107,11 +130,11 @@
     var ok = /^[A-Z0-9]{1,15}$/.test(sym);
     var key = ok ? (dark ? "t/dark/" : "t/") + sym : "";
     var sig = key + "|" + size + "|" + raw + "|" + dark;
+    if (!el.__logoapiHost) el.__logoapiHost = fitHost(el);
     if (el.__logoapiSig === sig) return;
     el.__logoapiSig = sig;
     el.__logoapiKey = key;
     el.__logoapiArgs = [sym || raw, size, dark];
-    if (el.style && !el.style.display) el.style.display = "inline-block";
     if (!ok || !base) { tile(el, sym || raw, size, dark); return; }
     if (state[key] === "ok") { draw(el, key, sym, size, dark); return; }
     if (state[key] === "miss") { tile(el, sym, size, dark); (missed[key] = missed[key] || []).push(el); return; }
