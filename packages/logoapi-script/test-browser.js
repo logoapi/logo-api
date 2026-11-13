@@ -4,7 +4,10 @@
 const fs = require("node:fs");
 const path = require("node:path");
 let pw;
-try { pw = require(process.env.PLAYWRIGHT || "playwright"); } catch (e) { console.log("skip browser tests (no playwright)"); process.exit(0); }
+try { pw = require(process.env.PLAYWRIGHT || "playwright"); } catch (e) {
+  if (process.env.CI) { console.log("FAIL browser tests need Playwright in CI"); process.exit(1); }
+  console.log("skip browser tests (no playwright)"); process.exit(0);
+}
 const { toScriptSrc } = { toScriptSrc: (k, svg) => "(self.LOGOAPI_Q=self.LOGOAPI_Q||[]).push([" + JSON.stringify(k) + "," + JSON.stringify(svg) + "]);" };
 
 const BASE = "https://cdn.test/logoapi-script/";
@@ -23,7 +26,7 @@ function page(css, body, csp) {
 async function main() {
   const b = await pw.chromium.launch();
   let failed = 0;
-  async function run(name, html, check, n) {
+  async function run(name, html, check, n, wait) {
     const p = await b.newPage({ viewport: { width: 600, height: 400 } });
     await p.route("https://cdn.test/**", (r) => {
       const rel = r.request().url().slice(BASE.length);
@@ -34,7 +37,7 @@ async function main() {
     await p.route("https://page.test/", (r) => r.fulfill({ contentType: "text/html", body: html }));
     await p.goto("https://page.test/");
     await p.waitForFunction((n) => { const a = [...document.querySelectorAll("[data-ticker]")]; return a.length >= n && a.every((e) => e.firstElementChild); }, n || 1, { timeout: 5000 });
-    await p.waitForTimeout(50);
+    await p.waitForTimeout(wait || 50);
     const r = await p.evaluate(() => [...document.querySelectorAll("[data-ticker]")].map((e) => {
       const box = (e.closest(".logo") || e).getBoundingClientRect(), c = e.firstElementChild.getBoundingClientRect();
       return { tag: c.width && e.firstElementChild.tagName, box: [box.x, box.y, box.width, box.height], c: [c.x, c.y, c.width, c.height], disp: e.style.display };
@@ -71,6 +74,10 @@ async function main() {
     tick("AAPL") + tick("ZZZQ")), (r) => {
     for (const x of r) { centred(x); assert.deepEqual(x.c.slice(2), [30, 30]); }
   }, 2);
+  await run("host hidden at first scan is fitted once shown", page("",
+    '<p>a <span id=h data-ticker="AAPL" hidden></span> b</p><script>setTimeout(function(){h.hidden=false;document.body.appendChild(document.createElement("i"))},300)</script>'), (r) => {
+    assert.equal(r[0].disp, "inline-flex"); assert.deepEqual(r[0].box.slice(2), [48, 48]);
+  }, 1, 600);
   await run("no page CSS: 48px square, host sized to it", page("", '<span data-ticker="AAPL"></span> <span data-ticker="ZZZQ" data-size="32"></span>'), (r) => {
     assert.deepEqual(r[0].c.slice(2), [48, 48]); assert.deepEqual(r[0].box.slice(2), [48, 48]); assert.equal(r[0].disp, "inline-flex");
     assert.deepEqual(r[1].c.slice(2), [32, 32]); assert.deepEqual(r[1].box.slice(2), [32, 32]);

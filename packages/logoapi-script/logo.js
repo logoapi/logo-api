@@ -43,23 +43,26 @@
   }
 
   // A square of the asked size that stays square and centred when page CSS caps
-  // it (max-width/max-height): height follows width, and the self-alignment
-  // centres it in a flex or grid parent instead of stretching it.
+  // it (max-width/max-height): height follows width, and align-self keeps a
+  // flex or grid parent from stretching it.
   function SQ(size) {
-    return "align-self:center;justify-self:center;width:" + size + "px;height:auto;aspect-ratio:1/1;";
+    return "align-self:center;width:" + size + "px;height:auto;aspect-ratio:1/1;";
   }
 
   // The host span gets a display only when it is still plain inline, so a page
   // that styles its own tile (display:grid, place-items:center) keeps its layout.
+  // A hidden host (display:none) is checked again on the next scan.
   function fitHost(el) {
     var s = el.style;
-    if (!s || s.display) return;
+    if (!s || s.display) return 1;
     var cs = w.getComputedStyle ? w.getComputedStyle(el) : null;
-    if (cs && cs.display !== "inline") return;
+    if (cs && cs.display === "none") return 0;
+    if (cs && cs.display !== "inline") return 1;
     s.display = "inline-flex";
     s.alignItems = "center";
     s.justifyContent = "center";
     s.verticalAlign = "middle";
+    return 1;
   }
 
   function put(el, node) {
@@ -127,11 +130,11 @@
     var ok = /^[A-Z0-9]{1,15}$/.test(sym);
     var key = ok ? (dark ? "t/dark/" : "t/") + sym : "";
     var sig = key + "|" + size + "|" + raw + "|" + dark;
+    if (!el.__logoapiHost) el.__logoapiHost = fitHost(el);
     if (el.__logoapiSig === sig) return;
     el.__logoapiSig = sig;
     el.__logoapiKey = key;
     el.__logoapiArgs = [sym || raw, size, dark];
-    if (!el.__logoapiHost) { el.__logoapiHost = 1; fitHost(el); }
     if (!ok || !base) { tile(el, sym || raw, size, dark); return; }
     if (state[key] === "ok") { draw(el, key, sym, size, dark); return; }
     if (state[key] === "miss") { tile(el, sym, size, dark); (missed[key] = missed[key] || []).push(el); return; }
