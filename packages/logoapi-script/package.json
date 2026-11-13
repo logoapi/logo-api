@@ -1,0 +1,43 @@
+{
+  "name": "logoapi-script",
+  "version": "0.1.0",
+  "description": "Stock and crypto logos for pages that can only load scripts from a CDN (sandboxed AI artifacts). One script tag, then <span data-ticker=\"AAPL\">. Original square SVG tiles from logoapi.sh, light and dark. No API key.",
+  "keywords": [
+    "logo",
+    "logos",
+    "stock-logo",
+    "ticker-logos",
+    "crypto-logo",
+    "svg",
+    "jsdelivr",
+    "cdn",
+    "artifact",
+    "sandbox",
+    "watchlist",
+    "no-api-key"
+  ],
+  "homepage": "https://logoapi.sh",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/logoapi/logo-api.git",
+    "directory": "packages/logoapi-script"
+  },
+  "bugs": {
+    "url": "https://github.com/logoapi/logo-api/issues"
+  },
+  "license": "(MIT AND CC0-1.0)",
+  "browser": "./logo.js",
+  "jsdelivr": "./logo.js",
+  "unpkg": "./logo.js",
+  "files": [
+    "logo.js",
+    "t/",
+    "README.md",
+    "LICENSE-MIT"
+  ],
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node test.js"
+  },
+  "sideEffects": true
+}
