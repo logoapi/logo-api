@@ -54,7 +54,7 @@ jobs:
       - name: No install scripts
         run: |
           set -euo pipefail
-          for pkg in logoapi ticker-logos crypto-logos stock-ticker-logos etf-logos react-stock-logo logoapi-mcp; do
+          for pkg in logoapi ticker-logos crypto-logos stock-ticker-logos etf-logos react-stock-logo logoapi-mcp logoapi-script; do
             for script in install preinstall postinstall; do
               found=$(PKG="$pkg" SCRIPT="$script" node -e "const p=require('./packages/'+process.env.PKG+'/package.json'); process.stdout.write(p.scripts && p.scripts[process.env.SCRIPT] ? 'yes' : '')")
               if [ -n "$found" ]; then
@@ -73,7 +73,7 @@ jobs:
       - name: Test all packages
         run: |
           set -euo pipefail
-          for pkg in logoapi ticker-logos crypto-logos stock-ticker-logos etf-logos react-stock-logo logoapi-mcp; do
+          for pkg in logoapi ticker-logos crypto-logos stock-ticker-logos etf-logos react-stock-logo logoapi-mcp logoapi-script; do
             cd "packages/$pkg"
             # Dependents test against the sibling logoapi from this commit: the new
             # logoapi version is only staged, not yet on the registry.
@@ -127,3 +127,6 @@ jobs:
           else
             echo "::notice::logoapi-mcp is not on npm yet: first publish is manual"
           fi
+          # logoapi-script: own version line, data built from the live CDN by
+          # `npm run build` (network), so it is published by hand from a checked build.
+          echo "::notice::logoapi-script is published by hand: npm run build, npm test, then publish"
