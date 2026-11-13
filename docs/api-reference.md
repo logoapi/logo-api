@@ -1,5 +1,5 @@
 Canonical: https://logoapi.sh/docs
-Synced from the site build on 2026-11-12; do not edit here.
+Synced from the site build on 2026-11-13; do not edit here.
 
 # LogoAPI.sh API docs: logo, favicon, stock ticker and crypto, no key
 
@@ -276,7 +276,7 @@ Get the square icon of a listed company by its stock ticker. The URL answers `20
 https://logoapi.sh/ticker/NASDAQ:MNDY.svg
 ```
 
-**Lists and watchlists: add `?shape=square`.** On `.svg` the answer is always a 64 by 64 SVG, so a ticker with a wide wordmark, like JPM, still gets a readable tile in a row (its icon or favicon on a plate, else the wordmark). Dark version: `/dark/ticker/JPM.svg?shape=square`. Details in the [ticker guide](https://logoapi.sh/docs/logo-by-stock-ticker#square).
+**Lists and watchlists: add `?shape=square`.** On `.svg` the answer is always a 64 by 64 SVG, so a ticker with a wide wordmark, like JPM, still gets a readable tile in a row (its icon or favicon on a plate, else the wordmark). Dark version: `/dark/ticker/JPM.svg?shape=square`. Details in the [ticker guide](https://logoapi.sh/docs/logo-by-stock-ticker#square). Pages that cannot load outside images, such as sandboxed AI artifacts, can show ticker logos with one script: `https://cdn.jsdelivr.net/npm/logoapi-script@0.1.2/logo.js` and `<span data-ticker="AAPL"></span>`. Each logo is a finished square tile.
 
 ```
 <img src="https://logoapi.sh/ticker/JPM.svg?shape=square" alt="JPMorgan Chase" width="32" height="32">

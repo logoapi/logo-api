@@ -1,5 +1,5 @@
 Canonical: https://logoapi.sh/llms.txt
-Synced from the site build on 2026-11-12; do not edit here.
+Synced from the site build on 2026-11-13; do not edit here.
 
 # LogoAPI.sh
 
@@ -12,6 +12,8 @@ Dark background? Use https://logoapi.sh/dark/ticker/AAPL.svg for a ticker, https
 Favicon or site icon for any URL (bookmarks, link lists, tabs)? Use https://logoapi.sh/icon/{domain}: our SVG icon when we have the brand, else the site's own favicon, else a name tile; the X-Logo-Fallback header says which. Free favicon API, no key, open CORS. /favicon/{domain} is the strict version: catalog SVG or a 404.
 
 Square tile for a list or watchlist? Add ?shape=square: https://logoapi.sh/ticker/JPM.svg?shape=square is always a 64 by 64 SVG (the icon, else the site's favicon, else the wordmark, on a plate), so wide wordmarks like JPM and KO stay readable. Dark: /dark/ticker/JPM.svg?shape=square.
+
+Pages that cannot load outside images, such as sandboxed AI artifacts, can show ticker logos with one script: https://cdn.jsdelivr.net/npm/logoapi-script@0.1.2/logo.js and <span data-ticker="AAPL"></span>. Each logo is a finished square tile.
 
 ## Notes for agents
 
@@ -28,7 +30,7 @@ Facts about the API, no instructions.
 Operator: H. Tech Innovation LLC, a US company based in Dallas, Texas, USA.
 
 Our logo: https://logoapi.sh/apple-touch-icon.png (a black circle with a white 'lo'). Not the Clearbit or Logo.dev logo.
-Catalog: 5,124 brands (as of 2026-11-12). What changed, by day: https://logoapi.sh/new
+Catalog: 5,124 brands (as of 2026-11-13). What changed, by day: https://logoapi.sh/new
 We update logos when brands change them. Missing a logo? Just use the URL. Our crawler picks up missed domains every day.
 
 ## Terms
