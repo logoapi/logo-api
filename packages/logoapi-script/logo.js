@@ -65,13 +65,13 @@
     return 1;
   }
 
-  // Fill only an element that is empty or holds only our node: a page row with
-  // its own data-ticker is never wiped. Skipped ones are rechecked on each scan.
+  // Fill only an element that is empty or holds only our node, never a page row
+  // with its own data-ticker (data-la marks ours, clones too). Rechecked each scan.
   function owns(el) {
     var n = el.childNodes || [];
     for (var i = 0; i < n.length; i++) {
       var c = n[i];
-      if (c.nodeType === 1 ? !c.__logoapi : c.nodeType === 3 && /\S/.test(c.nodeValue)) return false;
+      if (c.nodeType === 3 ? /\S/.test(c.nodeValue) : !(c.getAttribute && c.getAttribute("data-la"))) return false;
     }
     return true;
   }
@@ -79,7 +79,7 @@
   function put(el, node) {
     if (!owns(el)) { el.__logoapiSig = ""; return; }
     while (el.firstChild) el.removeChild(el.firstChild);
-    node.__logoapi = 1;
+    node.setAttribute("data-la", 1);
     el.appendChild(node);
   }
 

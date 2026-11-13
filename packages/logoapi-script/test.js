@@ -26,6 +26,7 @@ function fakeDom(files, display) {
     get firstChild() { return this.children[0] || null; }
     appendChild(c) { c.parentNode = this; this.children.push(c); if (c.tagName === "SCRIPT") injected.push(c); return c; }
     removeChild(c) { this.children.splice(this.children.indexOf(c), 1); c.parentNode = null; return c; }
+    cloneNode() { const c = new El(this.tagName); Object.assign(c.attrs, this.attrs); c.style = { cssText: this.style.cssText }; this.children.forEach((k) => c.appendChild(k.nodeType === 1 ? k.cloneNode() : { ...k })); return c; }
     attachShadow() { this.shadow = { innerHTML: "" }; return this.shadow; }
   }
   const body = new El("body");
@@ -202,6 +203,18 @@ test("element with page content is never filled, rechecked once empty", () => {
   row.removeChild(name);
   dom.ctx.LogoAPI.scan(); dom.run();
   assert.equal(row.children[0].tagName, "IMG");
+});
+
+test("a cloned row with a new ticker redraws; a comment child counts as page content", () => {
+  const dom = fakeDom({ "t/AAPL.js": toScript("t/AAPL", SVG), "t/MSFT.js": toScript("t/MSFT", SVG) });
+  const a = dom.span({ "data-ticker": "AAPL" });
+  const cm = dom.span({ "data-ticker": "AAPL" }); cm.children.push({ nodeType: 8, nodeValue: "v-if" });
+  dom.load(); dom.run();
+  const b = dom.ctx.document.body.appendChild(a.cloneNode(true));
+  b.setAttribute("data-ticker", "MSFT");
+  dom.ctx.LogoAPI.scan(); dom.run();
+  assert.match(b.children[0].alt, /MSFT/);
+  assert.equal(cm.children[0].nodeValue, "v-if");
 });
 
 test("data-logoapi works like data-ticker and wins over it", () => {
