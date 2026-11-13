@@ -31,7 +31,7 @@ async function main() {
     await p.route("https://cdn.test/**", (r) => {
       const rel = r.request().url().slice(BASE.length);
       if (rel === "logo.js") return r.fulfill({ contentType: "text/javascript", body: LOADER });
-      if (rel === "t/AAPL.js" || rel === "t/dark/AAPL.js") return r.fulfill({ contentType: "text/javascript", body: toScriptSrc(rel.slice(0, -3), SVG) });
+      if (/^t\/(dark\/)?(AAPL|MSFT)\.js$/.test(rel)) return r.fulfill({ contentType: "text/javascript", body: toScriptSrc(rel.slice(0, -3), SVG) });
       return r.fulfill({ status: 404, body: "" });
     });
     await p.route("https://page.test/", (r) => r.fulfill({ contentType: "text/html", body: html }));
@@ -42,7 +42,7 @@ async function main() {
       const box = (e.closest(".logo") || e).getBoundingClientRect(), c = e.firstElementChild.getBoundingClientRect();
       return { tag: c.width && e.firstElementChild.tagName, box: [box.x, box.y, box.width, box.height], c: [c.x, c.y, c.width, c.height], disp: e.style.display };
     }));
-    try { check(r); console.log("ok   " + name); } catch (e) { failed++; console.log("FAIL " + name + "\n     " + e.message + "\n     " + JSON.stringify(r)); }
+    try { await check(r, p); console.log("ok   " + name); } catch (e) { failed++; console.log("FAIL " + name + "\n     " + e.message + "\n     " + JSON.stringify(r)); }
     await p.close();
   }
   const assert = require("node:assert/strict");
@@ -78,6 +78,23 @@ async function main() {
     '<p>a <span id=h data-ticker="AAPL" hidden></span> b</p><script>setTimeout(function(){h.hidden=false;document.body.appendChild(document.createElement("i"))},300)</script>'), (r) => {
     assert.equal(r[0].disp, "inline-flex"); assert.deepEqual(r[0].box.slice(2), [48, 48]);
   }, 1, 600);
+  const ROWS = "<ul id=l></ul><script>function row(t,n){var li=document.createElement('li');li.dataset.ticker=t;" +
+    "li.innerHTML='<span data-ticker=\"'+t+'\" data-size=\"24\"></span><b>'+n+'</b><input value=1><a href=#>x</a>';l.appendChild(li)}" +
+    "row('AAPL','Apple');row('MSFT','Microsoft')</script>";
+  const rowCheck = (p) => p.evaluate(() => [...document.querySelectorAll("li")].map((li) =>
+    [li.children.length, li.children[0].tagName, li.children[0].children[0] && li.children[0].children[0].tagName, li.querySelector("b").textContent].join(" ")));
+  await run("row with its own data-ticker keeps its content, inner span gets the logo; sort, theme, size, later rows", page("", ROWS), async (r, p) => {
+    assert.deepEqual(await rowCheck(p), ["4 SPAN IMG Apple", "4 SPAN IMG Microsoft"]);
+    await p.evaluate(() => { const l = document.getElementById("l"); [...l.children].reverse().forEach((li) => l.appendChild(li)); });
+    await p.waitForTimeout(100);
+    assert.deepEqual(await rowCheck(p), ["4 SPAN IMG Microsoft", "4 SPAN IMG Apple"]);
+    await p.evaluate(() => { const s = document.querySelector("li span"); s.dataset.theme = "dark"; s.dataset.size = "32"; row("AAPL", "Apple 2"); });
+    await p.waitForTimeout(300);
+    assert.deepEqual(await rowCheck(p), ["4 SPAN IMG Microsoft", "4 SPAN IMG Apple", "4 SPAN IMG Apple 2"]);
+    const img = await p.evaluate(() => { const i = document.querySelector("li span img"); return [i.width, i.alt]; });
+    assert.deepEqual(img, [32, "MSFT logo"]);
+    assert.ok(await p.evaluate(() => performance.getEntriesByType("resource").some((e) => e.name.endsWith("t/dark/MSFT.js"))));
+  }, 4);
   await run("no page CSS: 48px square, host sized to it", page("", '<span data-ticker="AAPL"></span> <span data-ticker="ZZZQ" data-size="32"></span>'), (r) => {
     assert.deepEqual(r[0].c.slice(2), [48, 48]); assert.deepEqual(r[0].box.slice(2), [48, 48]); assert.equal(r[0].disp, "inline-flex");
     assert.deepEqual(r[1].c.slice(2), [32, 32]); assert.deepEqual(r[1].box.slice(2), [32, 32]);
