@@ -21,6 +21,7 @@
   var store = {};   // key -> svg text
   var state = {};   // key -> "loading" | "ok" | "miss"
   var waiters = {}; // key -> [elements]
+  var missed = {};  // key -> [elements] showing a tile; redrawn if the file arrives late
 
   function norm(s) {
     s = String(s == null ? "" : s).trim().toUpperCase();
@@ -78,7 +79,8 @@
       var el = list[i];
       if (el.__logoapiKey !== key) continue; // attributes changed meanwhile
       var p = el.__logoapiArgs;
-      if (state[key] === "ok") draw(el, key, p[0], p[1], p[2]); else tile(el, p[0], p[1], p[2]);
+      if (state[key] === "ok") draw(el, key, p[0], p[1], p[2]);
+      else { tile(el, p[0], p[1], p[2]); (missed[key] = missed[key] || []).push(el); }
     }
   }
 
@@ -104,7 +106,7 @@
     if (!(size > 0 && size <= 1024)) size = 48;
     var ok = /^[A-Z0-9]{1,15}$/.test(sym);
     var key = ok ? (dark ? "t/dark/" : "t/") + sym : "";
-    var sig = key + "|" + size + "|" + raw;
+    var sig = key + "|" + size + "|" + raw + "|" + dark;
     if (el.__logoapiSig === sig) return;
     el.__logoapiSig = sig;
     el.__logoapiKey = key;
@@ -112,7 +114,7 @@
     if (el.style && !el.style.display) el.style.display = "inline-block";
     if (!ok || !base) { tile(el, sym || raw, size, dark); return; }
     if (state[key] === "ok") { draw(el, key, sym, size, dark); return; }
-    if (state[key] === "miss") { tile(el, sym, size, dark); return; }
+    if (state[key] === "miss") { tile(el, sym, size, dark); (missed[key] = missed[key] || []).push(el); return; }
     (waiters[key] = waiters[key] || []).push(el);
     if (!state[key]) inject(key);
   }
@@ -126,9 +128,11 @@
   var Q = w.LOGOAPI_Q = w.LOGOAPI_Q || [];
   function take(item) {
     if (!item || typeof item[0] !== "string" || typeof item[1] !== "string") return;
-    store[item[0]] = item[1];
-    state[item[0]] = "ok";
-    settle(item[0]);
+    var key = item[0];
+    store[key] = item[1];
+    state[key] = "ok";
+    if (missed[key]) { waiters[key] = (waiters[key] || []).concat(missed[key]); delete missed[key]; }
+    settle(key);
   }
   for (var j = 0; j < Q.length; j++) take(Q[j]);
   Q.length = 0;

@@ -146,6 +146,25 @@ test("nodes added later and changed attributes are picked up by scan", () => {
   assert.match(el.children[0].alt, /MSFT/);
 });
 
+test("a file that pushes after the timeout replaces the tile", () => {
+  const dom = fakeDom({}); // script errors or times out first
+  const el = dom.span({ "data-ticker": "AAPL" });
+  dom.load(); dom.run();
+  assert.equal(el.children[0].textContent, "AA");
+  vm.runInContext(toScript("t/AAPL", SVG), dom.ctx); // late push
+  assert.equal(el.children[0].tagName, "IMG");
+});
+
+test("theme change on a tile redraws the tile", () => {
+  const dom = fakeDom({});
+  const el = dom.span({ "data-ticker": "<x>" });
+  dom.load(); dom.run();
+  assert.match(el.children[0].style.cssText, /#e9ecf2/);
+  el.setAttribute("data-theme", "dark");
+  dom.ctx.LogoAPI.scan(); dom.run();
+  assert.match(el.children[0].style.cssText, /#2a2f3a/);
+});
+
 test("package files: loader only, no install scripts", () => {
   const pkg = require("./package.json");
   for (const s of ["install", "preinstall", "postinstall", "prepack", "prepare"]) assert.ok(!(pkg.scripts || {})[s], s);

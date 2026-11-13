@@ -3,7 +3,7 @@
 // Only catalog logos are kept: the build asks with ?fallback=404, so favicon and
 // letter-tile stand-ins are 404 and get no file (the loader shows a letter tile).
 // Run once before packing: node scripts/build.mjs [--only AAPL,MSFT]. Needs network.
-import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
+import { mkdir, readFile, rename, rm, writeFile } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -66,8 +66,11 @@ async function pool(items, fn) {
 async function main() {
   const only = process.argv.includes("--only") ? process.argv[process.argv.indexOf("--only") + 1].split(",").map(norm) : null;
   const syms = only || (await candidates());
-  await rm(join(ROOT, "t"), { recursive: true, force: true });
-  await mkdir(join(ROOT, "t", "dark"), { recursive: true });
+  // Build into t.tmp and swap in only after every symbol succeeded: a failed run
+  // never leaves a partial t/ behind.
+  const OUT = join(ROOT, "t.tmp");
+  await rm(OUT, { recursive: true, force: true });
+  await mkdir(join(OUT, "dark"), { recursive: true });
   const list = { light: [], dark: [] };
   const sums = {};
   let bytes = 0;
@@ -79,14 +82,16 @@ async function main() {
     if (!/^\s*(<\?xml[^>]*>\s*)?(<!--[\s\S]*?-->\s*)*<svg[\s>]/.test(svg)) throw new Error(url + ": not an SVG");
     const key = (dark ? "t/dark/" : "t/") + sym;
     const file = toScript(key, svg);
-    await writeFile(join(ROOT, key + ".js"), file);
+    await writeFile(join(OUT, key.slice(2) + ".js"), file);
     list[dark ? "dark" : "light"].push(sym);
     sums[key] = createHash("sha256").update(buf).digest("hex");
     bytes += file.length;
   });
   list.light.sort(); list.dark.sort();
-  await writeFile(join(ROOT, "t", "list.json"), JSON.stringify({ source: HOST, built: new Date().toISOString(), light: list.light, dark: list.dark }) + "\n");
-  await writeFile(join(ROOT, "t", "sha256.json"), JSON.stringify(sums) + "\n");
+  await writeFile(join(OUT, "list.json"), JSON.stringify({ source: HOST, built: new Date().toISOString(), light: list.light, dark: list.dark }) + "\n");
+  await writeFile(join(OUT, "sha256.json"), JSON.stringify(sums) + "\n");
+  await rm(join(ROOT, "t"), { recursive: true, force: true });
+  await rename(OUT, join(ROOT, "t"));
   console.log(`checked ${syms.length} symbols: ${list.light.length} light, ${list.dark.length} dark, ${(bytes / 1048576).toFixed(1)} MB`);
 }
 
