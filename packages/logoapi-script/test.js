@@ -19,9 +19,10 @@ function fakeDom(files, display) {
   const timers = [];
   const injected = [];
   class El {
-    constructor(tag) { this.tagName = tag.toUpperCase(); this.attrs = {}; this.children = []; this.style = { cssText: "" }; this.parentNode = null; }
+    constructor(tag) { this.nodeType = 1; this.tagName = tag.toUpperCase(); this.attrs = {}; this.children = []; this.style = { cssText: "" }; this.parentNode = null; }
     getAttribute(k) { return k in this.attrs ? this.attrs[k] : null; }
     setAttribute(k, v) { this.attrs[k] = String(v); }
+    get childNodes() { return this.children; }
     get firstChild() { return this.children[0] || null; }
     appendChild(c) { c.parentNode = this; this.children.push(c); if (c.tagName === "SCRIPT") injected.push(c); return c; }
     removeChild(c) { this.children.splice(this.children.indexOf(c), 1); c.parentNode = null; return c; }
@@ -34,7 +35,7 @@ function fakeDom(files, display) {
     currentScript: Object.assign(new El("script"), { src: BASE + "logo.js" }),
     createElement: (t) => new El(t),
     getElementsByTagName: () => [],
-    querySelectorAll: () => body.children.filter((e) => e.getAttribute("data-ticker") !== null),
+    querySelectorAll: () => body.children.filter((e) => e.getAttribute("data-ticker") !== null || e.getAttribute("data-logoapi") !== null),
     addEventListener() {},
   };
   const win = { getComputedStyle: (e) => ({ display: (display && display(e)) || "inline" }), document: doc, setTimeout: (f) => { timers.push(f); return timers.length; }, encodeURIComponent, parseInt, Math, String, RegExp };
@@ -186,6 +187,28 @@ test("host: page CSS display (grid) and inline display are left alone, also late
   assert.equal(a.style.display, undefined);
   assert.equal(b.style.display, "block");
   assert.equal(c.style.display, undefined);
+});
+
+test("element with page content is never filled, rechecked once empty", () => {
+  const dom = fakeDom({ "t/AAPL.js": toScript("t/AAPL", SVG) });
+  const row = dom.span({ "data-ticker": "AAPL" });
+  const name = row.appendChild(new (Object.getPrototypeOf(row).constructor)("b"));
+  const txt = dom.span({ "data-ticker": "AAPL" }); txt.children.push({ nodeType: 3, nodeValue: " Apple " });
+  const ws = dom.span({ "data-ticker": "AAPL" }); ws.children.push({ nodeType: 3, nodeValue: " \n " });
+  dom.load(); dom.run();
+  assert.deepEqual(row.children, [name]);
+  assert.equal(txt.children[0].nodeValue, " Apple ");
+  assert.equal(ws.children[0].tagName, "IMG");
+  row.removeChild(name);
+  dom.ctx.LogoAPI.scan(); dom.run();
+  assert.equal(row.children[0].tagName, "IMG");
+});
+
+test("data-logoapi works like data-ticker and wins over it", () => {
+  const dom = fakeDom({ "t/MSFT.js": toScript("t/MSFT", SVG) });
+  const el = dom.span({ "data-logoapi": "msft", "data-ticker": "row-7" });
+  dom.load(); dom.run();
+  assert.match(el.children[0].alt, /MSFT/);
 });
 
 test("package files: loader only, no install scripts", () => {

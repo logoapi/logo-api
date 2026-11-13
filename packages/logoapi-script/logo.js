@@ -1,6 +1,6 @@
 /*! logoapi-script loader. MIT. https://logoapi.sh
  * Usage: <script src="https://cdn.jsdelivr.net/npm/logoapi-script@VERSION/logo.js"></script>
- *        <span data-ticker="AAPL" data-size="48"></span>  (data-theme="dark" for the dark tile)
+ *        <span data-ticker="AAPL" data-size="48"></span>  (or data-logoapi; data-theme="dark")
  * Each ticker is one plain script next to this file (t/AAPL.js, t/dark/AAPL.js) that pushes
  * the original SVG text from logoapi.sh. A ticker with no file shows a letter tile.
  */
@@ -65,8 +65,21 @@
     return 1;
   }
 
+  // Fill only an element that is empty or holds only our node: a page row with
+  // its own data-ticker is never wiped. Skipped ones are rechecked on each scan.
+  function owns(el) {
+    var n = el.childNodes || [];
+    for (var i = 0; i < n.length; i++) {
+      var c = n[i];
+      if (c.nodeType === 1 ? !c.__logoapi : c.nodeType === 3 && /\S/.test(c.nodeValue)) return false;
+    }
+    return true;
+  }
+
   function put(el, node) {
+    if (!owns(el)) { el.__logoapiSig = ""; return; }
     while (el.firstChild) el.removeChild(el.firstChild);
+    node.__logoapi = 1;
     el.appendChild(node);
   }
 
@@ -121,7 +134,8 @@
   }
 
   function want(el) {
-    var raw = el.getAttribute("data-ticker") || "";
+    if (!owns(el)) { el.__logoapiSig = ""; return; }
+    var raw = el.getAttribute("data-logoapi") || el.getAttribute("data-ticker") || "";
     var sym = norm(raw);
     var th = el.getAttribute("data-theme") || defTheme;
     var dark = th === "dark";
@@ -143,7 +157,7 @@
   }
 
   function scan() {
-    var els = d.querySelectorAll("[data-ticker]");
+    var els = d.querySelectorAll("[data-logoapi],[data-ticker]");
     for (var i = 0; i < els.length; i++) want(els[i]);
   }
 
@@ -174,6 +188,6 @@
         var r = recs[i];
         if (r.type === "attributes" || r.addedNodes.length) { later(); return; }
       }
-    }).observe(d.documentElement, { childList: true, subtree: true, attributes: true, attributeFilter: ["data-ticker", "data-theme", "data-size"] });
+    }).observe(d.documentElement, { childList: true, subtree: true, attributes: true, attributeFilter: ["data-logoapi", "data-ticker", "data-theme", "data-size"] });
   }
 })();
