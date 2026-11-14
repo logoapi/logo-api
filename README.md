@@ -44,6 +44,10 @@ Crypto coin SVGs, light and dark, as files: [logoapi/crypto-logos](https://githu
 
 MCP client (Claude Desktop, Cursor, others): run `npx -y logoapi-mcp`, or connect `https://logoapi.sh/mcp` directly.
 
+Replit: one click adds the MCP server to your workspace.
+
+[![Add to Replit](https://replit.com/badge?caption=Add%20to%20Replit)](https://replit.com/integrations?mcp=eyJkaXNwbGF5TmFtZSI6IkxvZ29BUEkuc2giLCJiYXNlVXJsIjoiaHR0cHM6Ly9sb2dvYXBpLnNoL21jcCJ9)
+
 ```js
 import { getLogos } from 'logoapi';
 getLogos(['AAPL', 'VOO', 'BTC']).map((r) => r.dataUri || r.url); // SVG data URI or hosted URL
