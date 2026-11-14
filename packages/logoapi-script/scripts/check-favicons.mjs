@@ -2,6 +2,7 @@
 // writes scripts/favicon-ok.json ({ "t/SYM": sha256 of the tile }). The build
 // swaps in a favicon tile only when its exact bytes are listed there, so the
 // build itself needs no browser and a changed favicon is never used unchecked.
+// scripts/favicon-allow.txt forces a reviewed tile in when the check is wrong.
 // Steps: npm run build (writes .favicon-candidates.json), then
 // PLAYWRIGHT=/path/to/playwright node scripts/check-favicons.mjs, then build again.
 import { readFile, writeFile } from "node:fs/promises";
@@ -32,9 +33,11 @@ async function main() {
   const stats = {};
   for (let i = 0; i < keys.length; i += 40) Object.assign(stats, await p.evaluate(measure, keys.slice(i, i + 40).map((k) => [k, cand[k]])));
   await b.close();
+  const allow = new Set((await readFile(join(ROOT, "scripts", "favicon-allow.txt"), "utf8")).split("\n")
+    .map((l) => l.replace(/#.*/, "").trim().split(/\s+/)[0]).filter(Boolean));
   const ok = {}, low = [];
   for (const k of keys) {
-    if (stats[k] && visible(stats[k], k.startsWith("t/dark/"))) ok[k] = createHash("sha256").update(cand[k], "utf8").digest("hex");
+    if (allow.has(k) || (stats[k] && visible(stats[k], k.startsWith("t/dark/")))) ok[k] = createHash("sha256").update(cand[k], "utf8").digest("hex");
     else low.push(k);
   }
   await writeFile(join(ROOT, "scripts", "favicon-ok.json"), "{\n" + Object.keys(ok).map((k) => JSON.stringify(k) + ": " + JSON.stringify(ok[k])).join(",\n") + "\n}\n");

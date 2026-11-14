@@ -10,3 +10,4 @@ PTNR    blurry raster
 PM      faint
 PNR     faint
 STEM    source artwork looks stretched
+SAP     favicon is a blue slash without the SAP letters

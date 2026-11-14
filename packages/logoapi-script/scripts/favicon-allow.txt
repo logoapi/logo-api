@@ -1,0 +1,5 @@
+# Favicon tiles that pass even though the contrast check fails them (bright yellow
+# or white areas the check counts as faint). One per line: FILE  reason, where FILE
+# is t/SYM (light) or t/dark/SYM. Reviewed on the 1260 contact sheet (2026-11-14).
+t/SHEL  Shell pecten reads clearly on white
+t/PEP   Pepsi globe reads clearly on white
