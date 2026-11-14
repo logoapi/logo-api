@@ -60,10 +60,22 @@ async function main() {
     "<div id=x></div><script>setTimeout(function(){x.innerHTML='" + tick("AAPL") + "'},100)</script>"), (r) => {
     centred(r[0]); assert.deepEqual(r[0].c.slice(2), [28, 28]);
   }, 1);
-  await run("page tile CSS, images blocked: inline SVG centred", page(BUG_CSS, tick("AAPL", ' data-size="32"'),
+  await run("page tile CSS: missing logo letter tile fits, 28px and centred, light + dark", page(BUG_CSS,
+    tick("ZZZQ") + tick("ZZZQ", ' data-theme="dark"')), (r) => {
+    for (const x of r) { assert.equal(x.tag, "IMG"); centred(x); assert.deepEqual(x.c.slice(2), [28, 28]); assert.deepEqual(x.box.slice(2), [40, 40]); }
+  }, 2);
+  await run("page tile CSS, images blocked: inline SVG and letter tile fit, 28px and centred", page(BUG_CSS,
+    tick("AAPL") + tick("AAPL", ' data-theme="dark"') + tick("ZZZQ") + tick("ZZZQ", ' data-theme="dark"'),
     "default-src 'none'; script-src 'unsafe-inline' https://cdn.test; style-src 'unsafe-inline'; img-src 'none'"), (r) => {
-    assert.equal(r[0].tag, "SPAN"); centred(r[0]);
-  });
+    for (const x of r) { assert.equal(x.tag, "SPAN"); centred(x); assert.deepEqual(x.c.slice(2), [28, 28]); assert.deepEqual(x.box.slice(2), [40, 40]); }
+  }, 4, 300);
+  await run("no page CSS, images blocked: inline SVG and tile keep data-size", page("",
+    '<span data-ticker="AAPL"></span> <span data-ticker="ZZZQ" data-size="32"></span>',
+    "default-src 'none'; script-src 'unsafe-inline' https://cdn.test; style-src 'unsafe-inline'; img-src 'none'"), (r) => {
+    assert.equal(r[0].tag, "SPAN"); assert.deepEqual(r[0].c.slice(2), [48, 48]);
+    assert.equal(r[1].tag, "SPAN"); assert.deepEqual(r[1].c.slice(2), [32, 32]);
+    for (const x of r) centred(x);
+  }, 2, 300);
   await run("page caps the logo, tile and inline SVG: each stays square and centred, light + dark", page(
     ".logo{width:40px;height:40px;display:grid;place-items:center} .logo [data-ticker]>*{max-width:30px;max-height:30px}",
     tick("AAPL") + tick("AAPL", ' data-theme="dark"') + tick("ZZZQ") + tick("ZZZQ", ' data-theme="dark"')), (r) => {

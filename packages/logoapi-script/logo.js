@@ -1,8 +1,6 @@
 /*! logoapi-script loader. MIT. https://logoapi.sh
- * Usage: <script src="https://cdn.jsdelivr.net/npm/logoapi-script@VERSION/logo.js"></script>
- *        <span data-ticker="AAPL" data-size="48"></span>  (or data-logoapi; data-theme="dark")
- * Each ticker is one plain script next to this file (t/AAPL.js, t/dark/AAPL.js) that pushes
- * the original SVG text from logoapi.sh. A ticker with no file shows a letter tile.
+ * <span data-ticker="AAPL" data-size="48" data-theme="dark"></span> (or data-logoapi).
+ * t/AAPL.js, t/dark/AAPL.js push the original SVG. No file: a letter tile.
  */
 (function () {
   "use strict";
@@ -18,10 +16,7 @@
   var defTheme = me && me.getAttribute("data-theme") === "dark" ? "dark" : "light";
   var TIMEOUT = 8000;
 
-  var store = {};   // key -> svg text
-  var state = {};   // key -> "loading" | "ok" | "miss"
-  var waiters = {}; // key -> [elements]
-  var missed = {};  // key -> [elements] showing a tile; redrawn if the file arrives late
+  var store = {}, state = {}, waiters = {}, missed = {}; // missed: tiles redrawn if the file arrives late
 
   function norm(s) {
     s = String(s == null ? "" : s).trim().toUpperCase();
@@ -29,29 +24,20 @@
     return s.replace(/[.\-\/]/g, ""); // BRK.B, BRK-B, BRK/B -> BRKB (same rule as logoapi.sh)
   }
 
+  // Letter tile for a miss, drawn like a logo so page img CSS sizes it too.
   function tile(el, label, size, dark) {
-    var t = d.createElement("span");
-    var txt = (label || "?").replace(/[^A-Za-z0-9]/g, "").slice(0, 2).toUpperCase() || "?";
-    t.textContent = txt;
-    t.setAttribute("role", "img");
-    t.setAttribute("aria-label", (label || "") + " logo");
-    t.style.cssText = "display:flex;align-items:center;justify-content:center;box-sizing:border-box;" + SQ(size) +
-      "border-radius:" + Math.round(size * 0.22) + "px;" +
-      "font:600 " + Math.round(size * (txt.length > 1 ? 0.36 : 0.46)) + "px/1 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;" +
-      (dark ? "background:#2a2f3a;color:#e6e8ee;" : "background:#e9ecf2;color:#3a4150;");
-    put(el, t);
+    var t = (label || "?").replace(/[^A-Za-z0-9]/g, "").slice(0, 2).toUpperCase() || "?";
+    draw(el, '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="' +
+      (dark ? "#2a2f3a" : "#e9ecf2") + '"/><text x="32" y="32" dominant-baseline="central" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,Roboto,sans-serif" font-weight="600" font-size="' +
+      (t.length > 1 ? 23 : 29) + '" fill="' + (dark ? "#e6e8ee" : "#3a4150") + '">' + t + "</text></svg>", label, size);
   }
 
-  // A square of the asked size that stays square and centred when page CSS caps
-  // it (max-width/max-height): height follows width, and align-self keeps a
-  // flex or grid parent from stretching it.
+  // Square that stays square and centred when page CSS caps it.
   function SQ(size) {
     return "align-self:center;width:" + size + "px;height:auto;aspect-ratio:1/1;";
   }
 
-  // The host span gets a display only when it is still plain inline, so a page
-  // that styles its own tile (display:grid, place-items:center) keeps its layout.
-  // A hidden host (display:none) is checked again on the next scan.
+  // Host gets a display only while plain inline; page tiles keep theirs. Hidden: retried.
   function fitHost(el) {
     var s = el.style;
     if (!s || s.display) return 1;
@@ -65,8 +51,7 @@
     return 1;
   }
 
-  // Fill only an element that is empty or holds only our node, never a page row
-  // with its own data-ticker (data-la marks ours, clones too). Rechecked each scan.
+  // Fill only an empty element or one holding our node (data-la), never a page row.
   function owns(el) {
     var n = el.childNodes || [];
     for (var i = 0; i < n.length; i++) {
@@ -83,9 +68,8 @@
     el.appendChild(node);
   }
 
-  // Inline fallback: the SVG goes into its own shadow root, so ids in one logo
-  // never clash with another logo on the page. The SVG text is used as is.
-  function inline(el, svg, label, size, dark) {
+  // Images blocked: the SVG in its own shadow root (ids never clash), text as is.
+  function inline(el, svg, label, size) {
     try {
       var host = d.createElement("span");
       host.style.cssText = "display:block;" + SQ(size);
@@ -94,16 +78,20 @@
       var root = host.attachShadow ? host.attachShadow({ mode: "open" }) : host;
       root.innerHTML = "<style>svg{width:100%;height:100%;display:block}</style>" + svg;
       put(el, host);
-    } catch (e) { tile(el, label, size, dark); }
+    } catch (e) {}
   }
 
-  function draw(el, key, label, size, dark) {
-    var svg = store[key];
+  // Images blocked: the fallback takes the size page CSS gave the img (a 28px cap stays 28).
+  function draw(el, svg, label, size) {
     var img = d.createElement("img");
     img.alt = label + " logo";
-    img.width = size; img.height = size;
+    img.width = img.height = size;
     img.style.cssText = "display:block;object-fit:contain;" + SQ(size);
-    img.onerror = function () { if (img.parentNode === el) inline(el, svg, label, size, dark); };
+    img.onerror = function () {
+      if (img.parentNode !== el) return;
+      var r = img.getBoundingClientRect ? img.getBoundingClientRect().width : 0;
+      inline(el, svg, label, r > 0 && r < size ? Math.round(r) : size);
+    };
     img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
     put(el, img);
   }
@@ -113,9 +101,9 @@
     delete waiters[key];
     for (var i = 0; i < list.length; i++) {
       var el = list[i];
-      if (el.__logoapiKey !== key) continue; // attributes changed meanwhile
+      if (el.__logoapiKey !== key) continue;
       var p = el.__logoapiArgs;
-      if (state[key] === "ok") draw(el, key, p[0], p[1], p[2]);
+      if (state[key] === "ok") draw(el, store[key], p[0], p[1]);
       else { tile(el, p[0], p[1], p[2]); (missed[key] = missed[key] || []).push(el); }
     }
   }
@@ -128,7 +116,7 @@
     s.async = true;
     s.src = base + key + ".js";
     s.onerror = miss;
-    s.onload = function () { setTimeout(miss, 0); }; // loaded but pushed nothing: a miss
+    s.onload = function () { setTimeout(miss, 0); }; // pushed nothing: miss
     setTimeout(miss, TIMEOUT);
     (d.head || d.documentElement).appendChild(s);
   }
@@ -150,7 +138,7 @@
     el.__logoapiKey = key;
     el.__logoapiArgs = [sym || raw, size, dark];
     if (!ok || !base) { tile(el, sym || raw, size, dark); return; }
-    if (state[key] === "ok") { draw(el, key, sym, size, dark); return; }
+    if (state[key] === "ok") { draw(el, store[key], sym, size); return; }
     if (state[key] === "miss") { tile(el, sym, size, dark); (missed[key] = missed[key] || []).push(el); return; }
     (waiters[key] = waiters[key] || []).push(el);
     if (!state[key]) inject(key);
@@ -161,7 +149,7 @@
     for (var i = 0; i < els.length; i++) want(els[i]);
   }
 
-  // Ticker files push [key, svg] here, in any load order.
+  // Ticker files push [key, svg] here, any order.
   var Q = w.LOGOAPI_Q = w.LOGOAPI_Q || [];
   function take(item) {
     if (!item || typeof item[0] !== "string" || typeof item[1] !== "string") return;

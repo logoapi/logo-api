@@ -65,6 +65,7 @@ const { toScript, exactText, norm } = (() => {
 })();
 
 const SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><title>Société  "q" </title><rect id="a" width="64" height="64"/></svg>';
+const svgOf = (img) => decodeURIComponent(img.src.replace("data:image/svg+xml;charset=utf-8,", ""));
 const valueOf = (file) => { const box = { self: {} }; vm.runInNewContext(file, box); return box.self.LOGOAPI_Q[0]; };
 
 test("toScript is ASCII, one statement, value equals the SVG text", () => {
@@ -107,22 +108,37 @@ test("img error falls back to the SVG in a shadow root", () => {
   assert.ok(host.shadow.innerHTML.endsWith(SVG));
 });
 
-test("miss shows a letter tile, never another source", () => {
+test("miss shows a letter tile as a data: img, never another source", () => {
   const dom = fakeDom({});
   const el = dom.span({ "data-ticker": "ZZZQ" });
   dom.load(); dom.run();
   const t = el.children[0];
-  assert.equal(t.tagName, "SPAN");
-  assert.equal(t.textContent, "ZZ");
-  assert.equal(t.getAttribute("role"), "img");
-  assert.ok(!/url\(|http/.test(t.style.cssText));
+  assert.equal(t.tagName, "IMG");
+  assert.equal(t.alt, "ZZZQ logo");
+  assert.match(t.style.cssText, /width:48px;height:auto;aspect-ratio:1\/1/);
+  const svg = svgOf(t);
+  assert.match(svg, />ZZ<\/text>/);
+  assert.ok(!/href|url\(|<script/.test(svg.replace("http://www.w3.org/2000/svg", "")));
+});
+
+test("tile img error falls back to the tile SVG in a shadow root", () => {
+  const dom = fakeDom({});
+  const el = dom.span({ "data-ticker": "ZZZQ", "data-size": "40" });
+  dom.load(); dom.run();
+  const svg = svgOf(el.children[0]);
+  el.children[0].onerror();
+  const host = el.children[0];
+  assert.equal(host.tagName, "SPAN");
+  assert.equal(host.getAttribute("aria-label"), "ZZZQ logo");
+  assert.match(host.style.cssText, /width:40px/);
+  assert.ok(host.shadow.innerHTML.endsWith(svg));
 });
 
 test("bad symbol shows a tile and loads nothing", () => {
   const dom = fakeDom({});
   const el = dom.span({ "data-ticker": "<x>" });
   dom.load(); dom.run();
-  assert.equal(el.children[0].textContent, "X");
+  assert.match(svgOf(el.children[0]), />X<\/text>/);
   assert.deepEqual(dom.injectedLog(), []);
 });
 
@@ -152,19 +168,19 @@ test("a file that pushes after the timeout replaces the tile", () => {
   const dom = fakeDom({}); // script errors or times out first
   const el = dom.span({ "data-ticker": "AAPL" });
   dom.load(); dom.run();
-  assert.equal(el.children[0].textContent, "AA");
+  assert.match(svgOf(el.children[0]), />AA<\/text>/);
   vm.runInContext(toScript("t/AAPL", SVG), dom.ctx); // late push
-  assert.equal(el.children[0].tagName, "IMG");
+  assert.equal(svgOf(el.children[0]), SVG);
 });
 
 test("theme change on a tile redraws the tile", () => {
   const dom = fakeDom({});
   const el = dom.span({ "data-ticker": "<x>" });
   dom.load(); dom.run();
-  assert.match(el.children[0].style.cssText, /#e9ecf2/);
+  assert.match(svgOf(el.children[0]), /#e9ecf2/);
   el.setAttribute("data-theme", "dark");
   dom.ctx.LogoAPI.scan(); dom.run();
-  assert.match(el.children[0].style.cssText, /#2a2f3a/);
+  assert.match(svgOf(el.children[0]), /#2a2f3a/);
 });
 
 test("host: plain inline span becomes a centred inline-flex box", () => {
