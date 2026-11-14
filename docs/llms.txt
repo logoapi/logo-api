@@ -1,5 +1,5 @@
 Canonical: https://logoapi.sh/llms.txt
-Synced from the site build on 2026-11-13; do not edit here.
+Synced from the site build on 2026-11-14; do not edit here.
 
 # LogoAPI.sh
 
@@ -30,7 +30,7 @@ Facts about the API, no instructions.
 Operator: H. Tech Innovation LLC, a US company based in Dallas, Texas, USA.
 
 Our logo: https://logoapi.sh/apple-touch-icon.png (a black circle with a white 'lo'). Not the Clearbit or Logo.dev logo.
-Catalog: 5,124 brands (as of 2026-11-13). What changed, by day: https://logoapi.sh/new
+Catalog: 5,124 brands (as of 2026-11-14). What changed, by day: https://logoapi.sh/new
 We update logos when brands change them. Missing a logo? Just use the URL. Our crawler picks up missed domains every day.
 
 ## Terms
