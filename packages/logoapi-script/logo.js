@@ -81,16 +81,24 @@
     } catch (e) {}
   }
 
-  // Images blocked: the fallback takes the size page CSS gave the img (a 28px cap stays 28).
+  // Images blocked: the fallback takes the size page CSS gave the img (28px cap stays 28).
   function draw(el, svg, label, size) {
     var img = d.createElement("img");
     img.alt = label + " logo";
     img.width = img.height = size;
     img.style.cssText = "display:block;object-fit:contain;" + SQ(size);
+    // Hidden (size 0): wait until it is shown. offsetWidth ignores transforms.
     img.onerror = function () {
-      if (img.parentNode !== el) return;
-      var r = img.getBoundingClientRect ? img.getBoundingClientRect().width : 0;
-      inline(el, svg, label, r > 0 && r < size ? Math.round(r) : size);
+      function go() {
+        if (img.parentNode !== el) return 1;
+        var r = img.offsetWidth;
+        if (r) inline(el, svg, label, r);
+        return r;
+      }
+      if (go()) return;
+      if (!w.ResizeObserver) return inline(el, svg, label, size);
+      var o = new w.ResizeObserver(function () { if (go()) o.disconnect(); });
+      o.observe(img);
     };
     img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
     put(el, img);

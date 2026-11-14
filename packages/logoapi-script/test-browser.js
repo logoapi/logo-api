@@ -69,6 +69,19 @@ async function main() {
     "default-src 'none'; script-src 'unsafe-inline' https://cdn.test; style-src 'unsafe-inline'; img-src 'none'"), (r) => {
     for (const x of r) { assert.equal(x.tag, "SPAN"); centred(x); assert.deepEqual(x.c.slice(2), [28, 28]); assert.deepEqual(x.box.slice(2), [40, 40]); }
   }, 4, 300);
+  await run("images blocked inside a hidden tab, then shown: fits the tile", page(BUG_CSS,
+    "<div id=tab hidden>" + tick("AAPL") + tick("ZZZQ") + "</div><script>setTimeout(function(){tab.hidden=false},400)</script>",
+    "default-src 'none'; script-src 'unsafe-inline' https://cdn.test; style-src 'unsafe-inline'; img-src 'none'"), (r) => {
+    for (const x of r) { assert.equal(x.tag, "SPAN"); centred(x); assert.deepEqual(x.c.slice(2), [28, 28]); }
+  }, 2, 700);
+  await run("images blocked while the card scales in: fallback keeps the full size", page(BUG_CSS +
+    "@keyframes z{from{transform:scale(.5)}}.card{animation:z 1s}",
+    "<div class=card>" + tick("AAPL") + tick("ZZZQ") + "</div>",
+    "default-src 'none'; script-src 'unsafe-inline' https://cdn.test; style-src 'unsafe-inline'; img-src 'none'"), async (r, p) => {
+    for (const x of r) assert.equal(x.tag, "SPAN");
+    const w = await p.evaluate(() => [...document.querySelectorAll("[data-ticker]>span")].map((e) => e.offsetWidth));
+    assert.deepEqual(w, [28, 28]);
+  }, 2, 300);
   await run("no page CSS, images blocked: inline SVG and tile keep data-size", page("",
     '<span data-ticker="AAPL"></span> <span data-ticker="ZZZQ" data-size="32"></span>',
     "default-src 'none'; script-src 'unsafe-inline' https://cdn.test; style-src 'unsafe-inline'; img-src 'none'"), (r) => {
