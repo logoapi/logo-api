@@ -18,6 +18,10 @@ Claude Desktop, Cursor or any client that starts MCP servers over stdio:
 
 Clients that support remote servers can connect to `https://logoapi.sh/mcp` directly and skip this package.
 
+Replit: one click adds the hosted server to your workspace, no package needed.
+
+[![Add to Replit](https://replit.com/badge?caption=Add%20to%20Replit)](https://replit.com/integrations?mcp=eyJkaXNwbGF5TmFtZSI6IkxvZ29BUEkuc2giLCJiYXNlVXJsIjoiaHR0cHM6Ly9sb2dvYXBpLnNoL21jcCJ9)
+
 ## Notes
 
 - Node 18 or newer.
