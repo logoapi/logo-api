@@ -1,6 +1,6 @@
 {
   "name": "logoapi-script",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Stock and crypto logos for pages that can only load scripts from a CDN (sandboxed AI artifacts). One script tag, then <span data-ticker=\"AAPL\">. Original square SVG tiles from logoapi.sh, light and dark. No API key.",
   "keywords": [
     "logo",
