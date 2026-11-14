@@ -3,8 +3,10 @@
 // Only catalog logos are kept: the build asks with ?fallback=404, so favicon and
 // letter-tile stand-ins are 404 and get no file (the loader shows a letter tile).
 // One exception: when that answer is a wordmark (too small to read in a tile) and
-// the plain ?shape=square answer is the brand's own favicon at a sharp size, the
-// favicon tile is used instead (scripts/favicon-exclude.json opts a symbol out).
+// the plain ?shape=square answer is the brand's own favicon, sharp, not in
+// scripts/favicon-exclude.txt, and listed with the same sha256 in
+// scripts/favicon-ok.json (contrast check, scripts/check-favicons.mjs), the
+// favicon tile is used instead. Every sharp candidate goes to .favicon-candidates.json.
 // Run once before packing: node scripts/build.mjs [--only AAPL,MSFT]. Needs network.
 import { mkdir, readFile, rename, rm, writeFile } from "node:fs/promises";
 import { createHash } from "node:crypto";
@@ -33,18 +35,21 @@ export function exactText(buf) {
   return text;
 }
 
-// A favicon tile is sharp when every embedded image is SVG, or PNG at least
-// MIN_PX on its short side (the image area of a 64px tile is 44.8px).
-export const MIN_PX = 45;
+// A favicon tile is sharp when every embedded image is SVG (checked the same way
+// inside; #id links allowed) or PNG at least MIN_PX on its short side. The image area of a 64px tile
+// is 44.8px, so 48px is never upscaled. Any href this cannot parse fails.
+export const MIN_PX = 48;
 export function sharpFavicon(svg) {
-  for (const m of svg.matchAll(/href="data:image\/([a-z+]+);base64,([A-Za-z0-9+\/=]+)"/g)) {
-    if (m[1] === "svg+xml") continue;
-    if (m[1] !== "png") return false;
-    const b = Buffer.from(m[2].slice(0, 32), "base64");
-    if (b.toString("latin1", 12, 16) !== "IHDR") return false;
+  const hrefs = svg.match(/href\s*=(?!\s*["']#)/g) || []; // #id links stay inside the SVG
+  const imgs = [...svg.matchAll(/\bhref="data:image\/(png|svg\+xml);base64,([A-Za-z0-9+\/]+={0,2})"/g)];
+  if (imgs.length !== hrefs.length) return false;
+  for (const [, type, b64] of imgs) {
+    const b = Buffer.from(b64, "base64");
+    if (type === "svg+xml") { if (!sharpFavicon(b.toString("utf8"))) return false; continue; }
+    if (b.length < 24 || b.toString("latin1", 12, 16) !== "IHDR") return false;
     if (Math.min(b.readUInt32BE(16), b.readUInt32BE(20)) < MIN_PX) return false;
   }
-  return !/href="(?!data:image\/(png|svg\+xml);)/.test(svg);
+  return true;
 }
 
 async function get(url, tries = 3) {
@@ -91,7 +96,11 @@ async function main() {
   await rm(OUT, { recursive: true, force: true });
   await mkdir(join(OUT, "dark"), { recursive: true });
   const list = { light: [], dark: [], favicon: [] };
-  const exclude = new Set(JSON.parse(await readFile(join(ROOT, "scripts", "favicon-exclude.json"), "utf8")).map(norm));
+  const exclude = new Set((await readFile(join(ROOT, "scripts", "favicon-exclude.txt"), "utf8")).split("\n")
+    .map((l) => l.replace(/#.*/, "").trim().split(/\s+/)[0]).filter(Boolean).map(norm));
+  const okList = JSON.parse(await readFile(join(ROOT, "scripts", "favicon-ok.json"), "utf8"));
+  const cand = {};
+  const sha = (b) => createHash("sha256").update(b).digest("hex");
   const sums = {};
   let bytes = 0;
   await pool(syms.flatMap((s) => [[s, false], [s, true]]), async ([sym, dark]) => {
@@ -105,7 +114,10 @@ async function main() {
       const fb = await get(fu);
       if (fb && fb.kind === "favicon") {
         const ft = exactText(fb);
-        if (sharpFavicon(ft)) { url = fu; buf = fb; svg = ft; list.favicon.push(key); }
+        if (sharpFavicon(ft)) {
+          cand[key] = ft;
+          if (okList[key] === sha(fb)) { url = fu; buf = fb; svg = ft; list.favicon.push(key); }
+        }
       }
     }
     if (!/^\s*(<\?xml[^>]*>\s*)?(<!--[\s\S]*?-->\s*)*<svg[\s>]/.test(svg)) throw new Error(url + ": not an SVG");
@@ -118,9 +130,10 @@ async function main() {
   list.light.sort(); list.dark.sort(); list.favicon.sort();
   await writeFile(join(OUT, "list.json"), JSON.stringify({ source: HOST, built: new Date().toISOString(), light: list.light, dark: list.dark, favicon: list.favicon }) + "\n");
   await writeFile(join(OUT, "sha256.json"), JSON.stringify(sums) + "\n");
+  if (!only) await writeFile(join(ROOT, ".favicon-candidates.json"), JSON.stringify(cand) + "\n");
   await rm(join(ROOT, "t"), { recursive: true, force: true });
   await rename(OUT, join(ROOT, "t"));
-  console.log(`checked ${syms.length} symbols: ${list.light.length} light, ${list.dark.length} dark (${list.favicon.length} favicon tiles), ${(bytes / 1048576).toFixed(1)} MB`);
+  console.log(`checked ${syms.length} symbols: ${list.light.length} light, ${list.dark.length} dark (${list.favicon.length} favicon tiles of ${Object.keys(cand).length} candidates), ${(bytes / 1048576).toFixed(1)} MB`);
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) main().catch((e) => { console.error(e.message); process.exit(1); });

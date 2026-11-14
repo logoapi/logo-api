@@ -10,7 +10,7 @@ Stock and crypto logos for pages that can only load scripts from a CDN, such as 
 <span data-ticker="NVDA" data-theme="dark"></span>
 ```
 
-The loader reads its own URL and loads one small script per ticker from the same version, for example `logoapi-script@0.1.4/t/AAPL.js` or `t/dark/AAPL.js`. Each file holds the original square SVG tile served by `https://logoapi.sh/ticker/AAPL.svg?shape=square&fallback=404` (dark: `/dark/ticker/...`), byte for byte. Where that answer is a wordmark too small to read in a tile and the brand's own favicon is sharp, the file holds the tile from `?shape=square` instead (also byte for byte); `t/list.json` lists those under `favicon`. Tickers rendered later by React or other code are picked up too.
+The loader reads its own URL and loads one small script per ticker from the same version, for example `logoapi-script@0.1.4/t/AAPL.js` or `t/dark/AAPL.js`. Each file holds the original square SVG tile served by `https://logoapi.sh/ticker/AAPL.svg?shape=square&fallback=404` (dark: `/dark/ticker/...`), byte for byte. Where that answer is a wordmark too small to read in a tile, and the brand's own favicon is sharp and stands out on that theme's plate, the file holds the tile from `?shape=square` instead (also byte for byte); `t/list.json` lists those files under `favicon` (as `t/SYM` and `t/dark/SYM`). Tickers rendered later by React or other code are picked up too.
 
 | Attribute | Default | Notes |
 | --- | --- | --- |

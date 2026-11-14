@@ -1,0 +1,12 @@
+# Tickers that keep their wordmark tile (light and dark) even when a sharp favicon exists.
+# One per line: SYMBOL  reason. Reviewed on the 1260 contact sheet (2026-11-14).
+V       favicon is two colour bars, does not read as Visa
+USB     favicon is a blank red shield
+IBM     bee rebus favicon, faint
+005930  S icon does not read as Samsung
+DVA     blurry raster
+NNDM    blurry raster
+PTNR    blurry raster
+PM      faint
+PNR     faint
+STEM    source artwork looks stretched

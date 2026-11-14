@@ -57,6 +57,10 @@ function fakeDom(files, display) {
   return { ctx, run, span, head, injectedLog: () => head.children.map((s) => s.src), load: () => vm.runInContext(LOADER, ctx) };
 }
 
+const { visible } = (() => {
+  const src = fs.readFileSync(path.join(__dirname, "scripts", "check-favicons.mjs"), "utf8");
+  return vm.runInNewContext("(() => {" + src.match(/export function visible\([^)]*\) \{[\s\S]*?\n\}/)[0].replace(/^export /, "") + "; return { visible }; })()");
+})();
 const { toScript, exactText, norm, sharpFavicon } = (() => {
   // build.mjs is ESM; re-declare its pure helpers by evaluating the same source text.
   const src = fs.readFileSync(path.join(__dirname, "scripts", "build.mjs"), "utf8");
@@ -83,15 +87,30 @@ test("exactText round-trips bytes and rejects bad UTF-8", () => {
   assert.throws(() => exactText(new Uint8Array([0x3c, 0xff, 0x3e])));
 });
 
-test("sharpFavicon: SVG or PNG of 45px+ passes; small PNG, other formats, outside links fail", () => {
+test("sharpFavicon: SVG or PNG of 48px+ passes; small PNG, other formats, odd hrefs fail", () => {
   const png = (w, h) => { const b = Buffer.alloc(33); Buffer.from([0x89, 0x50, 0x4e, 0x47, 13, 10, 26, 10, 0, 0, 0, 13]).copy(b); b.write("IHDR", 12, "latin1"); b.writeUInt32BE(w, 16); b.writeUInt32BE(h, 20); return b.toString("base64"); };
-  const tile = (href) => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64"/><image href="' + href + '" width="44.8" height="44.8"/></svg>';
-  assert.equal(sharpFavicon(tile("data:image/svg+xml;base64,PHN2Zy8+")), true);
+  const tile = (href, q = '"') => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64"/><image href=' + q + href + q + ' width="44.8" height="44.8"/></svg>';
+  const inner = (x) => "data:image/svg+xml;base64," + Buffer.from(x).toString("base64");
+  assert.equal(sharpFavicon(tile(inner("<svg><path d='M0 0h1'/></svg>"))), true);
   assert.equal(sharpFavicon(tile("data:image/png;base64," + png(48, 48))), true);
+  assert.equal(sharpFavicon(tile("data:image/png;base64," + png(47, 128))), false);
   assert.equal(sharpFavicon(tile("data:image/png;base64," + png(32, 32))), false);
-  assert.equal(sharpFavicon(tile("data:image/png;base64," + png(64, 40))), false);
   assert.equal(sharpFavicon(tile("data:image/x-icon;base64,AAAB")), false);
   assert.equal(sharpFavicon(tile("https://example.com/f.png")), false);
+  assert.equal(sharpFavicon(tile("https://example.com/f.png", "'")), false);
+  assert.equal(sharpFavicon(tile("data:image/png;name=a;base64," + png(16, 16))), false);
+  assert.equal(sharpFavicon(tile("data:image/png;base64," + png(16, 16).replace(/(.{8})/, "$1\n"))), false);
+  assert.equal(sharpFavicon(tile(inner(tile("data:image/png;base64," + png(16, 16))))), false);
+  assert.equal(sharpFavicon(tile(inner(tile("data:image/png;base64," + png(512, 512))))), true);
+  assert.equal(sharpFavicon(tile(inner('<svg><defs><path id="a"/></defs><use xlink:href="#a"/><use href= "#a"/></svg>'))), true);
+});
+
+test("contrast rule: faint on the plate fails, clear passes", () => {
+  assert.equal(visible({ cover: 0.4, p115: 0.35, p2: 0, p3: 0, p45: 0 }, true), false);   // dark mark on dark plate
+  assert.equal(visible({ cover: 0.42, p115: 0.4, p2: 0.19, p3: 0.18, p45: 0.16 }, true), false); // half the mark fades
+  assert.equal(visible({ cover: 1.04, p115: 0.13, p2: 0.12, p3: 0.11, p45: 0.1 }, true), true);  // own square, white text
+  assert.equal(visible({ cover: 0.9, p115: 0.8, p2: 0.76, p3: 0, p45: 0 }, false), true);       // mid green on white
+  assert.equal(visible({ cover: 1.04, p115: 0.2, p2: 0.17, p3: 0.04, p45: 0.01 }, false), false); // thin grey lines
 });
 
 test("norm matches logoapi.sh symbol rule", () => {
