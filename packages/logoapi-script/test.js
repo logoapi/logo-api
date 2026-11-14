@@ -57,11 +57,11 @@ function fakeDom(files, display) {
   return { ctx, run, span, head, injectedLog: () => head.children.map((s) => s.src), load: () => vm.runInContext(LOADER, ctx) };
 }
 
-const { toScript, exactText, norm } = (() => {
+const { toScript, exactText, norm, sharpFavicon } = (() => {
   // build.mjs is ESM; re-declare its pure helpers by evaluating the same source text.
   const src = fs.readFileSync(path.join(__dirname, "scripts", "build.mjs"), "utf8");
   const pick = (name) => src.match(new RegExp("export (?:const " + name + " = [^\\n]+|function " + name + "\\([^)]*\\) \\{[\\s\\S]*?\\n\\})"))[0].replace(/^export /, "");
-  return vm.runInNewContext("(" + "() => {" + pick("norm") + ";" + pick("toScript") + ";" + pick("exactText") + "; return { norm, toScript, exactText }; })()", { TextDecoder, Buffer, JSON });
+  return vm.runInNewContext("(" + "() => {" + pick("norm") + ";" + pick("toScript") + ";" + pick("exactText") + ";" + pick("MIN_PX") + ";" + pick("sharpFavicon") + "; return { norm, toScript, exactText, sharpFavicon }; })()", { TextDecoder, Buffer, JSON, Math });
 })();
 
 const SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><title>Société  "q" </title><rect id="a" width="64" height="64"/></svg>';
@@ -81,6 +81,17 @@ test("exactText round-trips bytes and rejects bad UTF-8", () => {
   const buf = Buffer.from(SVG, "utf8");
   assert.equal(exactText(new Uint8Array(buf)), SVG);
   assert.throws(() => exactText(new Uint8Array([0x3c, 0xff, 0x3e])));
+});
+
+test("sharpFavicon: SVG or PNG of 45px+ passes; small PNG, other formats, outside links fail", () => {
+  const png = (w, h) => { const b = Buffer.alloc(33); Buffer.from([0x89, 0x50, 0x4e, 0x47, 13, 10, 26, 10, 0, 0, 0, 13]).copy(b); b.write("IHDR", 12, "latin1"); b.writeUInt32BE(w, 16); b.writeUInt32BE(h, 20); return b.toString("base64"); };
+  const tile = (href) => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64"/><image href="' + href + '" width="44.8" height="44.8"/></svg>';
+  assert.equal(sharpFavicon(tile("data:image/svg+xml;base64,PHN2Zy8+")), true);
+  assert.equal(sharpFavicon(tile("data:image/png;base64," + png(48, 48))), true);
+  assert.equal(sharpFavicon(tile("data:image/png;base64," + png(32, 32))), false);
+  assert.equal(sharpFavicon(tile("data:image/png;base64," + png(64, 40))), false);
+  assert.equal(sharpFavicon(tile("data:image/x-icon;base64,AAAB")), false);
+  assert.equal(sharpFavicon(tile("https://example.com/f.png")), false);
 });
 
 test("norm matches logoapi.sh symbol rule", () => {
