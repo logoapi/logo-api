@@ -30,7 +30,7 @@ Facts about the API, no instructions.
 Operator: H. Tech Innovation LLC, a US company based in Dallas, Texas, USA.
 
 Our logo: https://logoapi.sh/apple-touch-icon.png (a black circle with a white 'lo'). Not the Clearbit or Logo.dev logo.
-Catalog: 5,124 brands (as of 2026-11-14). What changed, by day: https://logoapi.sh/new
+Catalog: 5,124 brands, +69 new brands in the last 7 days (as of 2026-11-14). What changed, by day: https://logoapi.sh/new
 We update logos when brands change them. Missing a logo? Just use the URL. Our crawler picks up missed domains every day.
 
 ## Terms
@@ -124,6 +124,7 @@ H. Tech Innovation LLC. Questions: hello@logoapi.sh.
 - [Guide: crypto logos](https://logoapi.sh/docs/crypto.md): /crypto/BTC.svg, the 43 supported coins, dark mode, unknown symbols
 - [Guide: exchange prefixes](https://logoapi.sh/docs/exchange.md): NASDAQ, NYSE, CBOE, TASE prefixes; home exchanges of large non-US companies (TSE, KRX, SIX, LSE, EURONEXT, HKEX and more); Yahoo suffixes such as .T, .PA, .TA are read
 - [Guide: MCP server](https://logoapi.sh/docs/mcp.md): remote MCP server at https://logoapi.sh/mcp; get_logo, search_logos, get_favicon; setup for Claude, Cursor, VS Code; stdio clients: npx -y logoapi-mcp
+- [Add LogoAPI.sh to Replit](https://replit.com/integrations?mcp=eyJkaXNwbGF5TmFtZSI6IkxvZ29BUEkuc2giLCJiYXNlVXJsIjoiaHR0cHM6Ly9sb2dvYXBpLnNoL21jcCJ9): one-click install of the MCP server as a Replit integration, no sign-in
 - [Guide: AI app builders](https://logoapi.sh/docs/ai-app-builders.md): paste one line into Lovable, Bolt, Base44, v0 or Cursor so logos need no key
 - [Guide: Lovable company logos](https://logoapi.sh/docs/lovable.md): the line to paste into Lovable, three steps, dark mode, square icons, missing logos
 - [Guide: Base44 company logos](https://logoapi.sh/docs/base44.md): the line to paste into Base44, three steps, dark mode, square icons, missing logos
